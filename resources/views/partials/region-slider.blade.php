@@ -18,7 +18,34 @@
 
 
     @php
-        $provincePages = $provinces->values()->chunk(6);
+        $surabayaRegions = collect([
+            (object) [
+                'name' => 'East Surabaya',
+                'slug' => 'east-surabaya',
+                'subtitle' => 'Kawasan Pendidikan & Alam'
+            ],
+            (object) [
+                'name' => 'West Surabaya',
+                'slug' => 'west-surabaya',
+                'subtitle' => 'Kawasan Elite & Hiburan'
+            ],
+            (object) [
+                'name' => 'Central Surabaya',
+                'slug' => 'central-surabaya',
+                'subtitle' => 'Pusat Pemerintahan & Kota'
+            ],
+            (object) [
+                'name' => 'North Surabaya',
+                'slug' => 'north-surabaya',
+                'subtitle' => 'Kawasan Sejarah & Pelabuhan'
+            ],
+            (object) [
+                'name' => 'South Surabaya',
+                'slug' => 'south-surabaya',
+                'subtitle' => 'Kawasan Bisnis & Modern'
+            ],
+        ]);
+        $provincePages = $surabayaRegions->chunk(6);
     @endphp
 
 
@@ -35,25 +62,25 @@
 
                     <div class="region-page">
 
-                        @foreach ($page as $province)
+                        @foreach ($page as $region)
 
                             <a
-                                href="{{ route('provinces.show', $province->slug) }}"
+                                href="{{ route('regions.show', $region->slug) }}"
                                 class="region-card"
                             >
 
                                 @php
 
                                     $regionImages = [
-                                        'North Surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'South Surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'East Surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'West Surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'Central Surabaya'          => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'north-surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'south-surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'east-surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'west-surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'central-surabaya'          => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
                                     ];
 
                                     $regionImage =
-                                        $regionImages[$province->slug]
+                                        $regionImages[$region->slug]
                                         ?? 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85';
 
                                 @endphp
@@ -61,7 +88,7 @@
 
                                 <img
                                     src="{{ $regionImage }}"
-                                    alt="{{ $province->name }}"
+                                    alt="{{ $region->name }}"
                                     class="region-image"
                                 >
 
@@ -72,12 +99,11 @@
                                 <div class="region-content">
 
                                     <h3>
-                                        {{ $province->name }}
+                                        {{ $region->name }}
                                     </h3>
 
                                     <p>
-                                        {{ $province->regencies_count ?? $province->regencies->count() }}
-                                        Kabupaten/Kota
+                                        {{ $region->subtitle }}
                                     </p>
 
                                     <span class="region-explore">

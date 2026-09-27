@@ -12,6 +12,7 @@ use App\Http\Controllers\TravelGuideController;
 use App\Http\Controllers\BestTimeController;
 use App\Http\Controllers\PlanYourTripController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\RegionController;
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
@@ -27,6 +28,9 @@ Route::get('/provinces', [ProvinceController::class, 'index'])
 
 Route::get('/provinces/{slug}', [ProvinceController::class, 'show'])
     ->name('provinces.show');
+
+Route::get('/regions/{slug}', [RegionController::class, 'show'])
+    ->name('regions.show');
 
 Route::get('/travel-experience', [TravelPostController::class, 'index'])
     ->name('travel-posts.index');
