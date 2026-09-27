@@ -15,7 +15,7 @@ class TestUserSeeder extends Seeder
                 'email' => 'user@nusaexplore.test',
             ],
             [
-                'name' => 'NusaExplorer',
+                'name' => 'Somewhere in...',
                 'password' => Hash::make('NusaExplore123'),
             ]
         );

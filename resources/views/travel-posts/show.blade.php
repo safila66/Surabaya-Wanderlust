@@ -364,7 +364,7 @@
             Shared by
 
             <strong>
-                {{ $post->user?->name ?? 'NusaExplorer' }}
+                {{ $post->user?->name ?? 'Somewhere in...' }}
             </strong>
 
             ·

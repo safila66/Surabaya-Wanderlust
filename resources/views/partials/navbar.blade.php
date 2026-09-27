@@ -11,7 +11,7 @@
     >
 
         <div class="logo">
-            Surabaya Wanderlust
+            Somewhere <br> in...
         </div>
 
         <div class="tagline">

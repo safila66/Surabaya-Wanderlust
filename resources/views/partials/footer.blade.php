@@ -5,7 +5,7 @@
 <footer>
 
     <h3>
-        Surabaya Wanderlusts
+        Somewhere in...
     </h3>
 
     <p style="margin-top:8px;">
@@ -13,7 +13,7 @@
     </p>
 
     <p style="margin-top:15px;">
-        &copy; {{ date('Y') }} Surabaya Wanderlust. All rights reserved.
+        &copy; {{ date('Y') }} Somewhere in... All rights reserved.
     </p>
 
 </footer>

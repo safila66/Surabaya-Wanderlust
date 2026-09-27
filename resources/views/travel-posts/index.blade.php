@@ -706,7 +706,7 @@
 
                                     {{ $post->user?->name
                                         ?? $post->name
-                                        ?? 'NusaExplorer'
+                                        ?? 'Somewhere in...'
                                     }}
 
                                 </span>

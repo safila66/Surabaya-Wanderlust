@@ -37,6 +37,16 @@
         
         .empty { background: white; padding: 35px; border-radius: 18px; text-align: center; color: #7b817d; }
         
+        .categories-section { padding: 50px 0 10px; }
+        .categories-header { margin-bottom: 20px; }
+        .categories-header h2 { color: #263b33; font-size: 24px; }
+        .categories-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .categories-scroll::-webkit-scrollbar { display: none; }
+        .category-btn { flex: 0 0 auto; background: white; border: 1px solid #e8e5dc; border-radius: 16px; padding: 20px 15px; min-width: 120px; text-align: center; transition: 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        .category-btn:hover { transform: translateY(-3px); border-color: #b8c7b7; box-shadow: 0 8px 20px rgba(30, 60, 45, .08); }
+        .cat-icon { font-size: 32px; margin-bottom: 10px; }
+        .cat-name { color: #2b463b; font-size: 13px; font-weight: 600; }
+
         footer { padding: 45px 7%; background: #203c32; color: white; text-align: center; }
         footer h3 { font-size: 22px; }
         footer p { margin-top: 8px; color: #c8d2cc; font-size: 13px; }
@@ -63,8 +73,41 @@
         </div>
     </section>
 
+    <!-- Categories Navigation -->
+    <section class="categories-section container">
+        <div class="categories-header">
+            <h2>Categories</h2>
+        </div>
+        <div class="categories-scroll">
+            <a href="#entertainment" class="category-btn">
+                <div class="cat-icon">🎢</div>
+                <div class="cat-name">Entertainment</div>
+            </a>
+            <a href="#resto-cafe" class="category-btn">
+                <div class="cat-icon">☕</div>
+                <div class="cat-name">Resto & Cafe</div>
+            </a>
+            <a href="#accommodation" class="category-btn">
+                <div class="cat-icon">🏨</div>
+                <div class="cat-name">Accommodation</div>
+            </a>
+            <a href="#transport" class="category-btn">
+                <div class="cat-icon">🚌</div>
+                <div class="cat-name">Transport</div>
+            </a>
+            <a href="#bar-club" class="category-btn">
+                <div class="cat-icon">🍸</div>
+                <div class="cat-name">Bar & Club</div>
+            </a>
+            <a href="#prayer-places" class="category-btn">
+                <div class="cat-icon">🕌</div>
+                <div class="cat-name">Prayer Places</div>
+            </a>
+        </div>
+    </section>
+
     <!-- Entertainment -->
-    <section class="section">
+    <section class="section" id="entertainment">
         <div class="container">
             <div class="section-heading">
                 <h2>Entertainment</h2>
@@ -73,11 +116,11 @@
             @if ($entertainment->count())
                 <div class="item-grid">
                     @foreach ($entertainment as $item)
-                        <div class="item-card">
+                        <a href="{{ route('destinations.show', $item->slug ?? '') }}" class="item-card" style="display: block; color: inherit;">
                             <img src="{{ $item->images->first()?->image_url ?? $item->image ?? 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=800&q=80' }}" alt="{{ $item->name }}" class="item-image">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -87,7 +130,7 @@
     </section>
 
     <!-- Resto & Cafe -->
-    <section class="section">
+    <section class="section" id="resto-cafe">
         <div class="container">
             <div class="section-heading">
                 <h2>Resto & Cafe</h2>
@@ -96,11 +139,11 @@
             @if ($restoCafe->count())
                 <div class="item-grid">
                     @foreach ($restoCafe as $item)
-                        <div class="item-card">
+                        <a href="{{ route('culinary.show', $item->slug ?? '') }}" class="item-card" style="display: block; color: inherit;">
                             <img src="{{ $item->images->first()?->image_url ?? $item->image ?? 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80' }}" alt="{{ $item->name }}" class="item-image">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -110,7 +153,7 @@
     </section>
 
     <!-- Accommodation -->
-    <section class="section">
+    <section class="section" id="accommodation">
         <div class="container">
             <div class="section-heading">
                 <h2>Accommodation</h2>
@@ -119,11 +162,11 @@
             @if ($accommodations->count())
                 <div class="item-grid">
                     @foreach ($accommodations as $item)
-                        <div class="item-card">
+                        <a href="#" class="item-card" style="display: block; color: inherit;">
                             <img src="{{ $item->image ?? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80' }}" alt="{{ $item->name }}" class="item-image">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -133,7 +176,7 @@
     </section>
 
     <!-- Transport -->
-    <section class="section">
+    <section class="section" id="transport">
         <div class="container">
             <div class="section-heading">
                 <h2>Transport</h2>
@@ -142,11 +185,11 @@
             @if ($transportations->count())
                 <div class="item-grid">
                     @foreach ($transportations as $item)
-                        <div class="item-card">
+                        <a href="#" class="item-card" style="display: block; color: inherit;">
                             <img src="{{ $item->image ?? 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80' }}" alt="{{ $item->name }}" class="item-image">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -156,7 +199,7 @@
     </section>
 
     <!-- Bar & Club -->
-    <section class="section">
+    <section class="section" id="bar-club">
         <div class="container">
             <div class="section-heading">
                 <h2>Bar & Club</h2>
@@ -165,10 +208,10 @@
             @if ($barClub->count())
                 <div class="item-grid">
                     @foreach ($barClub as $item)
-                        <div class="item-card">
+                        <a href="#" class="item-card" style="display: block; color: inherit;">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -178,7 +221,7 @@
     </section>
 
     <!-- Prayer Places -->
-    <section class="section">
+    <section class="section" id="prayer-places">
         <div class="container">
             <div class="section-heading">
                 <h2>Prayer Places</h2>
@@ -187,10 +230,10 @@
             @if ($prayerPlaces->count())
                 <div class="item-grid">
                     @foreach ($prayerPlaces as $item)
-                        <div class="item-card">
+                        <a href="#" class="item-card" style="display: block; color: inherit;">
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 80) }}</p>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else

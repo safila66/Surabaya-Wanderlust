@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Surabaya Wanderlust - Explore Surabaya Beyond the Destination')
+@section('title', 'Somewhere in... - Explore Surabaya Beyond the Destination')
 
 @section('content')
 

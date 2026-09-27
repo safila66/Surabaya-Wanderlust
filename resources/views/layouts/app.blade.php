@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Surabaya Wanderlust - Explore Surabaya Beyond the Destination')</title>
+    <title>@yield('title', 'Somewhere in... - Explore Surabaya Beyond the Destination')</title>
 
     <style>
 
@@ -60,7 +60,9 @@
         .logo {
             font-family: 'Perpetua Titling MT', serif;
             font-size: 35px;
+            white-space: normal;
             font-weight: bold;
+            line-height: 1.1;
             color: #f4e80b;
         }
 
