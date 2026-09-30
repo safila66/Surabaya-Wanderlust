@@ -32,6 +32,9 @@ Route::get('/provinces/{slug}', [ProvinceController::class, 'show'])
 Route::get('/regions/{slug}', [RegionController::class, 'show'])
     ->name('regions.show');
 
+Route::get('/regions/{slug}/{category}', [RegionController::class, 'category'])
+    ->name('regions.category');
+
 Route::get('/travel-experience', [TravelPostController::class, 'index'])
     ->name('travel-posts.index');
 
@@ -80,3 +83,17 @@ Route::get('/plan-your-trip', [PlanYourTripController::class, 'index'])
 
 Route::get('/about', [AboutController::class, 'index'])
     ->name('about.index');
+// Culture Sub-pages
+Route::get('/culture/heritage', function() { return view('culture.heritage'); })->name('culture.heritage');
+Route::get('/culture/traditions', function() { return view('culture.traditions'); })->name('culture.traditions');
+Route::get('/culture/arts', function() { return view('culture.arts'); })->name('culture.arts');
+
+// Travel Guide Sub-pages
+Route::get('/travel-guide/getting-around', function() { return view('travel-guide.getting-around'); })->name('travel-guide.getting-around');
+Route::get('/travel-guide/before-you-go', function() { return view('travel-guide.before-you-go'); })->name('travel-guide.before-you-go');
+Route::get('/travel-guide/tips', function() { return view('travel-guide.tips'); })->name('travel-guide.tips');
+
+// Plan Your Trip Sub-pages
+Route::get('/plan-your-trip/nature-escape', function() { return view('plan-your-trip.nature'); })->name('plan-your-trip.nature');
+Route::get('/plan-your-trip/culture-heritage', function() { return view('plan-your-trip.culture'); })->name('plan-your-trip.culture');
+Route::get('/plan-your-trip/culinary-journey', function() { return view('plan-your-trip.culinary'); })->name('plan-your-trip.culinary');

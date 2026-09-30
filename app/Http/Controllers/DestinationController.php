@@ -10,13 +10,26 @@ class DestinationController extends Controller
     /**
      * Menampilkan semua destinasi wisata.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $destinations = Destination::with('regency.province')
-            ->latest()
-            ->get();
+        $search = $request->get('search');
+        
+        $query = Destination::with('regency.province');
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('category', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('regency', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        $destinations = $query->latest()->get();
 
-        return view('destinations.index', compact('destinations'));
+        return view('destinations.index', compact('destinations', 'search'));
     }
 
     /**

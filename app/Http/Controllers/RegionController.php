@@ -10,44 +10,119 @@ use Illuminate\Support\Str;
 
 class RegionController extends Controller
 {
+    /**
+     * Category metadata helper
+     */
+    private function categoryMeta(): array
+    {
+        return [
+            'entertainment' => [
+                'label' => 'Entertainment',
+                'icon'  => '🎢',
+                'desc'  => 'Destinations and activities to enjoy your time.',
+            ],
+            'resto-cafe' => [
+                'label' => 'Resto & Cafe',
+                'icon'  => '☕',
+                'desc'  => 'Culinary spots, restaurants, and cozy cafes.',
+            ],
+            'accommodation' => [
+                'label' => 'Accommodation',
+                'icon'  => '🏨',
+                'desc'  => 'Places to stay, from hotels to guesthouses.',
+            ],
+            'transport' => [
+                'label' => 'Transport',
+                'icon'  => '🚌',
+                'desc'  => 'Public transportations, rentals, and stations.',
+            ],
+            'bar-club' => [
+                'label' => 'Bar & Club',
+                'icon'  => '🍸',
+                'desc'  => 'Nightlife and places to socialize.',
+            ],
+            'prayer-places' => [
+                'label' => 'Prayer Places',
+                'icon'  => '🕌',
+                'desc'  => 'Mosques, churches, temples, and prayer places.',
+            ],
+        ];
+    }
+
+    /**
+     * Show region overview with all categories
+     */
     public function show($slug)
     {
-        // Surabaya regency_id is 329
-        $regencyId = 329;
-        
+        $regencyId  = 329;
         $regionName = ucwords(str_replace('-', ' ', $slug));
 
-        $entertainment = Destination::with('images')
-            ->where('regency_id', $regencyId)
-            ->latest()
-            ->get();
+        $entertainment  = Destination::with('images')->where('regency_id', $regencyId)->latest()->get();
+        $restoCafe      = Culinary::with('images')->where('regency_id', $regencyId)->latest()->get();
+        $accommodations = Accommodation::where('regency_id', $regencyId)->latest()->get();
+        $transportations= Transportation::where('regency_id', $regencyId)->latest()->get();
+        $barClub        = collect([]);
+        $prayerPlaces   = collect([]);
 
-        $restoCafe = Culinary::with('images')
-            ->where('regency_id', $regencyId)
-            ->latest()
-            ->get();
-
-        $accommodations = Accommodation::where('regency_id', $regencyId)
-            ->latest()
-            ->get();
-
-        $transportations = Transportation::where('regency_id', $regencyId)
-            ->latest()
-            ->get();
-
-        // Currently no model for Bar & Club or Prayer Places, we'll pass empty collections
-        $barClub = collect([]);
-        $prayerPlaces = collect([]);
+        $categories = $this->categoryMeta();
 
         return view('regions.show', compact(
-            'regionName',
-            'slug',
-            'entertainment',
-            'restoCafe',
-            'accommodations',
-            'transportations',
-            'barClub',
-            'prayerPlaces'
+            'regionName', 'slug',
+            'entertainment', 'restoCafe', 'accommodations',
+            'transportations', 'barClub', 'prayerPlaces',
+            'categories'
+        ));
+    }
+
+    /**
+     * Show a specific category page for a region
+     */
+    public function category($slug, $category)
+    {
+        $regencyId  = 329;
+        $regionName = ucwords(str_replace('-', ' ', $slug));
+        $categories = $this->categoryMeta();
+
+        if (!array_key_exists($category, $categories)) {
+            abort(404);
+        }
+
+        $meta = $categories[$category];
+
+        // Load items based on category
+        $items = collect([]);
+
+        switch ($category) {
+            case 'entertainment':
+                $items = Destination::with('images')
+                    ->where('regency_id', $regencyId)
+                    ->latest()->get();
+                break;
+
+            case 'resto-cafe':
+                $items = Culinary::with('images')
+                    ->where('regency_id', $regencyId)
+                    ->latest()->get();
+                break;
+
+            case 'accommodation':
+                $items = Accommodation::where('regency_id', $regencyId)
+                    ->latest()->get();
+                break;
+
+            case 'transport':
+                $items = Transportation::where('regency_id', $regencyId)
+                    ->latest()->get();
+                break;
+
+            case 'bar-club':
+            case 'prayer-places':
+                $items = collect([]);
+                break;
+        }
+
+        return view('regions.category', compact(
+            'regionName', 'slug', 'category', 'meta', 'items', 'categories'
         ));
     }
 }

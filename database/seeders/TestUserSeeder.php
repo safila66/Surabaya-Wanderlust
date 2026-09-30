@@ -12,11 +12,11 @@ class TestUserSeeder extends Seeder
     {
         User::updateOrCreate(
             [
-                'email' => 'user@nusaexplore.test',
+                'email' => 'user@Surabaya Wanderlust.test',
             ],
             [
                 'name' => 'Somewhere in...',
-                'password' => Hash::make('NusaExplore123'),
+                'password' => Hash::make('Surabaya Wanderlust123'),
             ]
         );
     }

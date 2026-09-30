@@ -7,7 +7,7 @@
     <div class="section-title">
 
         <h2>
-            🗺️ Explore by Region
+            Explore by Region
         </h2>
 
         <p>
@@ -64,9 +64,7 @@
 
                         @foreach ($page as $region)
 
-                            <a
-                                href="{{ route('regions.show', $region->slug) }}"
-                                class="region-card"
+                            <a href="{{ route('regions.show', $region->slug) }}" class="region-card">
                             >
 
                                 @php

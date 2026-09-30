@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>About — NusaExplore</title>
+    <title>About — Surabaya Wanderlust</title>
 
     <style>
         * {
@@ -13,71 +15,38 @@
             padding: 0;
         }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f7f3ed;
-            color: #29251f;
-        }
+        
 
         a {
             text-decoration: none;
             color: inherit;
         }
 
-        .navbar {
-            height: 76px;
-            background: #fff;
-            border-bottom: 1px solid #e8e1d8;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 6%;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-        }
+        .navbar { display: none; }
 
-        .logo {
-            font-size: 22px;
-            font-weight: 800;
-        }
+        
 
-        .logo span {
-            color: #a5673f;
-        }
+        
 
-        .nav-links {
-            display: flex;
-            gap: 26px;
-            align-items: center;
-        }
+        
 
-        .nav-links a {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .7px;
-            color: #4b453e;
-            transition: .2s;
-        }
+        
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #a5673f;
-        }
+        
 
         .hero {
-            min-height: 480px;
+            min-height: 380px;
             display: flex;
             align-items: center;
             background:
                 linear-gradient(rgba(42,34,27,.48), rgba(42,34,27,.48)),
                 url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85')
                 center/cover;
-            color: white;
+            color: var(--text-heading);
         }
 
         .hero-content {
-            width: min(1120px, 88%);
+            width: min(1000px, 88%);
             margin: auto;
         }
 
@@ -85,44 +54,44 @@
             display: block;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 11px;
+            font-size: 9px;
             margin-bottom: 18px;
         }
 
         .hero h1 {
             font-family: Georgia, serif;
-            font-size: clamp(48px, 7vw, 82px);
+            font-size: clamp(36px, 5.5vw, 62px);
             line-height: .95;
-            max-width: 800px;
+            max-width: 680px;
             margin-bottom: 24px;
         }
 
         .hero p {
             max-width: 620px;
-            font-size: 16px;
+            font-size: 13px;
             line-height: 1.8;
-            color: #eee7de;
+            color: var(--text-secondary);
         }
 
         .container {
-            width: min(1120px, 88%);
+            width: min(1000px, 88%);
             margin: auto;
         }
 
         .section {
-            padding: 80px 0;
+            padding: 56px 0;
         }
 
         .intro {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 70px;
+            gap: 48px;
             align-items: center;
         }
 
         .eyebrow {
             display: block;
-            color: #a5673f;
+            color: var(--gold);
             text-transform: uppercase;
             letter-spacing: 1.6px;
             font-size: 11px;
@@ -132,20 +101,20 @@
 
         h2 {
             font-family: Georgia, serif;
-            font-size: 42px;
+            font-size: 32px;
             line-height: 1.1;
             margin-bottom: 22px;
         }
 
         .intro p {
-            color: #716960;
+            color: var(--text-muted);
             line-height: 1.9;
-            font-size: 15px;
+            font-size: 13px;
             margin-bottom: 15px;
         }
 
         .intro-image {
-            height: 440px;
+            height: 340px;
             border-radius: 22px;
             overflow: hidden;
         }
@@ -157,7 +126,7 @@
         }
 
         .mission {
-            background: #ebe3d9;
+            background: var(--bg-primary);
         }
 
         .mission-grid {
@@ -167,10 +136,10 @@
         }
 
         .mission-card {
-            background: white;
-            padding: 30px;
+            background: var(--bg-card);
+            padding: 22px;
             border-radius: 18px;
-            border: 1px solid #e3d9ce;
+            border: 1px solid var(--border);
             transition: .25s;
         }
 
@@ -183,7 +152,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #f1e6da;
+            background: rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,13 +162,13 @@
 
         .mission-card h3 {
             font-family: Georgia, serif;
-            font-size: 23px;
+            font-size: 18px;
             margin-bottom: 10px;
         }
 
         .mission-card p {
-            color: #716960;
-            font-size: 14px;
+            color: var(--text-muted);
+            font-size: 12px;
             line-height: 1.8;
         }
 
@@ -210,7 +179,7 @@
         .journey > p {
             max-width: 650px;
             margin: 0 auto 40px;
-            color: #716960;
+            color: var(--text-muted);
             line-height: 1.8;
             font-size: 15px;
         }
@@ -223,31 +192,31 @@
         }
 
         .journey-step {
-            border-top: 2px solid #c5b4a4;
+            border-top: 1px solid var(--border);
             padding-top: 20px;
         }
 
         .journey-number {
             font-family: Georgia, serif;
-            color: #a5673f;
-            font-size: 34px;
+            color: var(--gold);
+            font-size: 26px;
             margin-bottom: 10px;
         }
 
         .journey-step h3 {
-            font-size: 17px;
+            font-size: 14px;
             margin-bottom: 8px;
         }
 
         .journey-step p {
-            color: #716960;
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 11px;
             line-height: 1.7;
         }
 
         .values {
-            background: #29251f;
-            color: white;
+            background: var(--bg-surface);
+            color: var(--text-heading);
         }
 
         .values-grid {
@@ -258,11 +227,11 @@
         }
 
         .values h2 {
-            color: white;
+            color: var(--text-heading);
         }
 
         .values-intro {
-            color: #bcb3aa;
+            color: var(--text-muted);
             line-height: 1.8;
             font-size: 14px;
         }
@@ -274,7 +243,7 @@
 
         .value {
             padding: 20px;
-            border: 1px solid #514a43;
+            border: 1px solid var(--border);
             border-radius: 14px;
         }
 
@@ -285,7 +254,7 @@
         }
 
         .value p {
-            color: #bcb3aa;
+            color: var(--text-muted);
             font-size: 13px;
             line-height: 1.7;
         }
@@ -293,15 +262,15 @@
         .source-note {
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 1px solid #514a43;
-            color: #999087;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
             font-size: 12px;
             line-height: 1.7;
         }
 
         footer {
             background: #1e1b18;
-            color: #eee7de;
+            color: var(--text-secondary);
             padding: 45px 7%;
         }
 
@@ -335,9 +304,7 @@
         }
 
         @media (max-width: 900px) {
-            .nav-links {
-                display: none;
-            }
+            
 
             .intro,
             .values-grid {
@@ -383,42 +350,30 @@
             }
         }
     </style>
+    <style>
+        </style>
 </head>
 
 <body>
 
-<nav class="navbar">
+@include('partials.navbar')
 
-    <a href="{{ route('home') }}" class="logo">
-        Nusa<span>Explore</span>
-    </a>
 
-    <div class="nav-links">
-        <a href="{{ route('home') }}">HOME</a>
-        <a href="{{ route('destinations.index') }}">DESTINATIONS</a>
-        <a href="{{ route('culinary.index') }}">CULINARY</a>
-        <a href="{{ route('culture.index') }}">CULTURE</a>
-        <a href="{{ route('travel-guide.index') }}">TRAVEL GUIDE</a>
-        <a href="{{ route('best-time.index') }}">BEST TIME</a>
-        <a href="{{ route('plan-your-trip.index') }}">PLAN YOUR TRIP</a>
-        <a href="{{ route('about.index') }}" class="active">ABOUT</a>
-    </div>
 
-</nav>
 
 
 <section class="hero">
 
     <div class="hero-content">
 
-        <small>About NusaExplore</small>
+        <small>About Surabaya Wanderlust</small>
 
         <h1>
             Surabaya is more than a destination.
         </h1>
 
         <p>
-            NusaExplore is a digital travel information portal designed
+            Surabaya Wanderlust is a digital travel information portal designed
             to help travelers discover, understand and plan their journey
             across Surabaya.
         </p>
@@ -445,12 +400,12 @@
                 <p>
                     Surabaya has thousands of islands, hundreds of cultures,
                     unique culinary traditions and countless places worth exploring.
-                    NusaExplore brings this information together in one place.
+                    Surabaya Wanderlust brings this information together in one place.
                 </p>
 
                 <p>
                     Instead of only showing travelers where to go,
-                    NusaExplore helps them understand the character of a place,
+                    Surabaya Wanderlust helps them understand the character of a place,
                     what they can experience, when to visit and what they should
                     prepare before traveling.
                 </p>
@@ -487,7 +442,7 @@
             <span class="eyebrow">Our Purpose</span>
 
             <h2>
-                What NusaExplore brings together.
+                What Surabaya Wanderlust brings together.
             </h2>
 
         </div>
@@ -547,7 +502,7 @@
 
     <div class="container">
 
-        <span class="eyebrow">The NusaExplore Journey</span>
+        <span class="eyebrow">The Surabaya Wanderlust Journey</span>
 
         <h2>
             From inspiration to experience.
@@ -638,7 +593,7 @@
                 </h2>
 
                 <p class="values-intro">
-                    NusaExplore is designed around useful, practical and
+                    Surabaya Wanderlust is designed around useful, practical and
                     transparent travel information. Recommendations and
                     estimated information are presented as guidance rather
                     than guarantees.
@@ -690,7 +645,7 @@
 
 
         <div class="source-note">
-            NusaExplore is an information portal. Prices, opening hours,
+            Surabaya Wanderlust is an information portal. Prices, opening hours,
             transportation schedules, weather conditions and other travel
             information may change over time. Travelers should verify
             important information with the relevant official provider
@@ -702,48 +657,10 @@
 </section>
 
 
-<footer>
-
-    <div class="footer-inner">
-
-        <div>
-
-            <h3>NusaExplore</h3>
-
-            <p>
-                Explore Surabaya Beyond the Destination.
-            </p>
-
-        </div>
 
 
-        <div class="footer-links">
 
-            <a href="{{ route('destinations.index') }}">
-                Destinations
-            </a>
-
-            <a href="{{ route('culinary.index') }}">
-                Culinary
-            </a>
-
-            <a href="{{ route('culture.index') }}">
-                Culture
-            </a>
-
-            <a href="{{ route('travel-guide.index') }}">
-                Travel Guide
-            </a>
-
-            <a href="{{ route('plan-your-trip.index') }}">
-                Plan Your Trip
-            </a>
-
-        </div>
-
-    </div>
-
-</footer>
+@include('partials.footer')
 
 </body>
 </html>

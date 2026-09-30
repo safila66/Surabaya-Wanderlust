@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
 
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $culinary->name }} | NusaExplore</title>
+    <title>{{ $culinary->name }} | Surabaya Wanderlust</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
@@ -31,12 +33,7 @@
             box-sizing: border-box;
         }
 
-        body {
-            margin: 0;
-            background: var(--cream-light);
-            color: var(--text);
-            font-family: Arial, sans-serif;
-        }
+        
 
         /* =========================
            NAVBAR
@@ -146,7 +143,7 @@
         }
 
         .gallery-item {
-            height: 150px;
+            height: 200px;
             border-radius: 12px;
             overflow: hidden;
             background: #e8e1d5;
@@ -316,9 +313,7 @@
            CARD BODY
         ========================= */
 
-        .recommendation-body {
-            padding: 20px;
-        }
+        .recommendation-
 
         .recommendation-location {
             display: flex;
@@ -544,50 +539,22 @@
 
     </style>
 
+    <style>
+        </style>
 </head>
 
 
 <body>
+
+@include('partials.navbar')
+
 
 
 <!-- =========================
      NAVBAR
 ========================= -->
 
-<nav class="navbar">
 
-    <div class="container">
-
-        <div class="d-flex justify-content-between align-items-center">
-
-            <a href="{{ route('home') }}" class="brand">
-                NusaExplore
-            </a>
-
-            <div>
-
-                <a href="{{ route('destinations.index') }}"
-                   class="nav-link d-inline-block">
-                    Destinations
-                </a>
-
-                <a href="{{ route('culinary.index') }}"
-                   class="nav-link d-inline-block">
-                    Culinary
-                </a>
-
-                <a href="{{ route('travel-posts.index') }}"
-                   class="nav-link d-inline-block">
-                    Travel Stories
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</nav>
 
 
 <!-- =========================
@@ -1054,22 +1021,11 @@
      FOOTER
 ========================= -->
 
-<footer>
 
-    <div class="container">
 
-        <strong>
-            NusaExplore
-        </strong>
 
-        <span class="ms-2">
-            Explore Surabaya Beyond the Destination.
-        </span>
 
-    </div>
-
-</footer>
-
+@include('partials.footer')
 
 </body>
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login | NusaExplore</title>
+    <title>Login | Surabaya Wanderlust</title>
 
     <style>
         body {
@@ -93,7 +93,7 @@
     <h1>Welcome back.</h1>
 
     <p>
-        Sign in to share your travel experience on NusaExplore.
+        Sign in to share your travel experience on Surabaya Wanderlust.
     </p>
 
     @if($errors->any())
@@ -136,7 +136,7 @@
     </form>
 
     <a href="{{ route('home') }}" class="back">
-        ← Back to NusaExplore
+        ← Back to Surabaya Wanderlust
     </a>
 
 </div>

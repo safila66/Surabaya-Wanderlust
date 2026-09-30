@@ -348,7 +348,7 @@
         <div class="experience-header">
 
             <div class="eyebrow">
-                NusaExplore Community
+                Surabaya Wanderlust Community
             </div>
 
             <h1>

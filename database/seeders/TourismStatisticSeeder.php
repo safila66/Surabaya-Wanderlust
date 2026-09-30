@@ -18,7 +18,7 @@ class TourismStatisticSeeder extends Seeder
         | DATA DEMO
         |--------------------------------------------------------------------------
         | Angka visitor_count di bawah ini hanya digunakan sebagai data contoh
-        | untuk pengembangan website NusaExplore.
+        | untuk pengembangan website Surabaya Wanderlust.
         |
         | Nantinya dapat diganti dengan data resmi dari BPS, pemerintah daerah,
         | atau pengelola destinasi.
@@ -74,7 +74,7 @@ class TourismStatisticSeeder extends Seeder
                 [
                     'visitor_count' => $data['visitor_count'],
                     'ranking' => $data['ranking'],
-                    'source' => 'Data Demo NusaExplore',
+                    'source' => 'Data Demo Surabaya Wanderlust',
                     'source_url' => null,
                     'last_updated' => now()->toDateString(),
                     'notes' => 'DATA DEMO untuk pengembangan website. Angka harus diganti dengan data resmi dari sumber terpercaya.',

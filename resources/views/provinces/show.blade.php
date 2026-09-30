@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 
 <head>
 
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
 
     <meta
         name="viewport"
@@ -11,7 +13,7 @@
     >
 
     <title>
-        {{ $province->name }} — NusaExplore
+        {{ $province->name }} — Surabaya Wanderlust
     </title>
 
     <style>
@@ -26,11 +28,7 @@
             scroll-behavior: smooth;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f6f4ee;
-            color: #26352f;
-        }
+        
 
         a {
             text-decoration: none;
@@ -41,21 +39,7 @@
            NAVBAR
         ====================================================== */
 
-        .navbar {
-            height: 78px;
-            padding: 0 7%;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            background: #ffffff;
-
-            border-bottom: 1px solid #e8e5dc;
-
-            position: relative;
-            z-index: 20;
-        }
+        .navbar { display: none; }
 
         .brand {
             color: #24584a;
@@ -90,14 +74,14 @@
         ====================================================== */
 
         .province-hero {
-            min-height: 470px;
+            min-height: 360px;
 
             position: relative;
 
             display: flex;
             align-items: flex-end;
 
-            padding: 80px 8%;
+            padding: 60px 6%;
 
             background:
                 linear-gradient(
@@ -371,9 +355,7 @@
 
         @media (max-width: 600px) {
 
-            .navbar {
-                padding: 0 5%;
-            }
+            .navbar { display: none; }
 
             .container {
                 width: 90%;
@@ -400,48 +382,22 @@
 
     </style>
 
+    <style>
+        </style>
 </head>
 
 
 <body>
+
+@include('partials.navbar')
+
 
 
     <!-- =====================================================
          NAVBAR
     ====================================================== -->
 
-    <nav class="navbar">
-
-        <div>
-
-            <div class="brand">
-                NusaExplore
-            </div>
-
-            <div class="brand-sub">
-                Explore Surabaya Beyond the Destination
-            </div>
-
-        </div>
-
-
-        <div class="nav-links">
-
-            <a href="{{ route('home') }}">
-                HOME
-            </a>
-
-            <a href="{{ route('destinations.index') }}">
-                DESTINATIONS
-            </a>
-
-            <a href="{{ route('provinces.index') }}">
-                REGIONS
-            </a>
-
-        </div>
-
-    </nav>
+    
 
 
 
@@ -495,7 +451,7 @@
                     <p>
 
                         {{ $province->description
-                            ?? 'Jelajahi berbagai wilayah dan pengalaman perjalanan yang tersedia di provinsi ini melalui NusaExplore.'
+                            ?? 'Jelajahi berbagai wilayah dan pengalaman perjalanan yang tersedia di provinsi ini melalui Surabaya Wanderlust.'
                         }}
 
                     </p>
@@ -635,22 +591,11 @@
          FOOTER
     ====================================================== -->
 
-    <footer>
+    
 
-        <h3>
-            NusaExplore
-        </h3>
 
-        <p>
-            Explore Surabaya Beyond the Destination
-        </p>
 
-        <p>
-            © {{ date('Y') }} NusaExplore
-        </p>
-
-    </footer>
-
+@include('partials.footer')
 
 </body>
 

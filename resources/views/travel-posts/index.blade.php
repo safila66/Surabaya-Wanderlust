@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
 
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
 
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Travel Experiences | NusaExplore</title>
+    <title>Travel Experiences | Surabaya Wanderlust</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
@@ -25,11 +27,7 @@
             padding: 0;
         }
 
-        body {
-            background: #F5F1E8;
-            color: #29352E;
-            font-family: "DM Sans", sans-serif;
-        }
+        
 
         a {
             color: inherit;
@@ -448,61 +446,22 @@
 
     </style>
 
+    <style>
+        </style>
 </head>
 
 
 <body>
+
+@include('partials.navbar')
+
 
 
     <!-- =========================
          NAVBAR
     ========================= -->
 
-    <nav class="navbar">
-
-        <a
-            href="{{ route('home') }}"
-            class="brand"
-        >
-            Nusa<span>Explore</span>
-        </a>
-
-
-        <div class="nav-links">
-
-            <a href="{{ route('home') }}">
-                HOME
-            </a>
-
-            <a href="{{ route('destinations.index') }}">
-                DESTINATIONS
-            </a>
-
-            <a href="#">
-                CULINARY
-            </a>
-
-            <a href="#">
-                CULTURE
-            </a>
-
-            <a
-                href="{{ route('travel-posts.index') }}"
-                class="nav-active"
-            >
-                EXPERIENCES
-            </a>
-
-            <a
-                href="{{ route('travel-posts.create') }}"
-                class="nav-button"
-            >
-                + SHARE STORY
-            </a>
-
-        </div>
-
-    </nav>
+    
 
 
     <!-- =========================
@@ -512,7 +471,7 @@
     <section class="page-hero">
 
         <div class="eyebrow">
-            NUSAEXPLORE COMMUNITY
+            Surabaya Wanderlust COMMUNITY
         </div>
 
 
@@ -524,7 +483,7 @@
         <p>
             Discover Surabaya through the experiences of fellow travelers.
             Read their stories, find new inspiration, and share your own
-            journey with the NusaExplore community.
+            journey with the Surabaya Wanderlust community.
         </p>
 
 
@@ -625,7 +584,7 @@
 
                                     <div class="no-image">
 
-                                        NusaExplore Experience
+                                        Surabaya Wanderlust Experience
 
                                     </div>
 
@@ -760,7 +719,7 @@
 
                 <p>
                     Be the first traveler to share an experience
-                    with the NusaExplore community.
+                    with the Surabaya Wanderlust community.
                 </p>
 
 
@@ -785,40 +744,11 @@
          FOOTER
     ========================= -->
 
-    <footer>
+    
 
 
-        <div class="footer-inner">
 
-
-            <div class="footer-brand">
-                NusaExplore
-            </div>
-
-
-            <p class="footer-text">
-
-                Explore Surabaya beyond the destination.
-                Discover places, understand local culture,
-                plan your journey, and experience Surabaya
-                through stories from fellow travelers.
-
-            </p>
-
-
-            <div class="footer-bottom">
-
-                © {{ date('Y') }} NusaExplore.
-                Explore Surabaya Beyond the Destination.
-
-            </div>
-
-
-        </div>
-
-
-    </footer>
-
+@include('partials.footer')
 
 </body>
 

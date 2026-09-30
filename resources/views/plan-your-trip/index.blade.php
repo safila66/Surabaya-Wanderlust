@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Plan Your Trip — NusaExplore</title>
+    <title>Plan Your Trip — Surabaya Wanderlust</title>
 
     <style>
         * {
@@ -13,11 +15,7 @@
             padding: 0;
         }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f7f3ed;
-            color: #29251f;
-        }
+        
 
         a {
             text-decoration: none;
@@ -26,8 +24,8 @@
 
         .navbar {
             height: 76px;
-            background: #fff;
-            border-bottom: 1px solid #e8e1d8;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -108,8 +106,8 @@
             margin-top: -38px;
             position: relative;
             z-index: 5;
-            background: #fff;
-            border: 1px solid #e7ded4;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 22px;
             padding: 30px;
             box-shadow: 0 18px 45px rgba(55,43,31,.10);
@@ -150,9 +148,9 @@
             width: 100%;
             height: 48px;
             padding: 0 13px;
-            border: 1px solid #ddd4ca;
+            border: 1px solid var(--border);
             border-radius: 10px;
-            background: #fff;
+            background: var(--bg-card);
             color: #403a34;
             outline: none;
         }
@@ -178,7 +176,7 @@
         }
 
         .section {
-            padding: 75px 0;
+            padding: 55px 0;
         }
 
         .section-heading {
@@ -217,7 +215,7 @@
 
         .idea {
             background: white;
-            border: 1px solid #e7ded4;
+            border: 1px solid var(--border);
             border-radius: 18px;
             padding: 28px;
             transition: .25s;
@@ -288,7 +286,7 @@
         .note {
             margin-top: 30px;
             padding: 18px 20px;
-            background: #fff;
+            background: var(--bg-card);
             border-left: 3px solid #a5673f;
             color: #6e675f;
             font-size: 13px;
@@ -321,7 +319,7 @@
 
         .footer-links {
             display: flex;
-            gap: 22px;
+            gap: 16px;
             align-items: center;
         }
 
@@ -383,29 +381,19 @@
             }
         }
     </style>
+    <style>
+        </style>
 </head>
 
 <body>
 
-<nav class="navbar">
-    <a href="{{ route('home') }}" class="logo">
-        Nusa<span>Explore</span>
-    </a>
+@include('partials.navbar')
 
-    <div class="nav-links">
-        <a href="{{ route('home') }}">HOME</a>
-        <a href="{{ route('destinations.index') }}">DESTINATIONS</a>
-        <a href="{{ route('culinary.index') }}">CULINARY</a>
-        <a href="{{ route('culture.index') }}">CULTURE</a>
-        <a href="{{ route('travel-guide.index') }}">TRAVEL GUIDE</a>
-        <a href="{{ route('best-time.index') }}">BEST TIME</a>
-        <a href="{{ route('plan-your-trip.index') }}">PLAN YOUR TRIP</a>
-        <a href="{{ route('about.index') }}">ABOUT</a>
-    </div>
-</nav>
+
+
 
 <section class="hero">
-    <small>NusaExplore Travel Planner</small>
+    <small>Surabaya Wanderlust Travel Planner</small>
 
     <h1>Plan Your Trip.</h1>
 
@@ -504,7 +492,7 @@
 
         <div class="ideas">
 
-            <div class="idea">
+            <a href="{{ route('plan-your-trip.nature') }}" class="idea" style="text-decoration:none; color:inherit; display:block;">
                 <div class="idea-icon">🌿</div>
 
                 <h3>Nature Escape</h3>
@@ -512,10 +500,9 @@
                 <p>
                     Mountains, beaches, waterfalls and natural landscapes
                     for travelers who want to slow down and reconnect with nature.
-                </p>
-            </div>
+                </p></a>
 
-            <div class="idea">
+            <a href="{{ route('plan-your-trip.culture') }}" class="idea" style="text-decoration:none; color:inherit; display:block;">
                 <div class="idea-icon">🏛️</div>
 
                 <h3>Culture & Heritage</h3>
@@ -523,10 +510,9 @@
                 <p>
                     Discover local traditions, historical places, architecture,
                     arts and stories that make each region different.
-                </p>
-            </div>
+                </p></a>
 
-            <div class="idea">
+            <a href="{{ route('plan-your-trip.culinary') }}" class="idea" style="text-decoration:none; color:inherit; display:block;">
                 <div class="idea-icon">🍜</div>
 
                 <h3>Culinary Journey</h3>
@@ -534,8 +520,7 @@
                 <p>
                     Explore Surabayan flavors through local dishes,
                     traditional food, street food and regional specialties.
-                </p>
-            </div>
+                </p></a>
 
         </div>
 
@@ -584,7 +569,7 @@
                 <div class="number">04</div>
                 <h3>Start exploring</h3>
                 <p>
-                    Use the information from NusaExplore to prepare for your journey.
+                    Use the information from Surabaya Wanderlust to prepare for your journey.
                 </p>
             </div>
 
@@ -592,7 +577,7 @@
 
         <div class="note">
             <strong>Note:</strong>
-            Estimated costs, travel times and recommendations on NusaExplore
+            Estimated costs, travel times and recommendations on Surabaya Wanderlust
             are provided as travel information and may change depending on
             season, provider and local conditions.
         </div>
@@ -601,28 +586,10 @@
 
 </section>
 
-<footer>
 
-    <div class="footer-inner">
 
-        <div>
-            <h3>NusaExplore</h3>
 
-            <p>
-                Explore Surabaya Beyond the Destination.
-            </p>
-        </div>
-
-        <div class="footer-links">
-            <a href="{{ route('destinations.index') }}">Destinations</a>
-            <a href="{{ route('culinary.index') }}">Culinary</a>
-            <a href="{{ route('culture.index') }}">Culture</a>
-            <a href="{{ route('travel-guide.index') }}">Travel Guide</a>
-        </div>
-
-    </div>
-
-</footer>
+@include('partials.footer')
 
 </body>
 </html>

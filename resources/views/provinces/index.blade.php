@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 
 <head>
 
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Explore Regions - Somewhere in...</title>
@@ -20,10 +22,7 @@
 
     <style>
 
-        body {
-            background: #f7f9fc;
-            font-family: Arial, sans-serif;
-        }
+        
 
         .navbar {
             background: white;
@@ -62,7 +61,7 @@
         }
 
         .province-icon {
-            height: 150px;
+            height: 200px;
             background: linear-gradient(135deg, #dbeafe, #eff6ff);
             display: flex;
             align-items: center;
@@ -88,115 +87,20 @@
 
     </style>
 
+    <style>
+        </style>
 </head>
 
 
 <body>
 
+@include('partials.navbar')
+
+
 
 <!-- NAVBAR -->
 
-<nav class="navbar navbar-expand-lg sticky-top">
 
-    <div class="container">
-
-        <a
-            class="navbar-brand brand"
-            href="{{ route('home') }}"
-        >
-            <i class="fa-solid fa-compass me-2"></i>
-            t
-        </a>
-
-
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-        >
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
-
-
-        <div
-            class="collapse navbar-collapse"
-            id="navbarNav"
-        >
-
-            <ul class="navbar-nav ms-auto">
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link"
-                        href="{{ route('home') }}"
-                    >
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link"
-                        href="{{ route('destinations.index') }}"
-                    >
-                        Destinations
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link active"
-                        href="{{ route('provinces.index') }}"
-                    >
-                        Provinces
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#">
-                        Culinary
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#">
-                        Culture
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#">
-                        Travel Guide
-                    </a>
-
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
-</nav>
 
 
 
@@ -310,21 +214,7 @@
 
 <!-- FOOTER -->
 
-<footer class="bg-dark text-white py-4 mt-5">
 
-    <div class="container text-center">
-
-        <h5 class="fw-bold">
-            NusaExplore
-        </h5>
-
-        <p class="text-white-50 mb-0">
-            Explore Surabaya Beyond the Destination
-        </p>
-
-    </div>
-
-</footer>
 
 
 
@@ -332,6 +222,9 @@
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
 
+
+
+@include('partials.footer')
 
 </body>
 

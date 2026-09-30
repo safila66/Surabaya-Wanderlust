@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
 
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
 
     <meta
         name="viewport"
@@ -11,7 +13,7 @@
     >
 
     <title>
-        {{ $post->title }} — NusaExplore
+        {{ $post->title }} — Surabaya Wanderlust
     </title>
 
     <link
@@ -35,12 +37,7 @@
             box-sizing: border-box;
         }
 
-        body {
-            margin: 0;
-            background: var(--cream);
-            color: var(--dark);
-            font-family: Arial, sans-serif;
-        }
+        
 
         .page {
             max-width: 1100px;
@@ -317,10 +314,15 @@
 
     </style>
 
+    <style>
+        </style>
 </head>
 
 
 <body>
+
+@include('partials.navbar')
+
 
 <div class="page">
 
@@ -558,6 +560,9 @@
 
 </div>
 
+
+
+@include('partials.footer')
 
 </body>
 

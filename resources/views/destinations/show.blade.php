@@ -1,14 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $destination->name }} — NusaExplore</title>
+    <title>{{ $destination->name }} — Surabaya Wanderlust</title>
 
+    {{-- Anti-flicker: apply saved theme immediately --}}
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+
+    {{-- Unified CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
+
     <style>
+        /* Override theme colors to match unified theme */
+        :root {
+            --cream: #0d1b3e;
+            --cream-dark: #07112a;
+            --paper: #122254;
+            --green: #f4e80b;
+            --green-soft: rgba(244,232,11,0.6);
+            --brown: #f4e80b;
+            --gold: #f4e80b;
+            --terracotta: #0abf8a;
+            --text: #ffffff;
+            --muted: #7a86a1;
+            --line: rgba(255,255,255,0.12);
+            --white: #ffffff;
+        }
+        body {
+            background: #0d1b3e !important;
+            color: #ffffff !important;
+        }
+    </style>
+
+    <style>{{-- Original inline styles below --}}
 
         :root {
             --cream: #f5f1e8;
@@ -58,13 +86,7 @@
         ========================= */
 
         .navbar {
-            height: 76px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 6%;
-            background: rgba(251, 250, 246, .96);
-            border-bottom: 1px solid rgba(48, 74, 59, .08);
+            display: none; /* digantikan oleh uni-navbar dari partials/navbar */
         }
 
         .brand {
@@ -141,14 +163,14 @@
         ========================= */
 
         .destination-hero {
-            max-width: 1180px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 25px;
+            padding: 0 20px;
         }
 
         .hero-photo {
-            height: 535px;
-            border-radius: 24px;
+            height: 420px;
+            border-radius: 18px;
             overflow: hidden;
             position: relative;
             background: #aaa;
@@ -174,46 +196,46 @@
 
         .hero-content {
             position: absolute;
-            bottom: 42px;
-            left: 45px;
-            right: 45px;
+            bottom: 34px;
+            left: 36px;
+            right: 36px;
             color: white;
         }
 
         .eyebrow {
             display: inline-block;
-            font-size: 11px;
-            letter-spacing: 2.5px;
+            font-size: 9px;
+            letter-spacing: 2px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .hero-content h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(42px, 6vw, 72px);
+            font-size: clamp(32px, 5vw, 56px);
             line-height: 1;
             font-weight: 600;
-            margin-bottom: 13px;
+            margin-bottom: 10px;
         }
 
         .hero-location {
-            font-size: 14px;
+            font-size: 12px;
             opacity: .92;
-            margin-bottom: 17px;
+            margin-bottom: 14px;
         }
 
         .rating-line {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
         .stars {
             color: #e7c979;
             letter-spacing: 2px;
-            font-size: 17px;
+            font-size: 14px;
         }
 
         .rating-number {
@@ -222,7 +244,7 @@
 
         .review-count {
             opacity: .9;
-            font-size: 13px;
+            font-size: 11px;
         }
 
 
@@ -231,15 +253,15 @@
         ========================= */
 
         .destination-gallery {
-            max-width: 1180px;
-            margin: 14px auto 0;
-            padding: 0 25px;
+            max-width: 1100px;
+            margin: 11px auto 0;
+            padding: 0 20px;
             overflow: hidden;
         }
 
         .gallery-track {
             display: flex;
-            gap: 12px;
+            gap: 10px;
 
             overflow-x: auto;
 
@@ -264,10 +286,10 @@
         }
 
         .gallery-slide {
-            flex: 0 0 260px;
-            height: 150px;
+            flex: 0 0 210px;
+            height: 120px;
 
-            border-radius: 16px;
+            border-radius: 13px;
 
             overflow: hidden;
 
@@ -294,13 +316,13 @@
         .gallery-caption {
             position: absolute;
 
-            left: 12px;
-            right: 12px;
-            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 8px;
 
             color: white;
 
-            font-size: 11px;
+            font-size: 9px;
 
             text-shadow:
                 0 1px 5px rgba(0,0,0,.5);
@@ -312,23 +334,23 @@
         ========================= */
 
         .content {
-            max-width: 1100px;
+            max-width: 1000px;
 
-            margin: 65px auto 90px;
+            margin: 48px auto 64px;
 
-            padding: 0 25px;
+            padding: 0 20px;
         }
 
         .intro {
-            max-width: 780px;
+            max-width: 680px;
 
-            margin-bottom: 45px;
+            margin-bottom: 36px;
         }
 
         .section-label {
-            font-size: 11px;
+            font-size: 9px;
 
-            letter-spacing: 2px;
+            letter-spacing: 1.8px;
 
             text-transform: uppercase;
 
@@ -336,13 +358,13 @@
 
             font-weight: 700;
 
-            margin-bottom: 9px;
+            margin-bottom: 7px;
         }
 
         .intro h2 {
             font-family: 'Playfair Display', serif;
 
-            font-size: 36px;
+            font-size: 28px;
 
             font-weight: 600;
 
@@ -350,15 +372,15 @@
 
             color: var(--green);
 
-            margin-bottom: 17px;
+            margin-bottom: 13px;
         }
 
         .intro p {
             color: #65655e;
 
-            font-size: 15px;
+            font-size: 13px;
 
-            line-height: 1.9;
+            line-height: 1.85;
         }
 
 
@@ -372,9 +394,9 @@
             grid-template-columns:
                 repeat(4, 1fr);
 
-            gap: 12px;
+            gap: 10px;
 
-            margin-bottom: 65px;
+            margin-bottom: 48px;
         }
 
         .info-card {
@@ -384,33 +406,33 @@
                 1px solid
                 rgba(48, 74, 59, .08);
 
-            border-radius: 15px;
+            border-radius: 12px;
 
-            padding: 20px;
+            padding: 16px;
 
-            min-height: 120px;
+            min-height: 95px;
         }
 
         .info-icon {
-            font-size: 18px;
+            font-size: 15px;
 
-            margin-bottom: 12px;
+            margin-bottom: 9px;
         }
 
         .info-title {
-            font-size: 10px;
+            font-size: 9px;
 
             text-transform: uppercase;
 
-            letter-spacing: 1.4px;
+            letter-spacing: 1.2px;
 
             color: var(--muted);
 
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .info-value {
-            font-size: 14px;
+            font-size: 12px;
 
             font-weight: 600;
 
@@ -428,13 +450,13 @@
             grid-template-columns:
                 1.45fr .8fr;
 
-            gap: 55px;
+            gap: 40px;
 
             align-items: start;
         }
 
         .content-section {
-            margin-bottom: 55px;
+            margin-bottom: 42px;
         }
 
         .content-section h3 {
@@ -442,17 +464,17 @@
 
             color: var(--green);
 
-            font-size: 28px;
+            font-size: 22px;
 
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .content-section p {
             color: #67675f;
 
-            font-size: 14px;
+            font-size: 13px;
 
-            line-height: 1.9;
+            line-height: 1.85;
         }
 
 
@@ -1005,67 +1027,23 @@
 <body>
 
 
+
+
 <!-- =========================
      NAVBAR
 ========================= -->
 
-<nav class="navbar">
-
-    <a href="{{ route('home') }}" class="brand">
-
-        <span class="brand-mark">
-            N
-        </span>
-
-        NusaExplore
-
-    </a>
-
-
-    <div class="nav-links">
-
-        <a href="{{ route('home') }}">
-            Home
-        </a>
-
-        <a href="{{ route('provinces.index') }}">
-            Destinations
-        </a>
-
-        <a href="#">
-            Experiences
-        </a>
-
-        <a href="#">
-            Travel Guide
-        </a>
-
-        <a href="#">
-            About
-        </a>
-
-        <a href="#" class="nav-button">
-            Explore
-        </a>
-
-    </div>
-
-</nav>
-
-
+@include('partials.navbar')
 
 <!-- =========================
      BREADCRUMB
 ========================= -->
 
-<div class="breadcrumb">
+<div class="breadcrumb" style="max-width:1200px; margin:90px auto 0; padding:20px 25px 10px;">
 
-    <a href="{{ route('home') }}">
-        Home
-    </a>
+    <a href="{{ route('home') }}">Home</a>
 
     &nbsp; / &nbsp;
-
 
     <a href="{{ route('provinces.show', $destination->regency->province->slug) }}">
 
@@ -1447,7 +1425,7 @@
 
                     {{
                         $destination->facilities
-                        ?? 'Facility information will be updated by NusaExplore.'
+                        ?? 'Facility information will be updated by Surabaya Wanderlust.'
                     }}
 
                 </p>
@@ -2013,151 +1991,8 @@
 
 
 
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-
-    <div class="footer-grid">
-
-
-        <div>
-
-            <div class="footer-brand">
-                NusaExplore
-            </div>
-
-
-            <div class="footer-desc">
-
-                Explore Surabaya beyond the destination.
-                Discover places, culture, culinary experiences
-                and travel inspiration across the archipelago.
-
-            </div>
-
-        </div>
-
-
-
-        <div>
-
-            <div class="footer-title">
-                Explore
-            </div>
-
-
-            <div class="footer-links">
-
-
-                <a href="{{ route('home') }}">
-                    Home
-                </a>
-
-
-                <a href="{{ route('provinces.index') }}">
-                    Destinations
-                </a>
-
-
-                <a href="#">
-                    Culinary
-                </a>
-
-
-                <a href="#">
-                    Culture
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-
-        <div>
-
-            <div class="footer-title">
-                Travel
-            </div>
-
-
-            <div class="footer-links">
-
-
-                <a href="#">
-                    Travel Guide
-                </a>
-
-
-                <a href="#">
-                    Best Time
-                </a>
-
-
-                <a href="#">
-                    Plan Your Trip
-                </a>
-
-
-                <a href="#">
-                    Travel Tips
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-
-        <div>
-
-            <div class="footer-title">
-                NusaExplore
-            </div>
-
-
-            <div class="footer-links">
-
-
-                <a href="#">
-                    About Us
-                </a>
-
-
-                <a href="#">
-                    Contact
-                </a>
-
-
-                <a href="#">
-                    Sources
-                </a>
-
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-
-    <div class="footer-bottom">
-
-        © {{ date('Y') }}
-        NusaExplore ·
-        Explore Surabaya Beyond the Destination
-
-    </div>
-
-
-</footer>
+<!-- UNIFIED FOOTER -->
+@include('partials.footer')
 
 
 

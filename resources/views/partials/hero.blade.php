@@ -21,7 +21,7 @@
 
             <input
                 type="text"
-                name="search"
+                name="search" autocomplete="off"
                 placeholder="destination, region, or activity"
             >
 

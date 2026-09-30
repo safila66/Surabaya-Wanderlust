@@ -11,58 +11,38 @@ class CulinaryController extends Controller
 {
     public function index(Request $request)
     {
-        $provinces = Province::orderBy('name')->get();
-
-        $selectedProvince = $request->get('province');
-        $selectedRegency = $request->get('regency');
-
-        $regencies = collect();
-
-        if ($selectedProvince) {
-            $province = Province::where('slug', $selectedProvince)->first();
-
-            if ($province) {
-                $regencies = Regency::where('province_id', $province->id)
-                    ->orderBy('name')
-                    ->get();
-            }
-        }
-
-        if ($selectedRegency) {
-            $regency = Regency::where('slug', $selectedRegency)->first();
-
-            if ($regency && !$selectedProvince) {
-                $regencies = collect([$regency]);
-            }
-        }
+        $selectedRegion = $request->get('region');
+        $foodName = $request->get('food_name');
 
         $query = Culinary::with([
             'regency.province'
         ]);
 
-        if ($selectedProvince) {
-            $query->whereHas('regency.province', function ($q) use ($selectedProvince) {
-                $q->where('slug', $selectedProvince);
+        if ($selectedRegion) {
+            $query->where(function($q) use ($selectedRegion) {
+                $q->where('where_to_buy', 'like', '%' . $selectedRegion . '%')
+                  ->orWhere('description', 'like', '%' . $selectedRegion . '%')
+                  ->orWhere('location', 'like', '%' . $selectedRegion . '%');
             });
         }
 
-        if ($selectedRegency) {
-            $query->whereHas('regency', function ($q) use ($selectedRegency) {
-                $q->where('slug', $selectedRegency);
-            });
+        if ($foodName) {
+            $query->where('name', 'like', '%' . $foodName . '%');
         }
 
         $culinaries = $query
             ->orderBy('name')
             ->get();
 
-        return view('culinary.index', compact(
-            'culinaries',
-            'provinces',
-            'regencies',
-            'selectedProvince',
-            'selectedRegency'
-        ));
+        return view('culinary.index', [
+            'culinaries' => $culinaries,
+            'provinces' => collect(),
+            'regencies' => collect(),
+            'selectedProvince' => '',
+            'selectedRegency' => '',
+            'selectedRegion' => $selectedRegion,
+            'foodName' => $foodName
+        ]);
     }
 
     public function show($slug)
@@ -73,14 +53,6 @@ class CulinaryController extends Controller
         ])
         ->where('slug', $slug)
         ->firstOrFail();
-
-        /*
-        |--------------------------------------------------------------------------
-        | RECOMMENDED CULINARY
-        |--------------------------------------------------------------------------
-        | Mengambil maksimal 10 makanan lain dari
-        | kota/kabupaten yang sama.
-        */
 
         $recommendedCulinaries = Culinary::with([
             'regency',
