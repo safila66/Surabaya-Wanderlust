@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -99,39 +99,32 @@
 
 
 {{-- ── FILTER ────────────────────────────────────────────── --}}
-<section class="filter-section">
-    <div class="filter-card">
-        <div class="filter-card-title">??? Explore Culinary by Region</div>
-
-        <form action="{{ route('culinary.index') }}" method="GET">
-            <div style="display:grid; grid-template-columns: 1fr 1fr auto; gap:16px; align-items:flex-end;">
-
-                <div>
-                    <label class="filter-label">Region</label>
-                    <select name="region" id="region" class="filter-select">
-                        <option value="">All Regions</option>
-                        <option value="barat" {{ request('region') == 'barat' ? 'selected' : '' }}>Surabaya Barat</option>
-                        <option value="timur" {{ request('region') == 'timur' ? 'selected' : '' }}>Surabaya Timur</option>
-                        <option value="tengah" {{ request('region') == 'tengah' ? 'selected' : '' }}>Surabaya Tengah</option>
-                        <option value="utara" {{ request('region') == 'utara' ? 'selected' : '' }}>Surabaya Utara</option>
-                        <option value="selatan" {{ request('region') == 'selatan' ? 'selected' : '' }}>Surabaya Selatan</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="filter-label">Food Name</label>
-                    <input type="text" name="food_name" class="filter-select" placeholder="Search food name..." value="{{ request('food_name') }}">
-                </div>
-
-                <div>
-                    <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
-                        Explore
-                    </button>
-                </div>
-
+<section class="filter-section" style="max-width:1240px; margin:auto; padding:0 7%; margin-top: -30px; position:relative; z-index: 10;">
+    <form action="" method="GET" style="margin-bottom: 30px; background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:16px; align-items:flex-end;">
+            <div>
+                <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Region (Wilayah)</label>
+                <select name="region" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;" onchange="this.form.submit()">
+                    <option value="">Semua Wilayah</option>
+                    <option value="Surabaya Barat" {{ request('region') == 'Surabaya Barat' ? 'selected' : '' }}>Surabaya Barat</option>
+                    <option value="Surabaya Timur" {{ request('region') == 'Surabaya Timur' ? 'selected' : '' }}>Surabaya Timur</option>
+                    <option value="Surabaya Selatan" {{ request('region') == 'Surabaya Selatan' ? 'selected' : '' }}>Surabaya Selatan</option>
+                    <option value="Surabaya Tengah" {{ request('region') == 'Surabaya Tengah' ? 'selected' : '' }}>Surabaya Tengah</option>
+                    <option value="Surabaya Utara" {{ request('region') == 'Surabaya Utara' ? 'selected' : '' }}>Surabaya Utara</option>
+                </select>
             </div>
-        </form>
-    </div>
+            <div>
+                <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Cari Nama</label>
+                <input type="text" name="search_name" value="{{ request('search_name') }}" placeholder="Cari nama..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;">
+            </div>
+
+            @include('partials.price-slider', ['max' => $sliderMax, 'step' => $sliderStep])
+
+            <div>
+                <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; height: 46px;">Filter</button>
+            </div>
+        </div>
+    </form>
 </section>
 
 
@@ -154,7 +147,7 @@
 
             <div class="culinary-grid">
                 @foreach ($culinaries as $culinary)
-                    <div class="uni-card">
+                    <a href="{{ route('culinary.show', $culinary->slug) }}" class="uni-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
 
                         <div class="card-placeholder" style="position:relative; overflow:hidden;">
                             @if ($culinary->image)
@@ -162,13 +155,13 @@
                                     class="uni-card-image"
                                     src="{{ asset('storage/' . $culinary->image) }}"
                                     alt="{{ $culinary->name }}"
-                                    style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+                                    style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
                             @else
-                                <i class="fa-solid fa-utensils"></i>
+                                <i class="fa-solid fa-utensils" style="transition: transform 0.5s ease;"></i>
                             @endif
                         </div>
 
-                        <div class="uni-card-body">
+                        <div class="uni-card-body" style="flex: 1; display: flex; flex-direction: column;">
                             <span class="uni-card-label">
                                 {{ $culinary->regency->name ?? 'Surabaya' }}
                                 @if ($culinary->regency?->province)
@@ -176,10 +169,10 @@
                                 @endif
                             </span>
                             <div class="uni-card-title">{{ $culinary->name }}</div>
-                            <div class="uni-card-desc">
+                            <div class="uni-card-desc" style="flex: 1;">
                                 {{ \Illuminate\Support\Str::limit($culinary->description, 110) }}
                             </div>
-                            <div class="uni-card-meta">
+                            <div class="uni-card-meta" style="margin-top: 15px;">
                                 <span class="price-tag">
                                     @if ($culinary->price_range)
                                         <i class="fa-solid fa-tag"></i>
@@ -189,13 +182,13 @@
                                         Local dish
                                     @endif
                                 </span>
-                                <a href="{{ route('culinary.show', $culinary->slug) }}" class="uni-card-link">
+                                <span class="uni-card-link" style="pointer-events: none;">
                                     Explore →
-                                </a>
+                                </span>
                             </div>
                         </div>
 
-                    </div>
+                    </a>
                 @endforeach
             </div>
 
@@ -204,7 +197,7 @@
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:16px;">🍜</div>
                 <h3>No culinary found</h3>
-                <p>Try exploring another province or city.</p>
+                <p>Try changing your filters or exploring another region.</p>
             </div>
 
         @endif

@@ -38,6 +38,35 @@
 <section class="section">
     <div style="max-width:1240px; margin:auto; padding:0 7%;">
 
+        {{-- ── FILTER ── --}}
+        <section class="filter-section">
+            <form action="" method="GET" style="margin-bottom: 30px; background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:16px; align-items:flex-end;">
+                    <div>
+                        <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Region (Wilayah)</label>
+                        <select name="region" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;" onchange="this.form.submit()">
+                            <option value="">Semua Wilayah</option>
+                            <option value="Surabaya Barat" {{ request('region') == 'Surabaya Barat' ? 'selected' : '' }}>Surabaya Barat</option>
+                            <option value="Surabaya Timur" {{ request('region') == 'Surabaya Timur' ? 'selected' : '' }}>Surabaya Timur</option>
+                            <option value="Surabaya Selatan" {{ request('region') == 'Surabaya Selatan' ? 'selected' : '' }}>Surabaya Selatan</option>
+                            <option value="Surabaya Tengah" {{ request('region') == 'Surabaya Tengah' ? 'selected' : '' }}>Surabaya Tengah</option>
+                            <option value="Surabaya Utara" {{ request('region') == 'Surabaya Utara' ? 'selected' : '' }}>Surabaya Utara</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Cari Nama</label>
+                        <input type="text" name="search_name" value="{{ request('search_name') }}" placeholder="Cari nama..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;">
+                    </div>
+
+                    @include('partials.price-slider', ['max' => $sliderMax ?? 100000, 'step' => $sliderStep ?? 5000])
+
+                    <div>
+                        <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; height: 46px;">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
         <div class="section-heading">
             <div>
                 <div class="section-kicker">All Destinations</div>
@@ -45,7 +74,7 @@
                 <p class="section-sub">Pilih destinasi dan temukan pengalaman perjalananmu.</p>
             </div>
             <span class="badge badge-gold">
-                {{ $destinations->count() }} Destinations
+                {{ $destinations->total() }} Destinations
             </span>
         </div>
 
@@ -117,7 +146,7 @@
             <div class="empty-state">
                 <div class="empty-state-icon">🗺️</div>
                 <h3>Belum ada destinasi</h3>
-                <p>Data destinasi belum tersedia. Pantau terus update kami!</p>
+                <p>Tidak ada destinasi yang cocok dengan filter kamu.</p>
             </div>
 
         @endif

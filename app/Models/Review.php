@@ -3,16 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
     protected $fillable = [
-        'destination_id',
+        'reviewable_id',
+        'reviewable_type',
         'user_id',
         'name',
         'rating',
         'comment',
+        'media_path',
         'is_approved',
     ];
 
@@ -21,9 +24,9 @@ class Review extends Model
         'is_approved' => 'boolean',
     ];
 
-    public function destination(): BelongsTo
+    public function reviewable(): MorphTo
     {
-        return $this->belongsTo(Destination::class);
+        return $this->morphTo();
     }
 
     public function user(): BelongsTo

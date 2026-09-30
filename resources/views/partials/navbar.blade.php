@@ -1,12 +1,55 @@
+<style>
+/* NAVBAR FIXES TO PREVENT OVERLAP (GLOBAL) */
+.uni-navbar {
+    padding: 12px 3% !important; 
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 40px !important;
+}
+.uni-brand {
+    flex-shrink: 0;
+}
+.uni-nav-menu {
+    display: flex !important;
+    gap: 14px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1; 
+}
+.uni-nav-menu li {
+    white-space: nowrap !important;
+    display: inline-block;
+}
+.uni-nav-menu a {
+    font-size: 11px !important;
+    letter-spacing: 0.5px !important;
+    white-space: nowrap !important;
+    text-align: center;
+}
+.uni-nav-right {
+    display: flex !important;
+    gap: 12px !important;
+    flex-shrink: 0; 
+    align-items: center !important;
+}
+.uni-nav-right a, .uni-nav-right form button, .uni-nav-right span {
+    white-space: nowrap !important;
+}
+.uni-brand-name {
+    font-size: 18px !important;
+}
+</style>
 {{-- =========================================================
      UNIFIED NAVBAR — Surabaya Wanderlust v2
      Include: @include('partials.navbar')
 ========================================================== --}}
 
-@php
-    $isDarkHero = request()->is('/') || request()->is('destinations*') || request()->is('culinary*') || request()->is('about*') || request()->is('culture*') || request()->is('travel-guide*') || request()->is('best-time*') || request()->is('plan-your-trip*');
-@endphp
-<nav class="uni-navbar {{ $isDarkHero ? '' : 'solid' }}" id="uniNavbar">
+<nav class="uni-navbar solid" id="uniNavbar">
 
     {{-- LOGO / BRAND --}}
     <a href="{{ route('home') }}" class="uni-brand">
@@ -19,15 +62,29 @@
         <li><a href="{{ route('home') }}"                 class="{{ request()->routeIs('home') ? 'active' : '' }}">HOME</a></li>
         <li><a href="{{ route('destinations.index') }}"   class="{{ request()->routeIs('destinations.*') ? 'active' : '' }}">DESTINATIONS</a></li>
         <li><a href="{{ route('culinary.index') }}"       class="{{ request()->routeIs('culinary.*') ? 'active' : '' }}">CULINARY</a></li>
-        <li><a href="{{ route('culture.index') }}"        class="{{ request()->routeIs('culture.*') ? 'active' : '' }}">CULTURE</a></li>
-        <li><a href="{{ route('travel-guide.index') }}"   class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a></li>
+        <li><a href="{{ route('accommodations.index') }}">ACCOMMODATIONS</a></li>
+        <li><a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a></li>
         <li><a href="{{ route('best-time.index') }}"      class="{{ request()->routeIs('best-time.*') ? 'active' : '' }}">BEST TIME</a></li>
         <li><a href="{{ route('plan-your-trip.index') }}" class="{{ request()->routeIs('plan-your-trip.*') ? 'active' : '' }}">PLAN YOUR TRIP</a></li>
         <li><a href="{{ route('about.index') }}"          class="{{ request()->routeIs('about.*') ? 'active' : '' }}">ABOUT</a></li>
     </ul>
 
-    {{-- RIGHT SIDE: THEME TOGGLE + HAMBURGER --}}
-    <div class="uni-nav-right">
+        {{-- RIGHT SIDE: THEME TOGGLE + HAMBURGER + AUTH --}}
+    <div class="uni-nav-right" style="display: flex; align-items: center; gap: 12px;">
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <a href="/admin" class="btn-primary" style="padding: 6px 14px; font-size: 11px; text-decoration: none; border-radius: 999px;">Admin Panel</a>
+            @else
+                <span style="font-size: 12px; font-weight: 600;">Hello, {{ explode(' ', Auth::user()->name)[0] }}</span>
+            @endif
+            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                @csrf
+                <button type="submit" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: inherit; padding: 6px 12px; font-size: 11px; border-radius: 999px; cursor: pointer; transition: 0.2s;">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: inherit; padding: 6px 14px; font-size: 11px; border-radius: 999px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.2s;">Sign In</a>
+        @endauth
+
         <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
             🌙
         </button>
@@ -37,7 +94,6 @@
             <span></span>
         </button>
     </div>
-
 </nav>
 
 {{-- Mobile Overlay --}}
@@ -56,8 +112,8 @@
     <a href="{{ route('home') }}"                 class="{{ request()->routeIs('home') ? 'active' : '' }}">HOME</a>
     <a href="{{ route('destinations.index') }}"   class="{{ request()->routeIs('destinations.*') ? 'active' : '' }}">DESTINATIONS</a>
     <a href="{{ route('culinary.index') }}"       class="{{ request()->routeIs('culinary.*') ? 'active' : '' }}">CULINARY</a>
-    <a href="{{ route('culture.index') }}"        class="{{ request()->routeIs('culture.*') ? 'active' : '' }}">CULTURE</a>
-    <a href="{{ route('travel-guide.index') }}"   class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a>
+    <a href="{{ route('accommodations.index') }}">ACCOMMODATIONS</a>
+    <a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a>
     <a href="{{ route('best-time.index') }}"      class="{{ request()->routeIs('best-time.*') ? 'active' : '' }}">BEST TIME</a>
     <a href="{{ route('plan-your-trip.index') }}" class="{{ request()->routeIs('plan-your-trip.*') ? 'active' : '' }}">PLAN YOUR TRIP</a>
     <a href="{{ route('about.index') }}"          class="{{ request()->routeIs('about.*') ? 'active' : '' }}">ABOUT</a>
@@ -79,7 +135,7 @@ function toggleUniNav() {
     const nav = document.getElementById('uniNavbar');
     if (!nav) return;
     function onScroll() {
-        if (!nav.classList.contains("always-solid")) { nav.classList.toggle("solid", window.scrollY > 60); }
+        
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();

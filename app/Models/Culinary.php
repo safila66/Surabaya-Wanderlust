@@ -11,16 +11,21 @@ class Culinary extends Model
     protected $fillable = [
         'regency_id',
         'name',
+        'category',
         'slug',
         'description',
         'history',
         'ingredients',
         'taste',
         'price_range',
+        'gofood_url',
+        'grabfood_url',
+        'shopeefood_url',
+        'reservation_required',
         'where_to_buy',
         'location',
         'souvenir',
-        'image',
+        'image', 'menu_image', 'menu_description', 'latitude', 'longitude', 'maps_url',
         'source',
     ];
 
@@ -38,5 +43,10 @@ class Culinary extends Model
         return $this->hasMany(CulinaryImage::class)
             ->where('is_approved', true)
             ->orderBy('sort_order');
+    }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
     }
 }

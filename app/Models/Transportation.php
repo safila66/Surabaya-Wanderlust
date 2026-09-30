@@ -25,4 +25,9 @@ class Transportation extends Model
     {
         return $this->belongsTo(Regency::class);
     }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
 }

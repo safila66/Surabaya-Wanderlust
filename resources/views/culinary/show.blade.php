@@ -71,7 +71,7 @@
         }
 
         .back-link {
-            color: var(--green);
+            color: var(--gold);
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
@@ -172,12 +172,7 @@
             margin-bottom: 10px;
         }
 
-        .section-title {
-            font-family: Georgia, serif;
-            font-size: 34px;
-            color: var(--green-dark);
-            margin-bottom: 18px;
-        }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold) !important; margin-bottom: 18px; }
 
         .content-text {
             color: var(--muted);
@@ -743,10 +738,188 @@
             @endif
 
 
-        </div>
+        
+            @if ($culinary->menu_image || $culinary->menu_description)
+                <div class="mb-5">
+                    <div class="section-label">
+                        Menu & Harga
+                    </div>
+                    <div class="section-title">
+                        What's on the menu?
+                    </div>
+                    @if ($culinary->menu_description)
+                        <div class="content-text" style="margin-bottom: 20px;">
+                            {{ $culinary->menu_description }}
+                        </div>
+                    @endif
+                    @if ($culinary->menu_image)
+                        <img src="{{ Storage::url($culinary->menu_image) }}" alt="Menu {{ $culinary->name }}" style="max-width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    @endif
+                </div>
+            @endif
+</div>
 
 
-        <!-- =========================
+                    <!-- =========================
+                 DINE IN & TAKEAWAY
+            ========================= -->
+            <div class="content-section" style="margin-top: 50px;">
+                <div class="section-label">ORDER & RESERVATION</div>
+                <h3 class="section-title">Dine In & Takeaway</h3>
+
+                <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px;">
+                    <strong style="display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">🍽️ Dine In Status:</strong>
+                    @if($culinary->reservation_required)
+                        <span style="color: #A04F36; font-size: 13px; font-weight: bold; background: rgba(160, 79, 54, 0.1); padding: 6px 12px; border-radius: 6px; display: inline-block;">⚠️ Wajib Reservasi (Reservation Required)</span>
+                    @else
+                        <span style="color: #00B14F; font-size: 13px; font-weight: bold; background: rgba(0, 177, 79, 0.1); padding: 6px 12px; border-radius: 6px; display: inline-block;">✅ Bisa Langsung Datang (Walk-ins Welcome)</span>
+                    @endif
+                </div>
+
+                <strong style="display: block; font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">🛵 Pesan Takeaway / Delivery:</strong>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    @if($culinary->gofood_url)
+                        <a href="{{ $culinary->gofood_url }}" target="_blank" class="btn-primary" style="background: #EE2737; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
+                            <span>Pesan via GoFood</span> <span>→</span>
+                        </a>
+                    @endif
+                    @if($culinary->grabfood_url)
+                        <a href="{{ $culinary->grabfood_url }}" target="_blank" class="btn-primary" style="background: #00B14F; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
+                            <span>Pesan via GrabFood</span> <span>→</span>
+                        </a>
+                    @endif
+                    @if($culinary->shopeefood_url)
+                        <a href="{{ $culinary->shopeefood_url }}" target="_blank" class="btn-primary" style="background: #EE4D2D; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
+                            <span>Pesan via ShopeeFood</span> <span>→</span>
+                        </a>
+                    @endif
+                    @if(!$culinary->gofood_url && !$culinary->grabfood_url && !$culinary->shopeefood_url)
+                        <p style="font-size: 14px; color: var(--text-muted);">Belum ada info tautan pesan antar (Delivery).</p>
+                    @endif
+                </div>
+            </div>
+        
+            <!-- =========================
+                 REVIEWS
+            ========================= -->
+            <div class="content-section" style="margin-top: 50px;">
+                <div class="section-label">VISITOR REVIEWS</div>
+                <h3 class="section-title">What Travelers Say</h3>
+
+                                <!-- RATING SUMMARY BOX -->
+                <div style="background: var(--bg-card); border-radius: 20px; padding: 30px; margin-bottom: 40px; border: 1px solid var(--border); max-width: 500px;">
+                    <div style="display: flex; gap: 20px; margin-bottom: 25px; align-items: center;">
+                        <div style="font-size: 48px; font-weight: 700; color: var(--text-primary); font-family: 'Plus Jakarta Sans', sans-serif;">
+                            @if($reviewCount > 0)
+                                {{ number_format($averageRating, 1) }}
+                            @else
+                                —
+                            @endif
+                        </div>
+                        <div>
+                            <div style="color: var(--gold); font-size: 20px; margin-bottom: 5px;">
+                                @if($reviewCount > 0)
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= round($averageRating)) ★ @else ☆ @endif
+                                    @endfor
+                                @else
+                                    ☆☆☆☆☆
+                                @endif
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 14px;">
+                                Based on {{ $reviewCount }} {{ $reviewCount == 1 ? 'review' : 'reviews' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BARS -->
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        @foreach([5,4,3,2,1] as $star)
+                            <div style="display: flex; align-items: center; gap: 15px; font-size: 13px;">
+                                <span style="color: var(--gold); width: 60px; letter-spacing: 2px;">
+                                    {{ str_repeat('★', $star) }}{{ str_repeat('☆', 5 - $star) }}
+                                </span>
+                                <div style="flex: 1; background: var(--bg-surface); height: 8px; border-radius: 4px; overflow: hidden;">
+                                    <div style="background: var(--gold); height: 100%; width: {{ $reviewCount > 0 ? ($culinary->reviews->where('rating', $star)->count() / $reviewCount) * 100 : 0 }}%;"></div>
+                                </div>
+                                <span style="width: 35px; text-align: right; color: var(--text-muted);">
+                                    {{ $reviewCount > 0 ? round(($culinary->reviews->where('rating', $star)->count() / $reviewCount) * 100) : 0 }}%
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    @forelse($culinary->reviews as $review)
+                        <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px;">
+                            <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
+                                    {{ substr($review->name, 0, 1) }}
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; font-size: 14px; color: var(--text-primary);">{{ $review->name }}</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);">{{ $review->created_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                            <div style="color: var(--gold); font-size: 14px; margin-bottom: 10px;">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= $review->rating) ★ @else ☆ @endif
+                                @endfor
+                            </div>
+                            <div style="font-size: 14px; line-height: 1.6; color: var(--text-secondary);">
+                                {{ $review->comment }}
+                                @if($review->media_path)
+                                    <div style="margin-top: 15px;">
+                                        @if(Str::endsWith($review->media_path, ['.mp4', '.mov']))
+                                            <video controls style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+                                                <source src="{{ asset('storage/' . $review->media_path) }}">
+                                            </video>
+                                        @else
+                                            <img src="{{ asset('storage/' . $review->media_path) }}" alt="Review Media" style="max-width: 100%; max-height: 300px; border-radius: 8px; object-fit: cover;">
+                                        @endif
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div style="padding: 30px; text-align: center; background: var(--bg-card); border-radius: 12px; color: var(--text-muted); font-size: 14px; border: 1px solid var(--border);">
+                            Belum ada ulasan. Jadilah yang pertama!
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- TULIS ULASAN FORM -->
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: 16px; margin-top: 40px;">
+                    <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--text-primary); font-family: 'Playfair Display', serif; font-size: 24px;">Tulis Ulasan Anda</h4>
+                    <form action="{{ route('culinary.reviews.store', $culinary->slug) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Nama</label>
+                            <input type="text" name="name" required style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Rating (1-5)</label>
+                            <select name="rating" required style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                                <option value="5">⭐⭐⭐⭐⭐ (5) Sangat Bagus</option>
+                                <option value="4">⭐⭐⭐⭐ (4) Bagus</option>
+                                <option value="3">⭐⭐⭐ (3) Cukup</option>
+                                <option value="2">⭐⭐ (2) Kurang</option>
+                                <option value="1">⭐ (1) Sangat Kurang</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Komentar / Pengalaman Anda</label>
+                            <textarea name="comment" required rows="5" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Upload Foto/Video (Opsional)</label>
+                            <input type="file" name="media" accept="image/*,video/*" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                        </div>
+                        <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 14px 28px; border-radius: 999px; font-weight: bold; color: white; cursor: pointer; font-size: 16px;">Kirim Ulasan</button>
+                    </form>
+                </div>
+            </div>
+<!-- =========================
              MORE LOCAL FLAVORS
         ========================= -->
 
@@ -1013,6 +1186,7 @@
 
 
     </div>
+
 
 </main>
 

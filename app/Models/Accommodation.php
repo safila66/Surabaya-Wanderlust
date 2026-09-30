@@ -19,12 +19,17 @@ class Accommodation extends Model
         'maps_url',
         'booking_url',
         'official_url',
-        'image',
+        'image', 'latitude', 'longitude',
         'source',
     ];
 
     public function regency(): BelongsTo
     {
         return $this->belongsTo(Regency::class);
+    }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
     }
 }

@@ -7,12 +7,10 @@ use App\Models\Culinary;
 use App\Models\Accommodation;
 use App\Models\Transportation;
 use Illuminate\Support\Str;
+use App\Models\PrayerPlace;
 
 class RegionController extends Controller
 {
-    /**
-     * Category metadata helper
-     */
     private function categoryMeta(): array
     {
         return [
@@ -49,19 +47,16 @@ class RegionController extends Controller
         ];
     }
 
-    /**
-     * Show region overview with all categories
-     */
     public function show($slug)
     {
         $regencyId  = 329;
         $regionName = ucwords(str_replace('-', ' ', $slug));
 
         $entertainment  = Destination::with('images')->where('regency_id', $regencyId)->latest()->get();
-        $restoCafe      = Culinary::with('images')->where('regency_id', $regencyId)->latest()->get();
+        $restoCafe      = Culinary::with('images')->where('regency_id', $regencyId)->where('category', 'resto-cafe')->latest()->get();
         $accommodations = Accommodation::where('regency_id', $regencyId)->latest()->get();
         $transportations= Transportation::where('regency_id', $regencyId)->latest()->get();
-        $barClub        = collect([]);
+        $barClub        = Culinary::with('images')->where('regency_id', $regencyId)->where('category', 'bar-club')->latest()->get();
         $prayerPlaces   = collect([]);
 
         $categories = $this->categoryMeta();
@@ -74,9 +69,6 @@ class RegionController extends Controller
         ));
     }
 
-    /**
-     * Show a specific category page for a region
-     */
     public function category($slug, $category)
     {
         $regencyId  = 329;
@@ -89,7 +81,6 @@ class RegionController extends Controller
 
         $meta = $categories[$category];
 
-        // Load items based on category
         $items = collect([]);
 
         switch ($category) {
@@ -102,6 +93,14 @@ class RegionController extends Controller
             case 'resto-cafe':
                 $items = Culinary::with('images')
                     ->where('regency_id', $regencyId)
+                    ->where('category', 'resto-cafe')
+                    ->latest()->get();
+                break;
+
+            case 'bar-club':
+                $items = Culinary::with('images')
+                    ->where('regency_id', $regencyId)
+                    ->where('category', 'bar-club')
                     ->latest()->get();
                 break;
 
@@ -115,7 +114,6 @@ class RegionController extends Controller
                     ->latest()->get();
                 break;
 
-            case 'bar-club':
             case 'prayer-places':
                 $items = collect([]);
                 break;

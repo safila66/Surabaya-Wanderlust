@@ -130,6 +130,21 @@
                                     {{ $item->price_range }}
                                 </div>
                             @endif
+                                                        @if($category === 'accommodation')
+                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                    @if(isset($item->booking_url) && $item->booking_url)
+                                        <a href="{{ $item->booking_url }}" target="_blank" class="btn-primary" style="background: #00B14F; color: white; border-radius: 999px; padding: 6px 14px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                            🏨 Book Traveloka/Agoda
+                                        </a>
+                                    @endif
+                                    @if(isset($item->official_url) && $item->official_url)
+                                        <a href="{{ $item->official_url }}" target="_blank" class="btn-primary" style="background: var(--gold); color: white; border-radius: 999px; padding: 6px 14px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                            🌐 Web Resmi
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
+
                             @if(isset($item->ticket_price) && $item->ticket_price)
                                 <div style="margin-top:12px; display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:var(--teal);">
                                     <i class="fa-solid fa-ticket fa-xs"></i>

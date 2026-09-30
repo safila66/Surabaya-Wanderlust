@@ -133,7 +133,7 @@
             Sign In
         </button>
 
-    </form>
+    </form>`n`n    <div style="text-align: center; margin-top: 20px; font-size: 13px;">`n        Don't have an account? <a href="{{ route('register') }}" style="color: #304A3B; font-weight: bold;">Sign Up</a>`n    </div>
 
     <a href="{{ route('home') }}" class="back">
         ← Back to Surabaya Wanderlust

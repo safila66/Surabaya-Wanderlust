@@ -14,28 +14,46 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
 
-    <style>
-        /* Override theme colors to match unified theme */
-        :root {
-            --cream: #0d1b3e;
-            --cream-dark: #07112a;
-            --paper: #122254;
-            --green: #f4e80b;
-            --green-soft: rgba(244,232,11,0.6);
-            --brown: #f4e80b;
-            --gold: #f4e80b;
-            --terracotta: #0abf8a;
-            --text: #ffffff;
-            --muted: #7a86a1;
-            --line: rgba(255,255,255,0.12);
-            --white: #ffffff;
-        }
-        body {
-            background: #0d1b3e !important;
-            color: #ffffff !important;
-        }
-    </style>
+   <style>
+    /* ===== DARK MODE ===== */
+    html[data-theme="dark"] {
+        --cream:        #0d1b3e;
+        --cream-dark:   #07112a;
+        --paper:        #122254;
+        --green:        #f4e80b;
+        --green-soft:   rgba(244,232,11,0.6);
+        --brown:        #f4e80b;
+        --gold:         #f4c430;
+        --terracotta:   #0abf8a;
+        --text:         #ffffff;
+        --muted:        #7a86a1;
+        --line:         rgba(255,255,255,0.12);
+        --white:        #ffffff;
+        --page-bg:      #0d1b3e;
+    }
 
+    /* ===== LIGHT MODE ===== */
+    html[data-theme="light"] {
+        --cream:        #b6cbff;
+        --cream-dark:   #d0e9fa;
+        --paper:        #f4f9ff;
+        --green:        #0d2340;
+        --green-soft:   rgba(13,35,64,0.55);
+        --brown:        #8a6408;
+        --gold:         #c8960a;
+        --terracotta:   #0a8f68;
+        --text:         #0d2340;
+        --muted:        #4a6fa5;
+        --line:         rgba(0,100,200,0.15);
+        --white:        #ffffff;
+        --page-bg:      #cdebff;
+    }
+
+    body {
+        background: var(--page-bg) !important;
+        color: var(--text) !important;
+    }
+</style>
     <style>{{-- Original inline styles below --}}
 
         :root {
@@ -45,7 +63,7 @@
             --green: #304a3b;
             --green-soft: #66745c;
             --brown: #8a674d;
-            --gold: #b29a6b;
+            --gold: #f4c430;
             --terracotta: #a76f52;
             --text: #29332d;
             --muted: #77766d;
@@ -96,7 +114,7 @@
             font-family: 'Playfair Display', serif;
             font-size: 23px;
             font-weight: 600;
-            color: var(--green);
+            color: var(--gold);
         }
 
         .brand-mark {
@@ -125,7 +143,7 @@
         }
 
         .nav-links a:hover {
-            color: var(--green);
+            color: var(--gold);
         }
 
         .nav-button {
@@ -150,11 +168,11 @@
         }
 
         .breadcrumb a:hover {
-            color: var(--green);
+            color: var(--gold);
         }
 
         .breadcrumb span {
-            color: var(--green);
+            color: var(--gold);
         }
 
 
@@ -370,7 +388,7 @@
 
             line-height: 1.2;
 
-            color: var(--green);
+            color: var(--gold);
 
             margin-bottom: 13px;
         }
@@ -436,7 +454,7 @@
 
             font-weight: 600;
 
-            color: var(--green);
+            color: var(--gold);
         }
 
 
@@ -459,15 +477,7 @@
             margin-bottom: 42px;
         }
 
-        .content-section h3 {
-            font-family: 'Playfair Display', serif;
-
-            color: var(--green);
-
-            font-size: 22px;
-
-            margin-bottom: 14px;
-        }
+        .content-section h3 { font-family: 'Playfair Display', serif; color: var(--gold) !important; font-size: 22px; margin-bottom: 25px; }
 
         .content-section p {
             color: #67675f;
@@ -492,7 +502,8 @@
         }
 
         .activity {
-            background: var(--paper);
+            background: var(--bg-card);
+            color: var(--text-primary);
 
             padding: 15px 17px;
 
@@ -620,7 +631,7 @@
 
             line-height: 1;
 
-            color: var(--green);
+            color: var(--gold);
         }
 
         .rating-total-stars {
@@ -733,7 +744,7 @@
 
             font-size: 13px;
 
-            color: var(--green);
+            color: var(--gold);
         }
 
         .review-date {
@@ -794,7 +805,7 @@
         .map-card h4 {
             font-family: 'Playfair Display', serif;
 
-            color: var(--green);
+            color: var(--gold);
 
             font-size: 21px;
 
@@ -830,6 +841,25 @@
         .map-button:hover {
             background: #243a2e;
         }
+        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(48,74,59,.18); }
+.ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 4px; }
+.ride-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.ride-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.ride-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 30px;
+    border: 1.5px solid rgba(48,74,59,.3);
+    color: var(--green); font-size: 12px; font-weight: 600; transition: .2s ease;
+}
+.ride-chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+.ride-chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
+.ride-sub { margin: 20px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--brown); }
+.stop-list { display: grid; gap: 8px; }
+.stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(48,74,59,.07); }
+.stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--green); }
+.stop-type { display: block; font-size: 11px; color: var(--muted); }
+.stop-dist { font-size: 12px; font-weight: 700; color: var(--green); white-space: nowrap; }
+.ride-note { margin-top: 14px; font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.6; }
 
 
         /* =========================
@@ -1081,7 +1111,7 @@
         @else
 
             <img
-                src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85"
+                src="{{ $destination->image ? asset('storage/' . $destination->image) : (isset($destination->images) && $destination->images->count() ? $destination->images->first()->image_url : 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1800&q=85') }}"
                 alt="{{ $destination->name }}"
             >
 
@@ -1291,7 +1321,14 @@
 
             <div class="info-value">
 
-                {{ $destination->ticket_price ?? 'Information unavailable' }}
+                                {{ $destination->ticket_price ?? 'Information unavailable' }}
+                @if($destination->ticket_price && stripos($destination->ticket_price, 'gratis') === false && stripos($destination->ticket_price, 'free') === false)
+                    <div style="margin-top: 15px;">
+                        <a href="{{ $destination->ticket_url ?? 'https://tiketwisata.surabaya.go.id/' }}" target="_blank" class="btn-primary" style="background: var(--gold); color: white; border-radius: 999px; padding: 10px 20px; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(200, 150, 10, 0.4);">
+                            🎟️ Beli Tiket Resmi
+                        </a>
+                    </div>
+                @endif
 
             </div>
 
@@ -1459,8 +1496,6 @@
 
             </section>
 
-
-
             <!-- =========================
                  REVIEWS
             ========================= -->
@@ -1477,13 +1512,35 @@
                             VISITOR REVIEWS
                         </div>
 
-                        <h3>
-                            What Travelers Say
-                        </h3>
-
-                    </div>
-
-
+                        <h3>What Travelers Say</h3></div></div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 25px; border-radius: 16px; margin-top: 30px;">
+                    <h4 style="margin-top: 0; margin-bottom: 15px;">Tulis Ulasan Anda</h4>
+                    <form action="{{ route('destinations.reviews.store', $destination->slug) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px;">Nama</label>
+                            <input type="text" name="name" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px;">Rating (1-5)</label>
+                            <select name="rating" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                                <option value="5">⭐⭐⭐⭐⭐ (5) Sangat Bagus</option>
+                                <option value="4">⭐⭐⭐⭐ (4) Bagus</option>
+                                <option value="3">⭐⭐⭐ (3) Cukup</option>
+                                <option value="2">⭐⭐ (2) Kurang</option>
+                                <option value="1">⭐ (1) Sangat Kurang</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px;">Komentar / Pengalaman Anda</label>
+                            <textarea name="comment" required rows="4" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px;">Upload Foto/Video (Opsional)</label>
+                            <input type="file" name="media" accept="image/*,video/*" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+                        </div>
+                        <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 12px 24px; border-radius: 999px; font-weight: bold; color: white; cursor: pointer;">Kirim Ulasan</button>
+                    </form>
                 </div>
 
 
@@ -1938,54 +1995,57 @@
                  LOCATION
             ========================= -->
 
-            <div class="map-card">
+            @php
+    $mapsLink = $destination->maps_url
+        ?: ((!empty($latitude) && !empty($longitude))
+            ? 'https://maps.google.com/?q=' . $latitude . ',' . $longitude
+            : 'https://www.google.com/maps/search/?api=1&query=' . urlencode($destination->name . ' ' . $destination->regency->name));
+@endphp
 
+<div class="map-card">
+    <div class="section-label">LOCATION</div>
+    <h4>Find Your Way</h4>
+    <p>{{ $destination->location ?? $destination->regency->name }}</p>
 
-                <div class="section-label">
-                    LOCATION
-                </div>
+    <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer" class="map-button">
+        View on Google Maps →
+    </a>
 
+    <div class="ride">
+        <div class="ride-title">Get Me There</div>
+        <div class="ride-desc">Pesan transportasi online ke lokasi ini.</div>
 
-                <h4>
-                    Find Your Way
-                </h4>
+        <div class="ride-options">
+            <a class="ride-chip" style="--dot:#00aa13" href="https://gojek.link/" target="_blank" rel="noopener noreferrer">Gojek</a>
+            <a class="ride-chip" style="--dot:#00b14f" href="https://grab.com/" target="_blank" rel="noopener noreferrer">Grab</a>
+            <a class="ride-chip" style="--dot:#fee000" href="https://maxim.com/" target="_blank" rel="noopener noreferrer">Maxim</a>
+            <a class="ride-chip" style="--dot:#ff0000" href="https://www.greensm.com/" target="_blank" rel="noopener noreferrer">GreenSM</a>
+        </div>
 
-
-                <p>
-
-                    {{
-                        $destination->location
-                        ?? $destination->regency->name
-                    }}
-
-                </p>
-
-
-                @if($destination->maps_url)
-
-
-                    <a
-                        href="{{ $destination->maps_url }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="map-button"
-                    >
-
-                        View on Google Maps →
-
-                    </a>
-
-
-                @endif
-
-
+        @if(isset($nearestStops) && $nearestStops->count() > 0)
+            <div class="ride-sub">Halte / stasiun terdekat (radius 5 km)</div>
+            <div class="stop-list">
+                @foreach($nearestStops as $stop)
+                    @php $type = strtolower($stop->type); @endphp
+                    <div class="stop-item">
+                        <div>
+                            <span class="stop-name">
+                                @if(str_contains($type, 'bus')) 🚌
+                                @elseif(str_contains($type, 'train') || str_contains($type, 'kereta')) 🚂
+                                @else 🚏 @endif
+                                {{ $stop->name }}
+                            </span>
+                            <span class="stop-type">{{ $stop->type }}</span>
+                        </div>
+                        <span class="stop-dist">{{ number_format($stop->calculated_distance, 1) }} km</span>
+                    </div>
+                @endforeach
             </div>
-
-
-        </aside>
-
-
+        @else
+            <div class="ride-note">Tidak ada stasiun atau halte Suroboyo Bus/Wira Wiri dalam radius 5km.</div>
+        @endif
     </div>
+</div>
 
 </main>
 

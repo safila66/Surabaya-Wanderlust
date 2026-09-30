@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Destination extends Model
 {
@@ -17,11 +18,14 @@ class Destination extends Model
         'activities',
         'opening_hours',
         'ticket_price',
+        'ticket_url',
         'facilities',
         'accessibility',
         'visit_duration',
         'location',
         'maps_url',
+        'latitude',
+        'longitude',
         'image',
     ];
 
@@ -46,9 +50,9 @@ class Destination extends Model
             ->orderBy('sort_order');
     }
 
-    public function reviews(): HasMany
+    public function reviews(): MorphMany
     {
-        return $this->hasMany(Review::class)
+        return $this->morphMany(Review::class, 'reviewable')
             ->where('is_approved', true)
             ->latest();
     }

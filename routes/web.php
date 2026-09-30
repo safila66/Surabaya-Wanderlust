@@ -84,16 +84,25 @@ Route::get('/plan-your-trip', [PlanYourTripController::class, 'index'])
 Route::get('/about', [AboutController::class, 'index'])
     ->name('about.index');
 // Culture Sub-pages
-Route::get('/culture/heritage', function() { return view('culture.heritage'); })->name('culture.heritage');
-Route::get('/culture/traditions', function() { return view('culture.traditions'); })->name('culture.traditions');
-Route::get('/culture/arts', function() { return view('culture.arts'); })->name('culture.arts');
+Route::get('/culture/heritage', [CultureController::class, 'heritage'])->name('culture.heritage');
+Route::get('/culture/traditions', [CultureController::class, 'traditions'])->name('culture.traditions');
+Route::get('/culture/arts', [CultureController::class, 'arts'])->name('culture.arts');
 
 // Travel Guide Sub-pages
-Route::get('/travel-guide/getting-around', function() { return view('travel-guide.getting-around'); })->name('travel-guide.getting-around');
-Route::get('/travel-guide/before-you-go', function() { return view('travel-guide.before-you-go'); })->name('travel-guide.before-you-go');
-Route::get('/travel-guide/tips', function() { return view('travel-guide.tips'); })->name('travel-guide.tips');
+Route::get('/travel-guide/getting-around', [TravelGuideController::class, 'gettingAround'])->name('travel-guide.getting-around');
+Route::get('/travel-guide/before-you-go', [TravelGuideController::class, 'beforeYouGo'])->name('travel-guide.before-you-go');
+Route::get('/travel-guide/tips', [TravelGuideController::class, 'tips'])->name('travel-guide.tips');
 
 // Plan Your Trip Sub-pages
-Route::get('/plan-your-trip/nature-escape', function() { return view('plan-your-trip.nature'); })->name('plan-your-trip.nature');
-Route::get('/plan-your-trip/culture-heritage', function() { return view('plan-your-trip.culture'); })->name('plan-your-trip.culture');
-Route::get('/plan-your-trip/culinary-journey', function() { return view('plan-your-trip.culinary'); })->name('plan-your-trip.culinary');
+Route::get('/plan-your-trip/nature-escape', [PlanYourTripController::class, 'nature'])->name('plan-your-trip.nature');
+Route::get('/plan-your-trip/culture-heritage', [PlanYourTripController::class, 'culture'])->name('plan-your-trip.culture');
+Route::get('/plan-your-trip/culinary-journey', [PlanYourTripController::class, 'culinary'])->name('plan-your-trip.culinary');
+
+Route::get('/register', [AuthController::class, 'showRegister'])->middleware('guest')->name('register');
+Route::post('/register', [AuthController::class, 'register'])->middleware('guest')->name('register.store');
+Route::post('/destinations/{slug}/reviews', [App\Http\Controllers\DestinationController::class, 'storeReview'])->name('destinations.reviews.store');
+Route::post('/culinary/{slug}/reviews', [App\Http\Controllers\CulinaryController::class, 'storeReview'])->name('culinary.reviews.store');
+Route::get('/accommodations', [App\Http\Controllers\AccommodationController::class, 'index'])->name('accommodations.index');
+Route::get('/get-me-there', function() { return redirect()->route('accommodations.index'); })->name('transport.index');
+Route::post('/accommodations/{slug}/reviews', [App\Http\Controllers\AccommodationController::class, 'storeReview'])->name('accommodations.reviews.store');
+Route::get('/accommodations/{slug}', [App\Http\Controllers\AccommodationController::class, 'show'])->name('accommodations.show');

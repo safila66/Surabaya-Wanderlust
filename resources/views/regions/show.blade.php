@@ -232,6 +232,87 @@
 </section>
 
 
+{{-- ── BAR & CLUB ─────────────────────────────────────── --}}
+<section class="section" id="bar-club">
+    <div class="container-main" style="padding: 0 7%; max-width:1240px; margin:auto;">
+        <div class="section-heading">
+            <div>
+                <div class="section-kicker">🍸 Nightlife</div>
+                <h2 class="section-title-text" style="font-size:28px;">Bar &amp; Club</h2>
+                <p class="section-sub">Nightlife and places to socialize.</p>
+            </div>
+            <a href="{{ route('regions.category', [$slug, 'bar-club']) }}" class="see-all-link">See all →</a>
+        </div>
+
+        @if($barClub->count())
+            <div class="grid-auto">
+                @foreach($barClub->take(6) as $item)
+                    <div class="item-card">
+                        @if($item->image ?? null)
+                            <div style="overflow:hidden; height:195px;">
+                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="item-image">
+                            </div>
+                        @else
+                            <div class="card-img-placeholder">🍸</div>
+                        @endif
+                        <div class="item-info">
+                            <h3>{{ $item->name }}</h3>
+                            <p>{{ Str::limit($item->description, 85) }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="empty-state">
+                <div class="empty-state-icon">🍸</div>
+                <h3>No bar or club found</h3>
+                <p>Data belum tersedia di region ini.</p>
+            </div>
+        @endif
+    </div>
+</section>
+
+{{-- ── PRAYER PLACES ─────────────────────────────────────────── --}}
+<section class="section section-alt" id="prayer-places">
+    <div class="container-main" style="padding: 0 7%; max-width:1240px; margin:auto;">
+        <div class="section-heading">
+            <div>
+                <div class="section-kicker">🕌 Religious</div>
+                <h2 class="section-title-text" style="font-size:28px;">Prayer Places</h2>
+                <p class="section-sub">Mosques, churches, temples, and prayer places.</p>
+            </div>
+            <a href="{{ route('regions.category', [$slug, 'prayer-places']) }}" class="see-all-link">See all →</a>
+        </div>
+
+        @if($prayerPlaces->count())
+            <div class="grid-auto">
+                @foreach($prayerPlaces->take(6) as $item)
+                    <div class="item-card">
+                        @php $imgUrl = $item->image ?? null; @endphp
+                        @if($imgUrl)
+                            <div style="overflow:hidden; height:195px;">
+                                <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                            </div>
+                        @else
+                            <div class="card-img-placeholder">🕌</div>
+                        @endif
+                        <div class="item-info">
+                            <h3>{{ $item->name }}</h3>
+                            <p>{{ Str::limit($item->description, 85) }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="empty-state">
+                <div class="empty-state-icon">🕌</div>
+                <h3>No prayer places found</h3>
+                <p>Data belum tersedia di region ini.</p>
+            </div>
+        @endif
+    </div>
+</section>
+
 @include('partials.footer')
 
 </body>
