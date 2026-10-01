@@ -17,6 +17,7 @@ use App\Http\Controllers\RegionController;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
+Route::get('/search', [App\Http\Controllers\GlobalSearchController::class, 'search'])->name('global.search');
 Route::get('/destinations', [DestinationController::class, 'index'])
     ->name('destinations.index');
 
@@ -80,6 +81,9 @@ Route::get('/best-time', [BestTimeController::class, 'index'])
 
 Route::get('/plan-your-trip', [PlanYourTripController::class, 'index'])
     ->name('plan-your-trip.index');
+
+Route::get('/plan-your-trip/build', [PlanYourTripController::class, 'build'])
+    ->name('plan-your-trip.build');
 
 Route::get('/about', [AboutController::class, 'index'])
     ->name('about.index');

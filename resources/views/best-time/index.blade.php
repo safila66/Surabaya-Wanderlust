@@ -22,7 +22,7 @@
 
 <section class="filter-section">
     <div class="filter-card">
-        <div class="filter-card-title">?? Search Event by Date</div>
+        <div class="filter-card-title">Search Event by Date</div>
         <form action="#" method="GET">
             <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:16px; align-items:flex-end;">
                 <div>

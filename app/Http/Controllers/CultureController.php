@@ -19,8 +19,8 @@ class CultureController extends Controller
 
     public function traditions()
     {
-        $items = Culture::where('category', 'Tradition')->orWhere('category', 'like', '%tradition%')->get();
-        return view('culture.show_category', ['title' => 'Traditions', 'items' => $items]);
+        // Use custom blade view for traditions instead of generic show_category
+        return view('culture.traditions');
     }
 
     public function arts()

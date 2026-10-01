@@ -19,7 +19,7 @@ class DestinationController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%")
+                  
                   ->orWhere('description', 'like', "%{$search}%")
                   ->orWhereHas('regency', function ($q) use ($search) {
                       $q->where('name', 'like', "%{$search}%");

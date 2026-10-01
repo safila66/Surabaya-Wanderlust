@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateCulture extends CreateRecord
 {
     protected static string $resource = CultureResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

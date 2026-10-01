@@ -31,6 +31,7 @@ class Culinary extends Model
 
     protected $casts = [
         'souvenir' => 'boolean',
+        'menu_image' => 'array',
     ];
 
     public function regency(): BelongsTo

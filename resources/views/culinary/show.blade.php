@@ -532,10 +532,48 @@
 
         }
 
+            .map-card { background: var(--cream-dark); border-radius: 18px; padding: 25px; margin-top: 25px; }
+        .map-card h4 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 21px; margin-bottom: 7px; }
+        .map-card p { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+        .map-button { display: inline-block; background: var(--green); color: white; padding: 11px 17px; border-radius: 30px; font-size: 11px; font-weight: 600; transition: .2s ease; }
+        .map-button:hover { background: #243a2e; }
+        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(48,74,59,.18); }
+        .ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 4px; }
+        .ride-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+        .ride-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ride-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(48,74,59,.3); color: var(--green); font-size: 12px; font-weight: 600; transition: .2s ease; }
+        .ride-chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+        .ride-chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
+        .ride-sub { margin: 20px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--brown); }
+        .stop-list { display: grid; gap: 8px; }
+        .stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(48,74,59,.07); }
+        .stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--green); }
+        .stop-type { display: block; font-size: 11px; color: var(--muted); }
+        .stop-dist { font-size: 12px; font-weight: 700; color: var(--green); white-space: nowrap; }
+        .ride-note { margin-top: 14px; font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.6; }
     </style>
 
     <style>
-        </style>
+                .map-card { background: var(--cream-dark); border-radius: 18px; padding: 25px; margin-top: 25px; }
+        .map-card h4 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 21px; margin-bottom: 7px; }
+        .map-card p { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+        .map-button { display: inline-block; background: var(--green); color: white; padding: 11px 17px; border-radius: 30px; font-size: 11px; font-weight: 600; transition: .2s ease; }
+        .map-button:hover { background: #243a2e; }
+        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(48,74,59,.18); }
+        .ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 4px; }
+        .ride-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+        .ride-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ride-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(48,74,59,.3); color: var(--green); font-size: 12px; font-weight: 600; transition: .2s ease; }
+        .ride-chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+        .ride-chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
+        .ride-sub { margin: 20px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--brown); }
+        .stop-list { display: grid; gap: 8px; }
+        .stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(48,74,59,.07); }
+        .stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--green); }
+        .stop-type { display: block; font-size: 11px; color: var(--muted); }
+        .stop-dist { font-size: 12px; font-weight: 700; color: var(--green); white-space: nowrap; }
+        .ride-note { margin-top: 14px; font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.6; }
+    </style>
 </head>
 
 
@@ -753,7 +791,15 @@
                         </div>
                     @endif
                     @if ($culinary->menu_image)
-                        <img src="{{ Storage::url($culinary->menu_image) }}" alt="Menu {{ $culinary->name }}" style="max-width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        @if (is_array($culinary->menu_image))
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 10px;">
+                                @foreach ($culinary->menu_image as $img)
+                                    <img src="{{ Storage::url($img) }}" alt="Menu {{ $culinary->name }}" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                                @endforeach
+                            </div>
+                        @else
+                            <img src="{{ Storage::url($culinary->menu_image) }}" alt="Menu {{ $culinary->name }}" style="max-width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        @endif
                     @endif
                 </div>
             @endif
@@ -799,8 +845,57 @@
                 </div>
             </div>
         
+                        <!-- =========================
+                 FIND YOUR WAY
+            ========================= -->
+            <div class="content-section" style="margin-top: 50px;">
+                <div class="map-card" style="margin-top: 0;">
+                    <div class="section-label">LOCATION</div>
+                    <h4>Find Your Way</h4>
+                    <p>{{ $culinary->location ?? $culinary->regency->name }}</p>
+
+                    <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer" class="map-button">
+                        View on Google Maps →
+                    </a>
+
+                    <div class="ride">
+                        <div class="ride-title">Get Me There</div>
+                        <div class="ride-desc">Pesan transportasi online ke lokasi ini.</div>
+
+                        <div class="ride-options">
+                            <a class="ride-chip" style="--dot:#00aa13" href="https://gojek.link/" target="_blank" rel="noopener noreferrer">Gojek</a>
+                            <a class="ride-chip" style="--dot:#00b14f" href="https://grab.com/" target="_blank" rel="noopener noreferrer">Grab</a>
+                            <a class="ride-chip" style="--dot:#fee000" href="https://maxim.com/" target="_blank" rel="noopener noreferrer">Maxim</a>
+                            <a class="ride-chip" style="--dot:#ff0000" href="https://www.greensm.com/" target="_blank" rel="noopener noreferrer">GreenSM</a>
+                        </div>
+
+                        @if(isset($nearestStops) && $nearestStops->count() > 0)
+                            <div class="ride-sub">Halte / stasiun terdekat (radius 5 km)</div>
+                            <div class="stop-list">
+                                @foreach($nearestStops as $stop)
+                                    @php $type = strtolower($stop->type); @endphp
+                                    <div class="stop-item">
+                                        <div>
+                                            <span class="stop-name">
+                                                @if(str_contains($type, 'bus')) 🚌
+                                                @elseif(str_contains($type, 'train') || str_contains($type, 'kereta')) 🚂
+                                                @else 🚏 @endif
+                                                {{ $stop->name }}
+                                            </span>
+                                            <span class="stop-type">{{ $stop->type }}</span>
+                                        </div>
+                                        <span class="stop-dist">{{ number_format($stop->calculated_distance, 1) }} km</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="ride-note">Tidak ada stasiun atau halte Suroboyo Bus/Wira Wiri dalam radius 5km.</div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <!-- =========================
-                 REVIEWS
             ========================= -->
             <div class="content-section" style="margin-top: 50px;">
                 <div class="section-label">VISITOR REVIEWS</div>

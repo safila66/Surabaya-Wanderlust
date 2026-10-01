@@ -15,7 +15,7 @@
 
         <form
             class="search-box"
-            action="{{ route('destinations.index') }}"
+            action="{{ route('global.search') }}"
             method="GET"
         >
 
@@ -34,3 +34,4 @@
     </div>
 
 </section>
+

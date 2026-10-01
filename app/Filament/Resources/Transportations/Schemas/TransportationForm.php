@@ -15,7 +15,7 @@ class TransportationForm
         return $schema
             ->components([
                 Select::make('regency_id')
-                    ->relationship('regency', 'name')->label('Region')
+                    ->relationship('regency', 'name', fn($query) => $query->whereIn('name', ['Surabaya Barat', 'Surabaya Tengah', 'Surabaya Timur', 'Surabaya Selatan', 'Surabaya Utara']))->label('Region')
                     ->required(),
                 TextInput::make('name')
                     ->required(),

@@ -40,7 +40,7 @@
             align-items: center;
             background:
                 linear-gradient(rgba(42,34,27,.48), rgba(42,34,27,.48)),
-                url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85')
+                url('https://upload.wikimedia.org/wikipedia/commons/b/ba/Patung_suroboyo.jpg')
                 center/cover;
             color: var(--text-heading);
         }
@@ -420,7 +420,7 @@
             <div class="intro-image">
 
                 <img
-                    src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=85"
+                    src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Patung_suroboyo.jpg"
                     alt="Surabaya"
                 >
 

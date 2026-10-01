@@ -70,16 +70,16 @@
                                 @php
 
                                     $regionImages = [
-                                        'north-surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'south-surabaya'            => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'east-surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'west-surabaya'             => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
-                                        'central-surabaya'          => 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+                                        'north-surabaya'            => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Jembatan_Merah_Surabaya.jpg/800px-Jembatan_Merah_Surabaya.jpg',
+                                        'south-surabaya'            => 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Masjid_Al_Akbar_Surabaya.jpg/800px-Masjid_Al_Akbar_Surabaya.jpg',
+                                        'east-surabaya'             => 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Klenteng_Sanggar_Agung%2C_Kenjeran%2C_Surabaya.jpg/800px-Klenteng_Sanggar_Agung%2C_Kenjeran%2C_Surabaya.jpg',
+                                        'west-surabaya'             => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Pakuwon_Mall_Surabaya.jpg/800px-Pakuwon_Mall_Surabaya.jpg',
+                                        'central-surabaya'          => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Bambu_Runcing_Monument.jpg/800px-Bambu_Runcing_Monument.jpg',
                                     ];
 
                                     $regionImage =
                                         $regionImages[$region->slug]
-                                        ?? 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85';
+                                        ?? 'https://images.unsplash.com/photo-1549473889-14f410d83298?w=800&q=80';
 
                                 @endphp
 

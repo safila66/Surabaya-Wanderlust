@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTransitStop extends CreateRecord
 {
     protected static string $resource = TransitStopResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

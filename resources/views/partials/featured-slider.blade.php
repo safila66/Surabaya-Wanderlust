@@ -98,69 +98,6 @@
 
             </div>
 
-
-
-            {{-- SLIDE 4 --}}
-
-            <div class="featured-slide">
-
-                <img
-                    src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=2000&q=85"
-                    alt="Yogyakarta"
-                    class="featured-image"
-                >
-
-                <div class="featured-content">
-
-                    <span class="featured-label">
-                        Explore
-                    </span>
-
-                    <h2>
-                        Yogyakarta
-                    </h2>
-
-                    <p>
-                        Experience heritage, art, traditions, culinary delights,
-                        and the unique atmosphere of Java.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- SLIDE 5 --}}
-
-            <div class="featured-slide">
-
-                <img
-                    src="https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=2000&q=85"
-                    alt="Papua"
-                    class="featured-image"
-                >
-
-                <div class="featured-content">
-
-                    <span class="featured-label">
-                        Beyond The Ordinary
-                    </span>
-
-                    <h2>
-                        Papua
-                    </h2>
-
-                    <p>
-                        Journey through extraordinary landscapes and discover
-                        the diversity of nature and culture in eastern Surabaya.
-                    </p>
-
-                </div>
-
-            </div>
-
-
         </div>
 
 
@@ -211,18 +148,6 @@
                 type="button"
                 class="featured-dot"
                 onclick="goToFeaturedSlide(2)"
-            ></button>
-
-            <button
-                type="button"
-                class="featured-dot"
-                onclick="goToFeaturedSlide(3)"
-            ></button>
-
-            <button
-                type="button"
-                class="featured-dot"
-                onclick="goToFeaturedSlide(4)"
             ></button>
 
         </div>

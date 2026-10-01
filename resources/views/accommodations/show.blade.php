@@ -1186,7 +1186,10 @@
     >
 
 
-        @forelse($accommodation->images as $image)
+        @php
+            $galleryImages = method_exists($accommodation, 'images') ? $accommodation->images : ($accommodation->image ? [ (object)['image' => $accommodation->image, 'caption' => null] ] : []);
+        @endphp
+        @forelse($galleryImages as $image)
 
 
             <div class="gallery-slide">

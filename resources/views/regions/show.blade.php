@@ -165,9 +165,14 @@
                 @foreach($accommodations->take(6) as $item)
                     <div class="item-card">
                         @php $imgUrl = $item->image ?? null; @endphp
+                        @php $imgUrl = $item->image ?? null; @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($imgUrl, ['http://', 'https://']))
+                                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🏨</div>
@@ -207,9 +212,14 @@
                 @foreach($transportations->take(6) as $item)
                     <div class="item-card">
                         @php $imgUrl = $item->image ?? null; @endphp
+                        @php $imgUrl = $item->image ?? null; @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($imgUrl, ['http://', 'https://']))
+                                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🚌</div>
@@ -248,9 +258,14 @@
             <div class="grid-auto">
                 @foreach($barClub->take(6) as $item)
                     <div class="item-card">
-                        @if($item->image ?? null)
+                        @php $imgUrl = $item->image ?? null; @endphp
+                        @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($imgUrl, ['http://', 'https://']))
+                                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🍸</div>
@@ -289,9 +304,14 @@
                 @foreach($prayerPlaces->take(6) as $item)
                     <div class="item-card">
                         @php $imgUrl = $item->image ?? null; @endphp
+                        @php $imgUrl = $item->image ?? null; @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($imgUrl, ['http://', 'https://']))
+                                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $imgUrl) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🕌</div>

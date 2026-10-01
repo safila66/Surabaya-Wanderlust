@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
     <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Plan Your Trip — Surabaya Wanderlust</title>
@@ -68,7 +69,7 @@
             text-align: center;
             background:
                 linear-gradient(rgba(45,38,29,.45), rgba(45,38,29,.45)),
-                url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85')
+                url('https://upload.wikimedia.org/wikipedia/commons/3/3e/Tugu_Pahlawan_Surabaya.jpg')
                 center/cover;
             color: white;
         }
@@ -412,62 +413,55 @@
             <p>Choose your preferences and use them as a starting point for your trip.</p>
         </div>
 
-        <form>
+        <form action="{{ route('plan-your-trip.build') }}" method="GET" id="trip-form">
             <div class="form-grid">
 
                 <div class="field">
-                    <label>Destination</label>
-
-                    <select>
-                        <option selected>Choose destination</option>
-                        <option>Bali</option>
-                        <option>Yogyakarta</option>
-                        <option>Malang</option>
-                        <option>Surabaya</option>
-                        <option>Bandung</option>
-                        <option>Lombok</option>
+                    <label>Destination Area</label>
+                    <select name="area">
+                        <option value="all" {{ request('area','all')==='all'?'selected':'' }}>Seluruh Surabaya</option>
+                        <option value="north" {{ request('area')==='north'?'selected':'' }}>Surabaya Utara</option>
+                        <option value="east" {{ request('area')==='east'?'selected':'' }}>Surabaya Timur</option>
+                        <option value="south" {{ request('area')==='south'?'selected':'' }}>Surabaya Selatan</option>
+                        <option value="west" {{ request('area')==='west'?'selected':'' }}>Surabaya Barat</option>
+                        <option value="central" {{ request('area')==='central'?'selected':'' }}>Surabaya Pusat</option>
                     </select>
                 </div>
 
                 <div class="field">
                     <label>Duration</label>
 
-                    <select>
-                        <option>1–2 Days</option>
-                        <option selected>3–4 Days</option>
-                        <option>5–7 Days</option>
-                        <option>More than 7 Days</option>
+                    <select name="duration">
+                        <option value="1" {{ request('duration')==='1'?'selected':'' }}>1-2 Hari</option>
+                        <option value="3" {{ request('duration','3')==='3'?'selected':'' }}>3-4 Hari</option>
+                        <option value="5" {{ request('duration')==='5'?'selected':'' }}>5-7 Hari</option>
                     </select>
                 </div>
 
                 <div class="field">
                     <label>Travel Style</label>
 
-                    <select>
-                        <option>Relaxed</option>
-                        <option>Adventure</option>
-                        <option>Culture</option>
-                        <option>Culinary</option>
-                        <option>Nature</option>
+                    <select name="style">
+                        <option value="relaxed" {{ request('style','relaxed')==='relaxed'?'selected':'' }}>Relaxed</option>
+                        <option value="adventure" {{ request('style')==='adventure'?'selected':'' }}>Adventure</option>
+                        <option value="culture" {{ request('style')==='culture'?'selected':'' }}>Culture &amp; Heritage</option>
+                        <option value="culinary" {{ request('style')==='culinary'?'selected':'' }}>Culinary</option>
                     </select>
                 </div>
 
                 <div class="field">
                     <label>Budget</label>
 
-                    <select>
-                        <option>Budget</option>
-                        <option selected>Mid-range</option>
-                        <option>Comfort</option>
-                        <option>Flexible</option>
+                    <select name="budget">
+                        <option value="budget" {{ request('budget')==='budget'?'selected':'' }}>Budget-friendly</option>
+                        <option value="mid" {{ request('budget','mid')==='mid'?'selected':'' }}>Mid-range</option>
+                        <option value="comfort" {{ request('budget')==='comfort'?'selected':'' }}>Comfort</option>
                     </select>
                 </div>
 
             </div>
 
-            <button type="button" class="btn">
-                Build My Trip →
-            </button>
+            <button type="submit" class="btn">Build My Trip →</button>
         </form>
 
     </section>
@@ -589,6 +583,56 @@
 
 
 
+
+{{-- ═══ ITINERARY RESULT (shown after Build My Trip) ═══ --}}
+@if(request()->has('area') && isset($itinerary))
+<div class="container" id="trip-result" style="margin-top:40px; margin-bottom:60px;">
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:22px;padding:32px;">
+        <div style="margin-bottom:24px;">
+            <small style="color:#a5673f;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">Your Curated Itinerary</small>
+            <h2 style="font-family:Georgia,serif;font-size:26px;margin-top:8px;">{{ $itinerary['title'] }}</h2>
+            <p style="color:var(--text-muted);font-size:13px;margin-top:4px;">{{ $itinerary['subtitle'] }}</p>
+        </div>
+
+        @foreach($itinerary['days'] as $dayIndex => $day)
+        <div style="margin-bottom:28px;">
+            <div style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#a5673f;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);">
+                Day {{ $dayIndex + 1 }}
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+                @foreach($day as $dest)
+                <a href="{{ route('destinations.show', $dest->slug) }}"
+                   style="display:flex;align-items:center;gap:14px;background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;transition:transform .2s;"
+                   onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                    <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#a5673f,#c8960a);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:1.1rem;">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:700;font-size:.87rem;color:var(--text-primary);">{{ $dest->name }}</div>
+                        @if($dest->location)<div style="font-size:.75rem;color:var(--text-muted);margin-top:2px;">{{ Str::limit($dest->location, 40) }}</div>@endif
+                        @if($dest->ticket_price)<div style="font-size:.73rem;color:#a5673f;margin-top:2px;font-weight:600;">{{ $dest->ticket_price }}</div>@endif
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endforeach
+
+        @if(isset($itinerary['tips']))
+        <div style="background:var(--bg-surface);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:15px 20px;margin-top:8px;">
+            <strong style="font-size:13px;">&#128161; Travel Tips:</strong>
+            <p style="color:var(--text-muted);font-size:13px;margin-top:5px;line-height:1.6;">{{ $itinerary['tips'] }}</p>
+        </div>
+        @endif
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('trip-result');
+    if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+});
+</script>
+@endif
 @include('partials.footer')
 
 </body>
