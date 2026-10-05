@@ -1,1301 +1,855 @@
+@use('App\Support\Media')
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-
 <head>
-
     <meta charset="UTF-8">
-    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
-    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $culinary->name }} | Surabaya Wanderlust</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    {{-- Anti-flicker: apply saved theme immediately --}}
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    {{--
+        [FIX] Bootstrap dan blok :root lama (--green, --cream, --border, dst. versi krem)
+        DIHAPUS. Itulah penyebab halaman ini terang dan berbeda dari halaman Destinations.
+        Sekarang memakai token tema yang sama persis dengan destinations/show.blade.php.
+    --}}
     <style>
-
-        :root {
-            --green: #29483b;
-            --green-dark: #1f372d;
-            --cream: #f6f1e8;
-            --cream-light: #fbf9f4;
-            --brown: #9a6b43;
-            --text: #26322d;
-            --muted: #77736c;
-            --border: #e5dfd4;
+        /* ===== THEME TOKENS (sama dengan halaman Destinations) ===== */
+        html[data-theme="dark"] {
+            --page-bg:      #0d1b3e;
+            --cream-dark:   #07112a;
+            --paper:        #122254;
+            --card-border:  rgba(255,255,255,.12);
+            --line:         rgba(255,255,255,.12);
+            --text:         #ffffff;
+            --text-soft:    #c9d2e6;
+            --muted:        #8d99b5;
+            --gold:         #f4c430;
+            --brown:        #f4e80b;
+            --star:         #f4c430;
+            --bar-bg:       rgba(255,255,255,.12);
+            --bar-fill:     #f4e80b;
+            --btn-bg:       #f4c430;
+            --btn-text:     #0d1b3e;
+            --panel-bg:     #1a3170;
+            --warn:         #ff9d7d;
+            --ok:           #2fd6a3;
         }
 
-        * {
-            box-sizing: border-box;
+        html[data-theme="light"] {
+            --page-bg:      #cdebff;
+            --cream-dark:   #d0e9fa;
+            --paper:        #f4f9ff;
+            --card-border:  rgba(0,100,200,.15);
+            --line:         rgba(0,100,200,.15);
+            --text:         #0d2340;
+            --text-soft:    #35557f;
+            --muted:        #4a6fa5;
+            --gold:         #b07d00;
+            --brown:        #8a6408;
+            --star:         #c8960a;
+            --bar-bg:       rgba(13,35,64,.12);
+            --bar-fill:     #0d2340;
+            --btn-bg:       #0d2340;
+            --btn-text:     #ffffff;
+            --panel-bg:     #0d2340;
+            --warn:         #b3361b;
+            --ok:           #0a7a58;
         }
 
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        .navbar {
-            background: var(--green);
-            padding: 18px 0;
+        body {
+            background: var(--page-bg) !important;
+            color: var(--text) !important;
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
         }
 
-        .brand {
-            color: #fff;
-            text-decoration: none;
-            font-size: 21px;
-            font-weight: 700;
-        }
+        a { text-decoration: none; color: inherit; }
+        img { display: block; width: 100%; }
 
-        .nav-link {
-            color: rgba(255,255,255,.8) !important;
-            margin-left: 18px;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .nav-link:hover {
-            color: #fff !important;
-        }
-
-        /* =========================
-           PAGE
-        ========================= */
-
-        .page {
-            padding: 55px 0 90px;
-        }
-
-        .back-link {
-            color: var(--gold);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            color: var(--brown);
-        }
-
-        .location {
-            color: var(--brown);
-            text-transform: uppercase;
-            letter-spacing: 1.3px;
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 90px auto 0;
+            padding: 20px 25px 10px;
             font-size: 12px;
-            font-weight: 700;
-            margin-top: 28px;
-            margin-bottom: 12px;
-        }
-
-        h1 {
-            font-family: Georgia, serif;
-            font-size: clamp(42px, 6vw, 68px);
-            line-height: 1;
-            color: var(--green-dark);
-            margin-bottom: 18px;
-        }
-
-        .intro {
-            max-width: 800px;
             color: var(--muted);
-            font-size: 17px;
-            line-height: 1.8;
+            background: transparent;
         }
+        .breadcrumb a:hover { color: var(--gold); }
+        .breadcrumb span { color: var(--gold); }
 
-        /* =========================
-           MAIN IMAGE
-        ========================= */
+        /* ===== HERO ===== */
+        .destination-hero { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-        .main-image {
-            height: 520px;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-top: 40px;
-            background: #e8e1d5;
-        }
-
-        .main-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--brown);
-            font-size: 60px;
-        }
-
-        /* =========================
-           GALLERY
-        ========================= */
-
-        .gallery {
-            margin-top: 14px;
-        }
-
-        .gallery-item {
-            height: 200px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #e8e1d5;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .content-section {
-            margin-top: 65px;
-        }
-
-        .section-label {
-            color: var(--brown);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .section-title { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold) !important; margin-bottom: 18px; }
-
-        .content-text {
-            color: var(--muted);
-            line-height: 1.9;
-            font-size: 15px;
-            white-space: pre-line;
-        }
-
-        /* =========================
-           MORE LOCAL FLAVORS
-        ========================= */
-
-        .recommendation-section {
-            margin-top: 70px;
-            padding-top: 45px;
-            border-top: 1px solid var(--border);
-        }
-
-        .recommendation-header {
-            margin-bottom: 25px;
-        }
-
-        .recommendation-title {
-            font-family: Georgia, serif;
-            color: var(--green-dark);
-            font-size: clamp(34px, 4vw, 48px);
-            line-height: 1.1;
-            margin: 0 0 10px;
-        }
-
-        .recommendation-subtitle {
-            color: var(--muted);
-            font-size: 15px;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        /* HORIZONTAL SCROLL */
-
-        .culinary-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 5px 2px 18px;
-            scroll-behavior: smooth;
-            scroll-snap-type: x proximity;
-        }
-
-        .culinary-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .culinary-scroll::-webkit-scrollbar-track {
-            background: #ece7dd;
-            border-radius: 20px;
-        }
-
-        .culinary-scroll::-webkit-scrollbar-thumb {
-            background: #b8aa99;
-            border-radius: 20px;
-        }
-
-        .culinary-scroll {
-            scrollbar-color: #b8aa99 #ece7dd;
-            scrollbar-width: thin;
-        }
-
-        /* =========================
-           RECOMMENDATION CARD
-           3 CARDS VISIBLE
-        ========================= */
-
-        .recommendation-card {
-            flex: 0 0 calc((100% - 40px) / 3);
-            min-width: 0;
-
-            background: #fff;
-            border: 1px solid var(--border);
+        .hero-photo {
+            height: 420px;
             border-radius: 18px;
             overflow: hidden;
+            position: relative;
+            background: var(--paper);
+        }
+        .hero-photo img { height: 100%; object-fit: cover; }
 
-            text-decoration: none;
-            color: var(--text);
-
-            scroll-snap-align: start;
-
-            transition:
-                transform .25s ease,
-                box-shadow .25s ease;
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(22,31,26,.78) 0%, rgba(22,31,26,.2) 48%, rgba(22,31,26,.02) 100%);
         }
 
-        .recommendation-card:hover {
-            color: var(--text);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(42, 52, 46, .11);
-        }
+        .hero-content { position: absolute; bottom: 34px; left: 36px; right: 36px; color: #fff; }
+        .eyebrow { display: inline-block; font-size: 9px; letter-spacing: 2px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
 
-        /* =========================
-           CARD IMAGE
-        ========================= */
-
-        .recommendation-image {
-            height: 230px;
-            background: #e8e1d5;
-            overflow: hidden;
-        }
-
-        .recommendation-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform .4s ease;
-        }
-
-        .recommendation-card:hover .recommendation-image img {
-            transform: scale(1.04);
-        }
-
-        .recommendation-placeholder {
-            width: 100%;
-            height: 100%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: var(--brown);
-            font-size: 45px;
-        }
-
-        /* =========================
-           CARD BODY
-        ========================= */
-
-        .recommendation-
-
-        .recommendation-location {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-
-            color: var(--brown);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 10px;
-            font-weight: 700;
-
-            margin-bottom: 8px;
-        }
-
-        .recommendation-location i {
-            font-size: 11px;
-        }
-
-        .recommendation-body h3 {
-            font-family: Georgia, serif;
-            color: var(--green-dark);
-            font-size: 25px;
-            line-height: 1.2;
-
-            margin: 0 0 10px;
-        }
-
-        .recommendation-description {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.7;
-
-            margin-bottom: 18px;
-
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* =========================
-           CARD INFO
-        ========================= */
-
-        .recommendation-info {
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .recommendation-info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 9px;
-        }
-
-        .recommendation-info-item i {
-            color: var(--brown);
-            font-size: 13px;
-            margin-top: 3px;
-            width: 15px;
-            flex-shrink: 0;
-        }
-
-        .recommendation-info-label {
-            color: #9a968f;
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: .7px;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .recommendation-info-value {
-            color: var(--text);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        /* =========================
-           CARD ARROW
-        ========================= */
-
-        .recommendation-footer {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-
-        .card-arrow {
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-            background: var(--cream);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: var(--brown);
-            font-size: 14px;
-
-            transition: all .25s ease;
-        }
-
-        .recommendation-card:hover .card-arrow {
-            background: var(--brown);
-            color: #fff;
-        }
-
-        /* =========================
-           REGION
-        ========================= */
-
-        .region-box {
-            background: var(--cream);
-            border-radius: 20px;
-            padding: 40px;
-            margin-top: 70px;
-        }
-
-        .region-box h2 {
-            font-family: Georgia, serif;
-            color: var(--green-dark);
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .region-box p {
-            color: var(--muted);
-            line-height: 1.7;
-            max-width: 650px;
-        }
-
-        .btn-region {
-            display: inline-block;
-
-            background: var(--green);
-            color: #fff;
-
-            text-decoration: none;
-
-            border-radius: 10px;
-            padding: 12px 20px;
-
-            font-size: 14px;
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 5vw, 56px);
+            line-height: 1;
             font-weight: 600;
-
-            margin-top: 8px;
-        }
-
-        .btn-region:hover {
-            background: var(--green-dark);
+            margin-bottom: 10px;
             color: #fff;
         }
 
-        /* =========================
-           FOOTER
-        ========================= */
+        .hero-location { font-size: 12px; opacity: .92; margin-bottom: 14px; }
+        .rating-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .stars { color: #e7c979; letter-spacing: 2px; font-size: 14px; }
+        .rating-number { font-weight: 700; }
+        .review-count { opacity: .9; font-size: 11px; }
 
-        footer {
-            background: var(--green-dark);
-            color: rgba(255,255,255,.7);
-            padding: 35px 0;
+        /* ===== GALLERY ===== */
+        .destination-gallery { max-width: 1100px; margin: 11px auto 0; padding: 0 20px; overflow: hidden; }
+
+        .gallery-track {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            cursor: grab;
+            user-select: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-track.dragging { cursor: grabbing; scroll-behavior: auto; }
+
+        .gallery-slide {
+            flex: 0 0 210px;
+            height: 120px;
+            border-radius: 13px;
+            overflow: hidden;
+            position: relative;
+            background: var(--paper);
+        }
+        .gallery-slide img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: transform .4s ease; }
+        .gallery-slide:hover img { transform: scale(1.04); }
+
+        .gallery-caption { position: absolute; left: 10px; right: 10px; bottom: 8px; color: #fff; font-size: 9px; text-shadow: 0 1px 5px rgba(0,0,0,.5); }
+
+        /* ===== MAIN CONTENT ===== */
+        .content { max-width: 1000px; margin: 48px auto 64px; padding: 0 20px; }
+
+        .intro { max-width: 680px; margin-bottom: 36px; }
+
+        .section-label {
+            font-size: 9px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--brown);
+            font-weight: 700;
+            margin-bottom: 7px;
         }
 
-        footer strong {
-            color: #fff;
+        .intro h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; line-height: 1.2; color: var(--gold); margin-bottom: 13px; }
+        .intro p { color: var(--text-soft); font-size: 13px; line-height: 1.85; }
+
+        /* ===== QUICK INFO ===== */
+        .quick-info { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 48px; }
+
+        .info-card {
+            background: var(--paper);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 95px;
         }
+        .info-icon { font-size: 15px; margin-bottom: 9px; color: var(--gold); }
+        .info-title { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 3px; }
+        .info-value { font-size: 12px; font-weight: 600; color: var(--gold); }
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
+        /* ===== TWO COLUMN ===== */
+        .two-column { display: grid; grid-template-columns: 1.45fr .8fr; gap: 40px; align-items: start; }
 
-        @media (max-width: 992px) {
+        .content-section { margin-bottom: 42px; }
+        .content-section h3 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 22px; margin-bottom: 25px; }
+        .content-section p, .content-text { color: var(--text-soft); font-size: 13px; line-height: 1.85; white-space: pre-line; }
 
-            .recommendation-card {
-                flex-basis: calc((100% - 20px) / 2);
-            }
+        /* ===== MENU IMAGES ===== */
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
+        .menu-grid img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--card-border); }
 
+        /* ===== ORDER / DINE IN ===== */
+        .status-card { background: var(--paper); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+        .status-card strong { display: block; font-size: 13px; margin-bottom: 10px; color: var(--text); }
+        .status-chip { display: inline-block; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+        .status-chip.warn { color: var(--warn); background: rgba(255,120,80,.12); }
+        .status-chip.ok   { color: var(--ok);   background: rgba(10,190,140,.12); }
+
+        .order-title { display: block; font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+        .order-list { display: flex; flex-direction: column; gap: 10px; }
+        .order-btn {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; border-radius: 10px;
+            color: #fff; font-size: 13px; font-weight: 600;
+            transition: .2s ease;
         }
+        .order-btn:hover { opacity: .88; transform: translateY(-1px); }
+        .order-empty { font-size: 12px; color: var(--muted); }
 
-        @media (max-width: 768px) {
+        /* ===== RATING BOX ===== */
+        .rating-box { background: var(--paper); border-radius: 20px; padding: 30px; border: 1px solid var(--card-border); margin-bottom: 22px; }
+        .rating-top { display: flex; align-items: center; gap: 17px; padding-bottom: 23px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+        .rating-big { font-family: 'Playfair Display', serif; font-size: 48px; line-height: 1; color: var(--gold); }
+        .rating-total-stars { color: var(--star); letter-spacing: 2px; }
+        .rating-total-text { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
-            .page {
-                padding-top: 35px;
-            }
+        .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 11px; }
+        .rating-row .row-stars { width: 70px; color: var(--star); letter-spacing: 1px; }
+        .bar { flex: 1; height: 5px; background: var(--bar-bg); border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--bar-fill); border-radius: 10px; }
+        .rating-percent { width: 38px; text-align: right; color: var(--muted); }
 
-            .main-image {
-                height: 350px;
-            }
-
-            .gallery-item {
-                height: 100px;
-            }
-
-            .recommendation-card {
-                flex-basis: 82%;
-            }
-
-            .recommendation-image {
-                height: 210px;
-            }
-
-            .recommendation-body h3 {
-                font-size: 23px;
-            }
-
-            .recommendation-info {
-                grid-template-columns: 1fr;
-            }
-
-            .region-box {
-                padding: 28px;
-            }
-
+        /* ===== REVIEWS ===== */
+        .review-form { background: var(--paper); border: 1px solid var(--card-border); padding: 25px; border-radius: 16px; margin-bottom: 22px; }
+        .review-form h4 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 18px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc;
+            background: #fff; color: #000; font-family: inherit; font-size: 13px;
         }
+        .form-success { background: rgba(10,191,138,.15); border: 1px solid #0abf8a; padding: 12px 16px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; }
+        .form-error   { background: rgba(255,90,90,.12);  border: 1px solid #ff7a7a; padding: 12px 16px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; }
+        .btn-submit { background: var(--btn-bg); color: var(--btn-text); border: none; padding: 12px 24px; border-radius: 999px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
-            .map-card { background: var(--cream-dark); border-radius: 18px; padding: 25px; margin-top: 25px; }
+        .review-card { background: var(--paper); border-radius: 17px; padding: 22px; margin-bottom: 11px; border: 1px solid var(--card-border); }
+        .review-head { display: flex; gap: 14px; align-items: center; margin-bottom: 9px; }
+        .review-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--btn-bg); color: var(--btn-text); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .review-user { font-weight: 600; font-size: 13px; color: var(--gold); }
+        .review-date { font-size: 11px; color: var(--muted); }
+        .review-stars { color: var(--star); letter-spacing: 1px; font-size: 12px; margin-bottom: 7px; }
+        .review-text { color: var(--text-soft); font-size: 13px; line-height: 1.7; }
+        .review-media { margin-top: 14px; }
+        .review-media img, .review-media video { max-width: 100%; max-height: 300px; border-radius: 8px; object-fit: cover; }
+        .empty-review { background: var(--paper); border-radius: 17px; padding: 28px; border: 1px solid var(--card-border); color: var(--muted); font-size: 13px; }
+
+        /* ===== MAP / RIDE ===== */
+        .map-card { background: var(--cream-dark); border: 1px solid var(--card-border); border-radius: 18px; padding: 25px; }
         .map-card h4 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 21px; margin-bottom: 7px; }
         .map-card p { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
-        .map-button { display: inline-block; background: var(--green); color: white; padding: 11px 17px; border-radius: 30px; font-size: 11px; font-weight: 600; transition: .2s ease; }
-        .map-button:hover { background: #243a2e; }
-        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(48,74,59,.18); }
-        .ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 4px; }
-        .ride-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-        .ride-options { display: flex; flex-wrap: wrap; gap: 8px; }
-        .ride-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(48,74,59,.3); color: var(--green); font-size: 12px; font-weight: 600; transition: .2s ease; }
-        .ride-chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
-        .ride-chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
-        .ride-sub { margin: 20px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--brown); }
-        .stop-list { display: grid; gap: 8px; }
-        .stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(48,74,59,.07); }
-        .stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--green); }
-        .stop-type { display: block; font-size: 11px; color: var(--muted); }
-        .stop-dist { font-size: 12px; font-weight: 700; color: var(--green); white-space: nowrap; }
-        .ride-note { margin-top: 14px; font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.6; }
-    </style>
+        .map-button { display: inline-block; background: var(--btn-bg); color: var(--btn-text); padding: 11px 17px; border-radius: 30px; font-size: 11px; font-weight: 700; transition: .2s ease; }
+        .map-button:hover { opacity: .85; }
 
-    <style>
-                .map-card { background: var(--cream-dark); border-radius: 18px; padding: 25px; margin-top: 25px; }
-        .map-card h4 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 21px; margin-bottom: 7px; }
-        .map-card p { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
-        .map-button { display: inline-block; background: var(--green); color: white; padding: 11px 17px; border-radius: 30px; font-size: 11px; font-weight: 600; transition: .2s ease; }
-        .map-button:hover { background: #243a2e; }
-        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(48,74,59,.18); }
-        .ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green); margin-bottom: 4px; }
+        .ride { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+        .ride-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold); margin-bottom: 4px; }
         .ride-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
         .ride-options { display: flex; flex-wrap: wrap; gap: 8px; }
-        .ride-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px; border: 1.5px solid rgba(48,74,59,.3); color: var(--green); font-size: 12px; font-weight: 600; transition: .2s ease; }
+        .ride-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px; border: 1.5px solid var(--card-border); color: var(--text); font-size: 12px; font-weight: 600; transition: .2s ease; }
         .ride-chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
-        .ride-chip:hover { background: var(--green); color: #fff; border-color: var(--green); }
+        .ride-chip:hover { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); }
         .ride-sub { margin: 20px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--brown); }
         .stop-list { display: grid; gap: 8px; }
-        .stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(48,74,59,.07); }
-        .stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--green); }
+        .stop-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--paper); border: 1px solid var(--card-border); }
+        .stop-name { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
         .stop-type { display: block; font-size: 11px; color: var(--muted); }
-        .stop-dist { font-size: 12px; font-weight: 700; color: var(--green); white-space: nowrap; }
+        .stop-dist { font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
         .ride-note { margin-top: 14px; font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.6; }
+
+        /* ===== MORE LOCAL FLAVORS ===== */
+        .more-section { max-width: 1100px; margin: 0 auto 64px; padding: 0 20px; }
+        .more-header { margin-bottom: 22px; }
+        .more-header h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--gold); margin-bottom: 6px; }
+        .more-header p { font-size: 13px; color: var(--text-soft); }
+
+        .more-scroll { display: flex; gap: 16px; overflow-x: auto; padding: 4px 2px 16px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+        .more-card {
+            flex: 0 0 calc((100% - 32px) / 3);
+            min-width: 240px;
+            background: var(--paper);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .more-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,.25); }
+        .more-card-image { height: 190px; background: var(--cream-dark); overflow: hidden; }
+        .more-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+        .more-card:hover .more-card-image img { transform: scale(1.05); }
+        .more-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+        .more-card-loc { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: var(--brown); margin-bottom: 6px; }
+        .more-card-body h3 { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.2; color: var(--text); margin-bottom: 8px; }
+        .more-card-desc { font-size: 12px; line-height: 1.7; color: var(--text-soft); margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .more-card-info { border-top: 1px solid var(--line); padding-top: 12px; margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .more-info-label { font-size: 9px; text-transform: uppercase; letter-spacing: .7px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+        .more-info-value { font-size: 12px; color: var(--text); line-height: 1.4; }
+        .more-card-arrow { align-self: flex-end; margin-top: 14px; width: 36px; height: 36px; border-radius: 50%; background: var(--btn-bg); color: var(--btn-text); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+        /* ===== REGION BOX ===== */
+        .region-box { max-width: 1060px; margin: 0 auto 64px; background: var(--panel-bg); color: #fff; border-radius: 20px; padding: 36px 40px; }
+        .region-box .section-label { color: #d7c39b; }
+        .region-box h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px; color: #fff; }
+        .region-box p { color: #c9d2e6; max-width: 600px; font-size: 13px; line-height: 1.8; margin-bottom: 18px; }
+        .btn-region { display: inline-block; background: var(--gold); color: #0d1b3e; padding: 12px 22px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 850px) {
+            .hero-photo { height: 430px; }
+            .quick-info { grid-template-columns: 1fr 1fr; }
+            .two-column { grid-template-columns: 1fr; }
+            .more-card { flex-basis: calc((100% - 16px) / 2); }
+        }
+
+        @media (max-width: 550px) {
+            .breadcrumb { padding-left: 20px; padding-right: 20px; }
+            .destination-hero { padding: 0 15px; }
+            .hero-photo { height: 400px; border-radius: 19px; }
+            .hero-content { left: 25px; right: 25px; bottom: 28px; }
+            .hero-content h1 { font-size: 42px; }
+            .destination-gallery { padding: 0 15px; }
+            .gallery-slide { flex-basis: 220px; height: 135px; }
+            .content { padding: 0 20px; margin-top: 50px; }
+            .intro h2 { font-size: 31px; }
+            .quick-info { grid-template-columns: 1fr; }
+            .more-card { flex-basis: 82%; }
+            .region-box { margin-left: 15px; margin-right: 15px; padding: 28px; }
+        }
     </style>
 </head>
-
 
 <body>
 
 @include('partials.navbar')
 
-
-
-<!-- =========================
-     NAVBAR
-========================= -->
-
-
-
-
-<!-- =========================
-     MAIN
-========================= -->
-
-<main class="page">
-
-    <div class="container">
-
-
-        <!-- BACK -->
-
-        <a href="{{ route('culinary.index') }}"
-           class="back-link">
-
-            <i class="fa-solid fa-arrow-left me-2"></i>
-
-            Back to Culinary
-
-        </a>
-
-
-        <!-- LOCATION -->
-
-        <div class="location">
-
-            {{ $culinary->regency->name ?? 'Surabaya' }}
-
-            @if ($culinary->regency?->province)
-
-                · {{ $culinary->regency->province->name }}
-
-            @endif
-
-        </div>
-
-
-        <!-- TITLE -->
-
-        <h1>
-            {{ $culinary->name }}
-        </h1>
-
-
-        <!-- DESCRIPTION -->
-
-        @if ($culinary->description)
-
-            <div class="intro">
-
-                {{ $culinary->description }}
-
-            </div>
-
-        @endif
-
-
-        <!-- MAIN IMAGE -->
-
-        <div class="main-image">
-
-            @if ($culinary->image)
-
-                <img
-                    src="{{ asset('storage/' . $culinary->image) }}"
-                    alt="{{ $culinary->name }}">
-
-            @elseif ($culinary->images->count())
-
-                <img
-                    src="{{ asset('storage/' . $culinary->images->first()->image) }}"
-                    alt="{{ $culinary->name }}">
-
-            @else
-
-                <div class="placeholder">
-
-                    <i class="fa-solid fa-utensils"></i>
-
-                </div>
-
-            @endif
-
-        </div>
-
-
-        <!-- GALLERY -->
-
-        @if ($culinary->images->count())
-
-            <div class="gallery">
-
-                <div class="row g-3">
-
-                    @foreach ($culinary->images as $image)
-
-                        <div class="col-6 col-md-3">
-
-                            <div class="gallery-item">
-
-                                <img
-                                    src="{{ asset('storage/' . $image->image) }}"
-                                    alt="{{ $image->caption ?? $culinary->name }}">
-
-                            </div>
-
-                        </div>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        @endif
-
-
-        <!-- =========================
-             STORY / INGREDIENTS / TASTE
-        ========================= -->
-
-        <div class="content-section">
-
-
-            @if ($culinary->history)
-
-                <div class="mb-5">
-
-                    <div class="section-label">
-                        Story
-                    </div>
-
-                    <div class="section-title">
-                        A taste with a story.
-                    </div>
-
-                    <div class="content-text">
-                        {{ $culinary->history }}
-                    </div>
-
-                </div>
-
-            @endif
-
-
-            @if ($culinary->ingredients)
-
-                <div class="mb-5">
-
-                    <div class="section-label">
-                        Ingredients
-                    </div>
-
-                    <div class="section-title">
-                        What's inside?
-                    </div>
-
-                    <div class="content-text">
-                        {{ $culinary->ingredients }}
-                    </div>
-
-                </div>
-
-            @endif
-
-
-            @if ($culinary->taste)
-
-                <div class="mb-5">
-
-                    <div class="section-label">
-                        Taste
-                    </div>
-
-                    <div class="section-title">
-                        What does it taste like?
-                    </div>
-
-                    <div class="content-text">
-                        {{ $culinary->taste }}
-                    </div>
-
-                </div>
-
-            @endif
-
-
-        
-            @if ($culinary->menu_image || $culinary->menu_description)
-                <div class="mb-5">
-                    <div class="section-label">
-                        Menu & Harga
-                    </div>
-                    <div class="section-title">
-                        What's on the menu?
-                    </div>
-                    @if ($culinary->menu_description)
-                        <div class="content-text" style="margin-bottom: 20px;">
-                            {{ $culinary->menu_description }}
-                        </div>
-                    @endif
-                    @if ($culinary->menu_image)
-                        @if (is_array($culinary->menu_image))
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 10px;">
-                                @foreach ($culinary->menu_image as $img)
-                                    <img src="{{ Storage::url($img) }}" alt="Menu {{ $culinary->name }}" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                                @endforeach
-                            </div>
-                        @else
-                            <img src="{{ Storage::url($culinary->menu_image) }}" alt="Menu {{ $culinary->name }}" style="max-width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                        @endif
-                    @endif
-                </div>
-            @endif
+@php
+    // Gambar default otomatis sesuai kategori:
+    //   Bar & Club   -> public/images/default-bar-club.svg
+    //   Cafe & Resto -> public/images/default-cafe-resto.svg
+    // (diatur di app/Support/CulinaryImage.php)
+    $defaultImg = \App\Support\CulinaryImage::defaultFor($culinary);
+    $fallback   = Media::fallback($defaultImg);
+
+    // Foto utama: kolom image -> foto pertama galeri -> gambar default
+    $coverPath = $culinary->image ?: optional($culinary->images->first())->image;
+    $coverUrl  = Media::url($coverPath, $defaultImg);
+
+    $counts = $culinary->reviews->groupBy('rating')->map->count();
+@endphp
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+    <a href="{{ route('home') }}">Home</a>
+    &nbsp; / &nbsp;
+    <a href="{{ route('culinary.index') }}">Culinary</a>
+    &nbsp; / &nbsp;
+    <span>{{ $culinary->name }}</span>
 </div>
 
+<!-- HERO -->
+<section class="destination-hero">
+    <div class="hero-photo">
 
-                    <!-- =========================
-                 DINE IN & TAKEAWAY
-            ========================= -->
-            <div class="content-section" style="margin-top: 50px;">
-                <div class="section-label">ORDER & RESERVATION</div>
-                <h3 class="section-title">Dine In & Takeaway</h3>
+        <img src="{{ $coverUrl }}" alt="{{ $culinary->name }}"
+             onerror="this.onerror=null;this.src='{{ $fallback }}';">
 
-                <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px;">
-                    <strong style="display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">🍽️ Dine In Status:</strong>
-                    @if($culinary->reservation_required)
-                        <span style="color: #A04F36; font-size: 13px; font-weight: bold; background: rgba(160, 79, 54, 0.1); padding: 6px 12px; border-radius: 6px; display: inline-block;">⚠️ Wajib Reservasi (Reservation Required)</span>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <div class="eyebrow">TASTE SURABAYA</div>
+
+            <h1>{{ $culinary->name }}</h1>
+
+            <div class="hero-location">
+                📍 {{ $culinary->regency?->name ?? 'Surabaya' }}@if($culinary->regency?->province), {{ $culinary->regency->province->name }}@endif
+            </div>
+
+            <div class="rating-line">
+                <span class="stars">
+                    @for($i = 1; $i <= 5; $i++){{ $i <= round($averageRating) ? '★' : '☆' }}@endfor
+                </span>
+
+                <span class="rating-number">
+                    @if($reviewCount > 0)
+                        {{ number_format($averageRating, 1) }} / 5
                     @else
-                        <span style="color: #00B14F; font-size: 13px; font-weight: bold; background: rgba(0, 177, 79, 0.1); padding: 6px 12px; border-radius: 6px; display: inline-block;">✅ Bisa Langsung Datang (Walk-ins Welcome)</span>
+                        No rating yet
+                    @endif
+                </span>
+
+                <span class="review-count">
+                    · {{ $reviewCount }} {{ $reviewCount == 1 ? 'review' : 'reviews' }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY -->
+@if ($culinary->images->count())
+    <section class="destination-gallery">
+        <div class="gallery-track" id="galleryTrack">
+            @foreach ($culinary->images as $image)
+                <div class="gallery-slide">
+                    <img src="{{ Media::url($image->image, $defaultImg) }}"
+                         alt="{{ $image->caption ?? $culinary->name }}"
+                         draggable="false"
+                         onerror="this.onerror=null;this.src='{{ $fallback }}';">
+
+                    @if(!empty($image->caption))
+                        <div class="gallery-caption">{{ $image->caption }}</div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </section>
+@endif
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+    <!-- INTRO -->
+    @if ($culinary->description)
+        <section class="intro">
+            <div class="section-label">ABOUT THE DISH</div>
+            <h2>{{ $culinary->name }}</h2>
+            <p>{{ $culinary->description }}</p>
+        </section>
+    @endif
+
+    <!-- QUICK INFO -->
+    <section class="quick-info">
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="info-title">Location</div>
+            <div class="info-value">{{ $culinary->regency?->name ?? 'Surabaya' }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-tag"></i></div>
+            <div class="info-title">Price</div>
+            <div class="info-value">{{ $culinary->price_range ?: 'Information unavailable' }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-store"></i></div>
+            <div class="info-title">Where to Buy</div>
+            <div class="info-value">{{ $culinary->where_to_buy ?: 'Information unavailable' }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-gift"></i></div>
+            <div class="info-title">Souvenir</div>
+            <div class="info-value">{{ $culinary->souvenir ? 'Suitable' : 'Not suitable' }}</div>
+        </div>
+
+    </section>
+
+    <!-- TWO COLUMN -->
+    <div class="two-column">
+
+        <!-- LEFT -->
+        <div>
+
+            @if ($culinary->history)
+                <section class="content-section">
+                    <div class="section-label">STORY</div>
+                    <h3>A taste with a story.</h3>
+                    <div class="content-text">{{ $culinary->history }}</div>
+                </section>
+            @endif
+
+            @if ($culinary->ingredients)
+                <section class="content-section">
+                    <div class="section-label">INGREDIENTS</div>
+                    <h3>What's inside?</h3>
+                    <div class="content-text">{{ $culinary->ingredients }}</div>
+                </section>
+            @endif
+
+            @if ($culinary->taste)
+                <section class="content-section">
+                    <div class="section-label">TASTE</div>
+                    <h3>What does it taste like?</h3>
+                    <div class="content-text">{{ $culinary->taste }}</div>
+                </section>
+            @endif
+
+            @if ($culinary->menu_image || $culinary->menu_description)
+                <section class="content-section">
+                    <div class="section-label">MENU & HARGA</div>
+                    <h3>What's on the menu?</h3>
+
+                    @if ($culinary->menu_description)
+                        <div class="content-text">{{ $culinary->menu_description }}</div>
+                    @endif
+
+                    @if ($culinary->menu_image)
+                        <div class="menu-grid">
+                            @foreach ((array) $culinary->menu_image as $img)
+                                <img src="{{ Media::url($img, $defaultImg) }}"
+                                     alt="Menu {{ $culinary->name }}"
+                                     loading="lazy"
+                                     onerror="this.onerror=null;this.src='{{ $fallback }}';">
+                            @endforeach
+                        </div>
+                    @endif
+                </section>
+            @endif
+
+            <!-- DINE IN & TAKEAWAY -->
+            <section class="content-section">
+                <div class="section-label">ORDER & RESERVATION</div>
+                <h3>Dine In & Takeaway</h3>
+
+                <div class="status-card">
+                    <strong>🍽️ Dine In Status:</strong>
+                    @if($culinary->reservation_required)
+                        <span class="status-chip warn">⚠️ Wajib Reservasi (Reservation Required)</span>
+                    @else
+                        <span class="status-chip ok">✅ Bisa Langsung Datang (Walk-ins Welcome)</span>
                     @endif
                 </div>
 
-                <strong style="display: block; font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">🛵 Pesan Takeaway / Delivery:</strong>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
+                <span class="order-title">🛵 Pesan Takeaway / Delivery:</span>
+
+                <div class="order-list">
                     @if($culinary->gofood_url)
-                        <a href="{{ $culinary->gofood_url }}" target="_blank" class="btn-primary" style="background: #EE2737; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
-                            <span>Pesan via GoFood</span> <span>→</span>
+                        <a href="{{ $culinary->gofood_url }}" target="_blank" rel="noopener noreferrer" class="order-btn" style="background:#EE2737;">
+                            <span>Pesan via GoFood</span><span>→</span>
                         </a>
                     @endif
                     @if($culinary->grabfood_url)
-                        <a href="{{ $culinary->grabfood_url }}" target="_blank" class="btn-primary" style="background: #00B14F; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
-                            <span>Pesan via GrabFood</span> <span>→</span>
+                        <a href="{{ $culinary->grabfood_url }}" target="_blank" rel="noopener noreferrer" class="order-btn" style="background:#00B14F;">
+                            <span>Pesan via GrabFood</span><span>→</span>
                         </a>
                     @endif
                     @if($culinary->shopeefood_url)
-                        <a href="{{ $culinary->shopeefood_url }}" target="_blank" class="btn-primary" style="background: #EE4D2D; color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: space-between; align-items: center; border:none;">
-                            <span>Pesan via ShopeeFood</span> <span>→</span>
+                        <a href="{{ $culinary->shopeefood_url }}" target="_blank" rel="noopener noreferrer" class="order-btn" style="background:#EE4D2D;">
+                            <span>Pesan via ShopeeFood</span><span>→</span>
                         </a>
                     @endif
                     @if(!$culinary->gofood_url && !$culinary->grabfood_url && !$culinary->shopeefood_url)
-                        <p style="font-size: 14px; color: var(--text-muted);">Belum ada info tautan pesan antar (Delivery).</p>
+                        <p class="order-empty">Belum ada info tautan pesan antar (Delivery).</p>
                     @endif
                 </div>
-            </div>
-        
-                        <!-- =========================
-                 FIND YOUR WAY
-            ========================= -->
-            <div class="content-section" style="margin-top: 50px;">
-                <div class="map-card" style="margin-top: 0;">
-                    <div class="section-label">LOCATION</div>
-                    <h4>Find Your Way</h4>
-                    <p>{{ $culinary->location ?? $culinary->regency->name }}</p>
+            </section>
 
-                    <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer" class="map-button">
-                        View on Google Maps →
-                    </a>
+            <!-- REVIEWS -->
+            <section class="content-section" id="reviews">
 
-                    <div class="ride">
-                        <div class="ride-title">Get Me There</div>
-                        <div class="ride-desc">Pesan transportasi online ke lokasi ini.</div>
-
-                        <div class="ride-options">
-                            <a class="ride-chip" style="--dot:#00aa13" href="https://gojek.link/" target="_blank" rel="noopener noreferrer">Gojek</a>
-                            <a class="ride-chip" style="--dot:#00b14f" href="https://grab.com/" target="_blank" rel="noopener noreferrer">Grab</a>
-                            <a class="ride-chip" style="--dot:#fee000" href="https://maxim.com/" target="_blank" rel="noopener noreferrer">Maxim</a>
-                            <a class="ride-chip" style="--dot:#ff0000" href="https://www.greensm.com/" target="_blank" rel="noopener noreferrer">GreenSM</a>
-                        </div>
-
-                        @if(isset($nearestStops) && $nearestStops->count() > 0)
-                            <div class="ride-sub">Halte / stasiun terdekat (radius 5 km)</div>
-                            <div class="stop-list">
-                                @foreach($nearestStops as $stop)
-                                    @php $type = strtolower($stop->type); @endphp
-                                    <div class="stop-item">
-                                        <div>
-                                            <span class="stop-name">
-                                                @if(str_contains($type, 'bus')) 🚌
-                                                @elseif(str_contains($type, 'train') || str_contains($type, 'kereta')) 🚂
-                                                @else 🚏 @endif
-                                                {{ $stop->name }}
-                                            </span>
-                                            <span class="stop-type">{{ $stop->type }}</span>
-                                        </div>
-                                        <span class="stop-dist">{{ number_format($stop->calculated_distance, 1) }} km</span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="ride-note">Tidak ada stasiun atau halte Suroboyo Bus/Wira Wiri dalam radius 5km.</div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <!-- =========================
-            ========================= -->
-            <div class="content-section" style="margin-top: 50px;">
                 <div class="section-label">VISITOR REVIEWS</div>
-                <h3 class="section-title">What Travelers Say</h3>
+                <h3>What Travelers Say</h3>
 
-                                <!-- RATING SUMMARY BOX -->
-                <div style="background: var(--bg-card); border-radius: 20px; padding: 30px; margin-bottom: 40px; border: 1px solid var(--border); max-width: 500px;">
-                    <div style="display: flex; gap: 20px; margin-bottom: 25px; align-items: center;">
-                        <div style="font-size: 48px; font-weight: 700; color: var(--text-primary); font-family: 'Plus Jakarta Sans', sans-serif;">
-                            @if($reviewCount > 0)
-                                {{ number_format($averageRating, 1) }}
-                            @else
-                                —
-                            @endif
-                        </div>
-                        <div>
-                            <div style="color: var(--gold); font-size: 20px; margin-bottom: 5px;">
-                                @if($reviewCount > 0)
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= round($averageRating)) ★ @else ☆ @endif
-                                    @endfor
-                                @else
-                                    ☆☆☆☆☆
-                                @endif
-                            </div>
-                            <div style="color: var(--text-muted); font-size: 14px;">
-                                Based on {{ $reviewCount }} {{ $reviewCount == 1 ? 'review' : 'reviews' }}
-                            </div>
-                        </div>
-                    </div>
+                <div class="review-form">
+                    <h4>Tulis Ulasan Anda</h4>
 
-                    <!-- BARS -->
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        @foreach([5,4,3,2,1] as $star)
-                            <div style="display: flex; align-items: center; gap: 15px; font-size: 13px;">
-                                <span style="color: var(--gold); width: 60px; letter-spacing: 2px;">
-                                    {{ str_repeat('★', $star) }}{{ str_repeat('☆', 5 - $star) }}
-                                </span>
-                                <div style="flex: 1; background: var(--bg-surface); height: 8px; border-radius: 4px; overflow: hidden;">
-                                    <div style="background: var(--gold); height: 100%; width: {{ $reviewCount > 0 ? ($culinary->reviews->where('rating', $star)->count() / $reviewCount) * 100 : 0 }}%;"></div>
-                                </div>
-                                <span style="width: 35px; text-align: right; color: var(--text-muted);">
-                                    {{ $reviewCount > 0 ? round(($culinary->reviews->where('rating', $star)->count() / $reviewCount) * 100) : 0 }}%
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div style="margin-top: 30px;">
-                    @forelse($culinary->reviews as $review)
-                        <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px;">
-                            <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
-                                    {{ substr($review->name, 0, 1) }}
-                                </div>
-                                <div>
-                                    <div style="font-weight: bold; font-size: 14px; color: var(--text-primary);">{{ $review->name }}</div>
-                                    <div style="font-size: 12px; color: var(--text-muted);">{{ $review->created_at->diffForHumans() }}</div>
-                                </div>
-                            </div>
-                            <div style="color: var(--gold); font-size: 14px; margin-bottom: 10px;">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= $review->rating) ★ @else ☆ @endif
-                                @endfor
-                            </div>
-                            <div style="font-size: 14px; line-height: 1.6; color: var(--text-secondary);">
-                                {{ $review->comment }}
-                                @if($review->media_path)
-                                    <div style="margin-top: 15px;">
-                                        @if(Str::endsWith($review->media_path, ['.mp4', '.mov']))
-                                            <video controls style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-                                                <source src="{{ asset('storage/' . $review->media_path) }}">
-                                            </video>
-                                        @else
-                                            <img src="{{ asset('storage/' . $review->media_path) }}" alt="Review Media" style="max-width: 100%; max-height: 300px; border-radius: 8px; object-fit: cover;">
-                                        @endif
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @empty
-                        <div style="padding: 30px; text-align: center; background: var(--bg-card); border-radius: 12px; color: var(--text-muted); font-size: 14px; border: 1px solid var(--border);">
-                            Belum ada ulasan. Jadilah yang pertama!
-                        </div>
-                    @endforelse
-                </div>
+                    @if(session('success'))
+                        <div class="form-success">{{ session('success') }}</div>
+                    @endif
 
-                <!-- TULIS ULASAN FORM -->
-                <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: 16px; margin-top: 40px;">
-                    <h4 style="margin-top: 0; margin-bottom: 20px; color: var(--text-primary); font-family: 'Playfair Display', serif; font-size: 24px;">Tulis Ulasan Anda</h4>
+                    @if($errors->any())
+                        <div class="form-error">
+                            @foreach($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <form action="{{ route('culinary.reviews.store', $culinary->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Nama</label>
-                            <input type="text" name="name" required style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+
+                        <div class="form-group">
+                            <label for="name">Nama</label>
+                            <input type="text" id="name" name="name" value="{{ old('name') }}" required>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Rating (1-5)</label>
-                            <select name="rating" required style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
-                                <option value="5">⭐⭐⭐⭐⭐ (5) Sangat Bagus</option>
-                                <option value="4">⭐⭐⭐⭐ (4) Bagus</option>
-                                <option value="3">⭐⭐⭐ (3) Cukup</option>
-                                <option value="2">⭐⭐ (2) Kurang</option>
-                                <option value="1">⭐ (1) Sangat Kurang</option>
+
+                        <div class="form-group">
+                            <label for="rating">Rating (1-5)</label>
+                            <select id="rating" name="rating" required>
+                                <option value="5" @selected(old('rating') == 5)>⭐⭐⭐⭐⭐ (5) Sangat Bagus</option>
+                                <option value="4" @selected(old('rating') == 4)>⭐⭐⭐⭐ (4) Bagus</option>
+                                <option value="3" @selected(old('rating') == 3)>⭐⭐⭐ (3) Cukup</option>
+                                <option value="2" @selected(old('rating') == 2)>⭐⭐ (2) Kurang</option>
+                                <option value="1" @selected(old('rating') == 1)>⭐ (1) Sangat Kurang</option>
                             </select>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Komentar / Pengalaman Anda</label>
-                            <textarea name="comment" required rows="5" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;"></textarea>
+
+                        <div class="form-group">
+                            <label for="comment">Komentar / Pengalaman Anda</label>
+                            <textarea id="comment" name="comment" rows="4" required>{{ old('comment') }}</textarea>
                         </div>
-                        <div style="margin-bottom: 20px;">
-                            <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Upload Foto/Video (Opsional)</label>
-                            <input type="file" name="media" accept="image/*,video/*" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000; box-sizing: border-box;">
+
+                        <div class="form-group">
+                            <label for="media">Upload Foto/Video (Opsional)</label>
+                            <input type="file" id="media" name="media" accept="image/*,video/*">
                         </div>
-                        <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 14px 28px; border-radius: 999px; font-weight: bold; color: white; cursor: pointer; font-size: 16px;">Kirim Ulasan</button>
+
+                        <button type="submit" class="btn-submit">Kirim Ulasan</button>
                     </form>
                 </div>
-            </div>
-<!-- =========================
-             MORE LOCAL FLAVORS
-        ========================= -->
 
-        @if ($recommendedCulinaries->count())
+                @forelse($culinary->reviews as $review)
+                    <div class="review-card">
+                        <div class="review-head">
+                            <div class="review-avatar">{{ strtoupper(substr($review->name, 0, 1)) }}</div>
+                            <div>
+                                <div class="review-user">{{ $review->name }}</div>
+                                <div class="review-date">{{ $review->created_at->diffForHumans() }}</div>
+                            </div>
+                        </div>
 
-            <section class="recommendation-section">
+                        <div class="review-stars">
+                            @for($i = 1; $i <= 5; $i++){{ $i <= $review->rating ? '★' : '☆' }}@endfor
+                        </div>
 
+                        <div class="review-text">{{ $review->comment }}</div>
 
-                <div class="recommendation-header">
-
-                    <div class="section-label">
-                        More Local Flavors
-                    </div>
-
-                    <h2 class="recommendation-title">
-                        More from {{ $culinary->regency->name }}
-                    </h2>
-
-                    <p class="recommendation-subtitle">
-                        Discover other local flavors from this region.
-                    </p>
-
-                </div>
-
-
-                <!-- HORIZONTAL CAROUSEL -->
-
-                <div class="culinary-scroll">
-
-
-                    @foreach ($recommendedCulinaries as $item)
-
-
-                        <a href="{{ route('culinary.show', $item->slug) }}"
-                           class="recommendation-card">
-
-
-                            <!-- IMAGE -->
-
-                            <div class="recommendation-image">
-
-                                @if ($item->image)
-
-                                    <img
-                                        src="{{ asset('storage/' . $item->image) }}"
-                                        alt="{{ $item->name }}">
-
-                                @elseif ($item->images?->count())
-
-                                    <img
-                                        src="{{ asset('storage/' . $item->images->first()->image) }}"
-                                        alt="{{ $item->name }}">
-
+                        @if($review->media_path)
+                            <div class="review-media">
+                                @if(\Illuminate\Support\Str::endsWith(strtolower($review->media_path), ['.mp4', '.mov']))
+                                    <video controls>
+                                        <source src="{{ Media::url($review->media_path) }}">
+                                    </video>
                                 @else
-
-                                    <div class="recommendation-placeholder">
-
-                                        <i class="fa-solid fa-utensils"></i>
-
-                                    </div>
-
+                                    <img src="{{ Media::url($review->media_path) }}" alt="Review media" loading="lazy">
                                 @endif
-
                             </div>
-
-
-                            <!-- BODY -->
-
-                            <div class="recommendation-body">
-
-
-                                <!-- LOCATION -->
-
-                                <div class="recommendation-location">
-
-                                    <i class="fa-solid fa-location-dot"></i>
-
-                                    {{ $item->regency->name ?? 'Surabaya' }}
-
-                                </div>
-
-
-                                <!-- NAME -->
-
-                                <h3>
-                                    {{ $item->name }}
-                                </h3>
-
-
-                                <!-- DESCRIPTION -->
-
-                                @if ($item->description)
-
-                                    <div class="recommendation-description">
-
-                                        {{ $item->description }}
-
-                                    </div>
-
-                                @endif
-
-
-                                <!-- INFORMATION -->
-
-                                <div class="recommendation-info">
-
-
-                                    @if ($item->price_range)
-
-                                        <div class="recommendation-info-item">
-
-                                            <i class="fa-solid fa-tag"></i>
-
-                                            <div>
-
-                                                <div class="recommendation-info-label">
-                                                    Price
-                                                </div>
-
-                                                <div class="recommendation-info-value">
-                                                    {{ $item->price_range }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    @endif
-
-
-                                    @if ($item->where_to_buy)
-
-                                        <div class="recommendation-info-item">
-
-                                            <i class="fa-solid fa-store"></i>
-
-                                            <div>
-
-                                                <div class="recommendation-info-label">
-                                                    Where to Buy
-                                                </div>
-
-                                                <div class="recommendation-info-value">
-                                                    {{ $item->where_to_buy }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    @endif
-
-
-                                    @if ($item->location)
-
-                                        <div class="recommendation-info-item">
-
-                                            <i class="fa-solid fa-map-pin"></i>
-
-                                            <div>
-
-                                                <div class="recommendation-info-label">
-                                                    Location
-                                                </div>
-
-                                                <div class="recommendation-info-value">
-                                                    {{ $item->location }}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    @endif
-
-
-                                    <div class="recommendation-info-item">
-
-                                        <i class="fa-solid fa-gift"></i>
-
-                                        <div>
-
-                                            <div class="recommendation-info-label">
-                                                Souvenir
-                                            </div>
-
-                                            <div class="recommendation-info-value">
-
-                                                {{ $item->souvenir ? 'Suitable' : 'Not suitable' }}
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-
-
-                                <!-- ARROW -->
-
-                                <div class="recommendation-footer">
-
-                                    <div class="card-arrow">
-
-                                        <i class="fa-solid fa-arrow-right"></i>
-
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-
-                        </a>
-
-
-                    @endforeach
-
-
-                </div>
-
+                        @endif
+                    </div>
+                @empty
+                    <div class="empty-review">
+                        Belum ada ulasan. Jadilah yang pertama memberikan penilaian dan pengalamanmu.
+                    </div>
+                @endforelse
 
             </section>
 
-        @endif
+        </div>
 
+        <!-- RIGHT -->
+        <aside>
 
-        <!-- =========================
-             EXPLORE REGION
-        ========================= -->
+            <!-- RATING -->
+            <div class="rating-box">
 
-        @if ($culinary->regency)
+                <div class="rating-top">
+                    <div class="rating-big">
+                        {{ $reviewCount > 0 ? number_format($averageRating, 1) : '—' }}
+                    </div>
 
-            <div class="region-box">
+                    <div>
+                        <div class="rating-total-stars">
+                            @if($reviewCount > 0)
+                                @for($i = 1; $i <= 5; $i++){{ $i <= round($averageRating) ? '★' : '☆' }}@endfor
+                            @else
+                                ☆☆☆☆☆
+                            @endif
+                        </div>
 
-                <div class="section-label">
-                    Continue Exploring
+                        <div class="rating-total-text">
+                            Based on {{ $reviewCount }} {{ $reviewCount == 1 ? 'review' : 'reviews' }}
+                        </div>
+                    </div>
                 </div>
 
-                <h2>
-                    Explore {{ $culinary->regency->name }}
-                </h2>
+                @foreach(range(5, 1) as $star)
+                    @php $pct = $reviewCount > 0 ? (($counts[$star] ?? 0) / $reviewCount) * 100 : 0; @endphp
 
-                <p>
-                    Discover destinations, culture, travel information,
-                    and other experiences from this region.
-                </p>
-
-                <a href="{{ route('destinations.index') }}"
-                   class="btn-region">
-
-                    Explore Destinations
-
-                    <i class="fa-solid fa-arrow-right ms-2"></i>
-
-                </a>
+                    <div class="rating-row">
+                        <span class="row-stars">{{ str_repeat('★', $star) }}{{ str_repeat('☆', 5 - $star) }}</span>
+                        <div class="bar"><div class="bar-fill" style="width: {{ $pct }}%"></div></div>
+                        <span class="rating-percent">{{ round($pct) }}%</span>
+                    </div>
+                @endforeach
 
             </div>
 
-        @endif
+            <!-- LOCATION -->
+            <div class="map-card">
+                <div class="section-label">LOCATION</div>
+                <h4>Find Your Way</h4>
+                <p>{{ $culinary->location ?? $culinary->regency?->name }}</p>
 
+                <a href="{{ $mapsLink }}" target="_blank" rel="noopener noreferrer" class="map-button">
+                    View on Google Maps →
+                </a>
+
+                <div class="ride">
+                    <div class="ride-title">Get Me There</div>
+                    <div class="ride-desc">Pesan transportasi online ke lokasi ini.</div>
+
+                    <div class="ride-options">
+                        <a class="ride-chip" style="--dot:#00aa13" href="https://gojek.link/" target="_blank" rel="noopener noreferrer">Gojek</a>
+                        <a class="ride-chip" style="--dot:#00b14f" href="https://grab.com/" target="_blank" rel="noopener noreferrer">Grab</a>
+                        <a class="ride-chip" style="--dot:#fee000" href="https://maxim.com/" target="_blank" rel="noopener noreferrer">Maxim</a>
+                        <a class="ride-chip" style="--dot:#ff0000" href="https://www.greensm.com/" target="_blank" rel="noopener noreferrer">GreenSM</a>
+                    </div>
+
+                    @if(isset($nearestStops) && $nearestStops->count() > 0)
+                        <div class="ride-sub">Halte / stasiun terdekat (radius 5 km)</div>
+
+                        <div class="stop-list">
+                            @foreach($nearestStops as $stop)
+                                @php $type = strtolower($stop->type); @endphp
+
+                                <div class="stop-item">
+                                    <div>
+                                        <span class="stop-name">
+                                            @if(str_contains($type, 'bus')) 🚌
+                                            @elseif(str_contains($type, 'train') || str_contains($type, 'kereta')) 🚂
+                                            @else 🚏
+                                            @endif
+                                            {{ $stop->name }}
+                                        </span>
+                                        <span class="stop-type">{{ $stop->type }}</span>
+                                    </div>
+
+                                    <span class="stop-dist">{{ number_format($stop->calculated_distance, 1) }} km</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="ride-note">Tidak ada stasiun atau halte Suroboyo Bus/Wira Wiri dalam radius 5km.</div>
+                    @endif
+                </div>
+            </div>
+
+        </aside>
 
     </div>
 
-
 </main>
 
+<!-- MORE LOCAL FLAVORS -->
+@if ($recommendedCulinaries->count())
+    <section class="more-section">
 
-<!-- =========================
-     FOOTER
-========================= -->
+        <div class="more-header">
+            <div class="section-label">MORE LOCAL FLAVORS</div>
+            <h2>More from {{ $culinary->regency?->name ?? 'Surabaya' }}</h2>
+            <p>Discover other local flavors from this region.</p>
+        </div>
 
+        <div class="more-scroll">
+            @foreach ($recommendedCulinaries as $item)
+                @php
+                    // Default gambar tiap kartu mengikuti kategori kuliner itu sendiri
+                    $itemDefault  = \App\Support\CulinaryImage::defaultFor($item);
+                    $itemFallback = Media::fallback($itemDefault);
+                    $itemCover    = Media::url($item->image ?: optional($item->images->first())->image, $itemDefault);
+                @endphp
 
+                <a href="{{ route('culinary.show', $item->slug) }}" class="more-card">
 
+                    <div class="more-card-image">
+                        <img src="{{ $itemCover }}" alt="{{ $item->name }}" loading="lazy"
+                             onerror="this.onerror=null;this.src='{{ $itemFallback }}';">
+                    </div>
 
+                    <div class="more-card-body">
+                        <div class="more-card-loc">📍 {{ $item->regency->name ?? 'Surabaya' }}</div>
+
+                        <h3>{{ $item->name }}</h3>
+
+                        @if ($item->description)
+                            <div class="more-card-desc">{{ $item->description }}</div>
+                        @endif
+
+                        <div class="more-card-info">
+                            @if ($item->price_range)
+                                <div>
+                                    <div class="more-info-label">Price</div>
+                                    <div class="more-info-value">{{ $item->price_range }}</div>
+                                </div>
+                            @endif
+
+                            @if ($item->where_to_buy)
+                                <div>
+                                    <div class="more-info-label">Where to Buy</div>
+                                    <div class="more-info-value">{{ $item->where_to_buy }}</div>
+                                </div>
+                            @endif
+
+                            <div>
+                                <div class="more-info-label">Souvenir</div>
+                                <div class="more-info-value">{{ $item->souvenir ? 'Suitable' : 'Not suitable' }}</div>
+                            </div>
+                        </div>
+
+                        <div class="more-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+
+                </a>
+            @endforeach
+        </div>
+
+    </section>
+@endif
+
+<!-- EXPLORE REGION -->
+@if ($culinary->regency)
+    <div class="region-box">
+        <div class="section-label">CONTINUE EXPLORING</div>
+        <h2>Explore {{ $culinary->regency->name }}</h2>
+        <p>Discover destinations, culture, travel information, and other experiences from this region.</p>
+
+        {{-- [FIX] Sebelumnya ke daftar semua destinasi. Sekarang ke halaman region (route regions.show).
+             Kalau regency belum punya slug, cadangannya daftar destinasi yang terfilter ke wilayah ini. --}}
+        <a href="{{ $culinary->regency->slug
+                    ? route('regions.show', $culinary->regency->slug)
+                    : route('destinations.index', ['region' => $culinary->regency->name]) }}"
+           class="btn-region">
+            Explore {{ $culinary->regency->name }} →
+        </a>
+    </div>
+@endif
 
 @include('partials.footer')
 
-</body>
+<script>
+(function () {
+    const track = document.getElementById('galleryTrack');
+    if (!track) return;
 
+    /* Desktop drag-to-scroll (touch memakai scroll bawaan browser) */
+    let isDown = false, startX = 0, startScroll = 0;
+    const stopDrag = () => { isDown = false; track.classList.remove('dragging'); };
+
+    track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        track.classList.add('dragging');
+        startX = e.pageX;
+        startScroll = track.scrollLeft;
+    });
+    track.addEventListener('mouseup', stopDrag);
+    track.addEventListener('mouseleave', stopDrag);
+    track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        track.scrollLeft = startScroll - (e.pageX - startX) * 1.4;
+    });
+})();
+</script>
+
+</body>
 </html>

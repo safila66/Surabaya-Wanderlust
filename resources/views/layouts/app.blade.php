@@ -270,6 +270,27 @@
             text-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.30);
         }
 
+        .featured-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1.25rem;
+            padding: 0.6rem 1.5rem;
+            background: var(--gold, #c9a227);
+            color: #07112a;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 2rem;
+            transition: 0.25s ease;
+            letter-spacing: 0.03em;
+        }
+        .featured-cta-btn:hover {
+            background: #fff;
+            color: #07112a;
+            transform: translateX(3px);
+        }
+
         /* ARROWS */
         .featured-arrow {
             position: absolute;

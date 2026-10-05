@@ -25,6 +25,9 @@ class CulinariesTable
                     ->searchable(),
                 TextColumn::make('price_range')
                     ->searchable(),
+                TextColumn::make('opening_hours')
+                    ->label('Opening hours')
+                    ->searchable(),
                 TextColumn::make('where_to_buy')
                     ->searchable(),
                 TextColumn::make('location')

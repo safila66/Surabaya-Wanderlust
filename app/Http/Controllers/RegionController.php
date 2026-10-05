@@ -53,6 +53,51 @@ class RegionController extends Controller
         ];
     }
 
+    /**
+     * Regency ID per wilayah (sesuai data di Filament).
+     */
+    private function getRegencyId($slug): ?int
+    {
+        return match($slug) {
+            'west-surabaya'    => 515,
+            'central-surabaya' => 516,
+            'east-surabaya'    => 517,
+            'south-surabaya'   => 518,
+            'north-surabaya'   => 519,
+            default            => null,
+        };
+    }
+
+    /**
+     * Filter wilayah: data yang regency-nya sudah dipisah di Filament (515-519),
+     * ATAU data yang masih di "Kota Surabaya" (329) tapi lokasinya menyebut wilayah tsb.
+     */
+    private function regionFilter($slug): \Closure
+    {
+        $regencyId = $this->getRegencyId($slug);
+        $keywords  = match($slug) {
+            'east-surabaya'    => ['Timur'],
+            'west-surabaya'    => ['Barat'],
+            'north-surabaya'   => ['Utara'],
+            'south-surabaya'   => ['Selatan'],
+            'central-surabaya' => ['Pusat', 'Tengah'],
+            default            => [],
+        };
+
+        return function ($q) use ($regencyId, $keywords) {
+            if (!$regencyId) return;
+            $q->where(function ($q) use ($regencyId, $keywords) {
+                $q->where('regency_id', $regencyId)
+                  ->orWhere(function ($q2) use ($keywords) {
+                      $q2->where('regency_id', 329)->where(function ($q3) use ($keywords) {
+                          foreach ($keywords as $k) {
+                              $q3->orWhere('location', 'like', "%{$k}%");
+                          }
+                      });
+                  });
+            });
+        };
+    }
     private function getRegionKeyword($slug): string
     {
         return match($slug) {
@@ -71,18 +116,14 @@ class RegionController extends Controller
         $regionName = ucwords(str_replace('-', ' ', $slug));
         $keyword = $this->getRegionKeyword($slug);
 
-        $filterByLocation = function($q) use ($keyword) {
-            if ($keyword) {
-                $q->where('location', 'like', "%{$keyword}%");
-            }
-        };
+        $filterByLocation = $this->regionFilter($slug);
 
-        $entertainment  = Destination::with('images')->where('regency_id', $regencyId)->where($filterByLocation)->latest()->get();
-        $restoCafe      = Culinary::with('images')->where('regency_id', $regencyId)->where('category', 'resto-cafe')->where($filterByLocation)->latest()->get();
-        $accommodations = Accommodation::where('regency_id', $regencyId)->where($filterByLocation)->latest()->get();
+        $entertainment  = Destination::with('images')->where($filterByLocation)->latest()->get();
+        $restoCafe      = Culinary::with('images')->where('category', 'resto-cafe')->where($filterByLocation)->latest()->get();
+        $accommodations = Accommodation::where($filterByLocation)->latest()->get();
         $transportations= Transportation::where('regency_id', $regencyId)->latest()->get();
-        $barClub        = Culinary::with('images')->where('regency_id', $regencyId)->where('category', 'bar-club')->where($filterByLocation)->latest()->get();
-        $prayerPlaces   = PrayerPlace::where('regency_id', $regencyId)->where($filterByLocation)->latest()->get();
+        $barClub        = Culinary::with('images')->where('category', 'bar-club')->where($filterByLocation)->latest()->get();
+        $prayerPlaces   = PrayerPlace::where($filterByLocation)->latest()->get();
         $culture        = Culture::where($filterByLocation)->latest()->get(); // Culture model doesn't use regency_id mostly but we can filter by location
 
         $categories = $this->categoryMeta();
@@ -109,23 +150,17 @@ class RegionController extends Controller
         $meta = $categories[$category];
         $items = collect([]);
         
-        $filterByLocation = function($q) use ($keyword) {
-            if ($keyword) {
-                $q->where('location', 'like', "%{$keyword}%");
-            }
-        };
+        $filterByLocation = $this->regionFilter($slug);
 
         switch ($category) {
             case 'entertainment':
                 $items = Destination::with('images')
-                    ->where('regency_id', $regencyId)
                     ->where($filterByLocation)
                     ->latest()->get();
                 break;
 
             case 'resto-cafe':
                 $items = Culinary::with('images')
-                    ->where('regency_id', $regencyId)
                     ->where('category', 'resto-cafe')
                     ->where($filterByLocation)
                     ->latest()->get();
@@ -133,15 +168,13 @@ class RegionController extends Controller
 
             case 'bar-club':
                 $items = Culinary::with('images')
-                    ->where('regency_id', $regencyId)
                     ->where('category', 'bar-club')
                     ->where($filterByLocation)
                     ->latest()->get();
                 break;
 
             case 'accommodation':
-                $items = Accommodation::where('regency_id', $regencyId)
-                    ->where($filterByLocation)
+                $items = Accommodation::where($filterByLocation)
                     ->latest()->get();
                 break;
 
@@ -151,8 +184,7 @@ class RegionController extends Controller
                 break;
 
             case 'prayer-places':
-                $items = PrayerPlace::where('regency_id', $regencyId)
-                    ->where($filterByLocation)
+                $items = PrayerPlace::where($filterByLocation)
                     ->latest()->get();
                 break;
                 

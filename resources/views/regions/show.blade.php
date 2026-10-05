@@ -74,13 +74,16 @@
             <div class="grid-auto">
                 @foreach($entertainment->take(6) as $item)
                     <a href="{{ route('destinations.show', $item->slug ?? '#') }}" class="item-card">
-                        @if($item->images->first()?->image_url ?? null)
+                        @php
+                            $destImg = \App\Support\Media::url($item->images->first()?->image ?? ($item->image ?? null));
+                        @endphp
+                        @if($destImg)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ $item->images->first()->image_url }}" alt="{{ $item->name }}" class="item-image">
-                            </div>
-                        @elseif($item->image ?? null)
-                            <div style="overflow:hidden; height:195px;">
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($destImg, ['http://', 'https://']))
+                                    <img src="{{ $destImg }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $destImg) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🏛️</div>
@@ -119,13 +122,16 @@
             <div class="grid-auto">
                 @foreach($restoCafe->take(6) as $item)
                     <a href="{{ route('culinary.show', $item->slug ?? '#') }}" class="item-card">
-                        @if($item->images->first()?->image_url ?? null)
+                        @php
+                            $culImg = \App\Support\Media::url($item->images->first()?->image ?? ($item->image ?? null), \App\Support\CulinaryImage::CAFE_RESTO);
+                        @endphp
+                        @if($culImg)
                             <div style="overflow:hidden; height:195px;">
-                                <img src="{{ $item->images->first()->image_url }}" alt="{{ $item->name }}" class="item-image">
-                            </div>
-                        @elseif($item->image ?? null)
-                            <div style="overflow:hidden; height:195px;">
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="item-image">
+                                @if(Str::startsWith($culImg, ['http://', 'https://']))
+                                    <img src="{{ $culImg }}" alt="{{ $item->name }}" class="item-image">
+                                @else
+                                    <img src="{{ asset('storage/' . $culImg) }}" alt="{{ $item->name }}" class="item-image">
+                                @endif
                             </div>
                         @else
                             <div class="card-img-placeholder">🍜</div>
@@ -164,8 +170,8 @@
             <div class="grid-auto">
                 @foreach($accommodations->take(6) as $item)
                     <div class="item-card">
-                        @php $imgUrl = $item->image ?? null; @endphp
-                        @php $imgUrl = $item->image ?? null; @endphp
+                        @php $imgUrl = \App\Support\Media::url($item->image, 'images/accommodation-default.jpg'); @endphp
+                            @php $imgUrl = \App\Support\Media::url($item->image, 'images/accommodation-default.jpg'); @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
                                 @if(Str::startsWith($imgUrl, ['http://', 'https://']))
@@ -210,9 +216,12 @@
         @if($transportations->count())
             <div class="grid-auto">
                 @foreach($transportations->take(6) as $item)
-                    <div class="item-card">
-                        @php $imgUrl = $item->image ?? null; @endphp
-                        @php $imgUrl = $item->image ?? null; @endphp
+                    @php 
+                        $link = $item->ticket_url ?? '#'; 
+                        $target = $item->ticket_url ? 'target="_blank"' : '';
+                    @endphp
+                    <a href="{{ $link }}" {!! $target !!} class="item-card">
+                            @php $imgUrl = \App\Support\Media::url($item->image); @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
                                 @if(Str::startsWith($imgUrl, ['http://', 'https://']))
@@ -228,7 +237,7 @@
                             <h3>{{ $item->name }}</h3>
                             <p>{{ Str::limit($item->description, 85) }}</p>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         @else
@@ -258,7 +267,7 @@
             <div class="grid-auto">
                 @foreach($barClub->take(6) as $item)
                     <div class="item-card">
-                        @php $imgUrl = $item->image ?? null; @endphp
+                            @php $imgUrl = \App\Support\Media::url($item->image, \App\Support\CulinaryImage::BAR_CLUB); @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
                                 @if(Str::startsWith($imgUrl, ['http://', 'https://']))
@@ -303,8 +312,8 @@
             <div class="grid-auto">
                 @foreach($prayerPlaces->take(6) as $item)
                     <div class="item-card">
-                        @php $imgUrl = $item->image ?? null; @endphp
-                        @php $imgUrl = $item->image ?? null; @endphp
+                        @php $imgUrl = \App\Support\Media::url($item->image); @endphp
+                        @php $imgUrl = \App\Support\Media::url($item->image); @endphp
                         @if($imgUrl)
                             <div style="overflow:hidden; height:195px;">
                                 @if(Str::startsWith($imgUrl, ['http://', 'https://']))

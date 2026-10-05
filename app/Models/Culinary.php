@@ -27,6 +27,7 @@ class Culinary extends Model
         'souvenir',
         'image', 'menu_image', 'menu_description', 'latitude', 'longitude', 'maps_url',
         'source',
+        'opening_hours',
     ];
 
     protected $casts = [

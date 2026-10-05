@@ -85,19 +85,26 @@
                     @php
                         // Resolve URL based on category
                         $url = '#';
+                        $target = '';
                         if ($category === 'entertainment' && isset($item->slug)) {
                             $url = route('destinations.show', $item->slug);
-                        } elseif ($category === 'resto-cafe' && isset($item->slug)) {
+                        } elseif (($category === 'resto-cafe' || $category === 'bar-club') && isset($item->slug)) {
                             $url = route('culinary.show', $item->slug);
+                        } elseif ($category === 'accommodation' && isset($item->slug)) {
+                            $url = route('accommodations.show', $item->slug);
+                        } elseif ($category === 'transport') {
+                            $url = $item->ticket_url ?? '#';
+                            if ($url !== '#') $target = 'target="_blank"';
                         }
 
-                        // Resolve image
-                        $imgUrl = null;
-                        if (isset($item->images) && $item->images->first()?->image_url) {
-                            $imgUrl = $item->images->first()->image_url;
-                        } elseif (isset($item->image) && $item->image) {
-                            $imgUrl = asset('storage/' . $item->image);
-                        }
+                        // Resolve image (pakai gambar default bila belum diupload)
+                        $defaults = [
+                            'resto-cafe'    => \App\Support\CulinaryImage::CAFE_RESTO,
+                            'bar-club'      => \App\Support\CulinaryImage::BAR_CLUB,
+                            'accommodation' => 'images/accommodation-default.jpg',
+                        ];
+                        $rawImg = (isset($item->images) ? $item->images->first()?->image : null) ?: ($item->image ?? null);
+                        $imgUrl = \App\Support\Media::url($rawImg, $defaults[$category] ?? null);
 
                         // Placeholder emoji
                         $emojis = [
@@ -111,7 +118,7 @@
                         $emoji = $emojis[$category] ?? '📍';
                     @endphp
 
-                    <a href="{{ $url }}" class="item-card">
+                    <a href="{{ $url }}" {!! $target !!} class="item-card">
                         @if($imgUrl)
                             <div style="overflow:hidden; height:210px;">
                                 <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="item-image">

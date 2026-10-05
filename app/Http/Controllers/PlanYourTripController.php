@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Culinary;
 use App\Models\Destination;
 use App\Models\Regency;
 
@@ -99,24 +100,61 @@ class PlanYourTripController extends Controller
         return view('plan-your-trip.index', compact('itinerary'));
     }
 
+    private const CULTURE_KEYWORDS = [
+        'museum', 'kota tua', 'kampung', 'jembatan merah', 'monumen', 'tugu', 'benteng',
+        'balai', 'gedung', 'rumah hos', 'majapahit', 'masjid', 'kelenteng', 'patung',
+        'pasar pabean', 'heritage', 'jalan tunjungan', 'sunan ampel',
+    ];
+
+    private const NATURE_KEYWORDS = [
+        'taman', 'hutan', 'kebun', 'mangrove', 'pantai', 'kenjeran park', 'graha natura',
+        'romokalisari',
+    ];
+
+    private function destinationsMatching(array $keywords, array $exclude = [])
+    {
+        return Destination::orderBy('name')->get()->filter(function ($d) use ($keywords, $exclude) {
+            $name = mb_strtolower($d->name);
+            foreach ($exclude as $e) {
+                if (str_contains($name, $e)) return false;
+            }
+            foreach ($keywords as $k) {
+                if (str_contains($name, $k)) return true;
+            }
+            return false;
+        })->values();
+    }
+
     public function nature()
     {
-        $items = Destination::whereHas('regency', fn($q) => $q->where('name', 'like', '%Surabaya%'))
-            ->inRandomOrder()->take(12)->get();
-        return view('plan-your-trip.show_category', ['title' => 'Nature Escape', 'items' => $items]);
+        $items = $this->destinationsMatching(self::NATURE_KEYWORDS, self::CULTURE_KEYWORDS);
+        return view('plan-your-trip.show_category', [
+            'title' => 'Nature Escape',
+            'subtitle' => 'Taman, hutan kota, mangrove, dan pantai untuk melepas penat.',
+            'type' => 'destination',
+            'items' => $items,
+        ]);
     }
 
     public function culture()
     {
-        $items = Destination::whereHas('regency', fn($q) => $q->where('name', 'like', '%Surabaya%'))
-            ->inRandomOrder()->take(12)->get();
-        return view('plan-your-trip.show_category', ['title' => 'Culture & Heritage', 'items' => $items]);
+        $items = $this->destinationsMatching(self::CULTURE_KEYWORDS);
+        return view('plan-your-trip.show_category', [
+            'title' => 'Culture & Heritage',
+            'subtitle' => 'Museum, kota tua, monumen, dan situs bersejarah Surabaya.',
+            'type' => 'destination',
+            'items' => $items,
+        ]);
     }
 
     public function culinary()
     {
-        $items = Destination::whereHas('regency', fn($q) => $q->where('name', 'like', '%Surabaya%'))
-            ->inRandomOrder()->take(12)->get();
-        return view('plan-your-trip.show_category', ['title' => 'Culinary Journey', 'items' => $items]);
+        $items = Culinary::orderBy('name')->orderBy('id')->paginate(12)->withQueryString();
+        return view('plan-your-trip.show_category', [
+            'title' => 'Culinary Journey',
+            'subtitle' => 'Makanan dan minuman khas Surabaya yang wajib dicoba.',
+            'type' => 'culinary',
+            'items' => $items,
+        ]);
     }
 }

@@ -51,6 +51,23 @@ class CulinaryForm
                         ]),
                     TextInput::make('price_min')->numeric()->label('Min Price (Angka)')->placeholder('Contoh: 30000'),
                     TextInput::make('price_max')->numeric()->label('Max Price (Angka)')->placeholder('Contoh: 75000'),
+                    TextInput::make('price_max')->numeric()->label('Max Price (Angka)')->placeholder('Contoh: 75000'),
+
+                    TextInput::make('opening_hours')
+                    ->label('Opening Hours')
+                    ->placeholder('Contoh: 08:00 - 21:00')
+                    ->datalist([
+                    '24 Jam',
+                    '08:00 - 17:00',
+                    '08:00 - 21:00',
+                    '10:00 - 22:00',
+                    '11:00 - 23:00',
+                    '12:00 - 00:00',
+                    '08:00 - 00:00',
+                    '17:00 - 00:00',
+    ]),
+
+TextInput::make('source'),
                     TextInput::make('source'),
                     Toggle::make('souvenir')->required(),
                     Toggle::make('reservation_required')->label('Reservation Required for Dine In'),

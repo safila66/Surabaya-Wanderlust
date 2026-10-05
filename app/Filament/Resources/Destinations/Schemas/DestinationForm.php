@@ -53,7 +53,12 @@ class DestinationForm
                 ])->columns(1)->collapsed()->columnSpanFull(),
 
                 Section::make('Media & Links')->schema([
-                    FileUpload::make('image')->image()->columnSpanFull(),
+                    FileUpload::make('image')
+    ->label('Foto Utama')
+    ->image()
+    ->disk('public')
+    ->directory('destinations')
+    ->visibility('public'),
                     TextInput::make('ticket_url')->url()->label('Ticket / Booking URL')->columnSpanFull(),
                 ])->columns(1)->columnSpanFull(),
 

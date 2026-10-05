@@ -34,6 +34,10 @@
                         local experiences on the Surabaya China Town.
                     </p>
 
+                    <a href="{{ route('destinations.show', 'kampung-kembang-jepun') }}" class="featured-cta-btn">
+                        Explore Destination →
+                    </a>
+
                 </div>
 
             </div>
@@ -64,6 +68,10 @@
                         A man will die, but not his idea. Sunan Ampel's legacy lives on in Surabaya, where his teachings and influence continue to shape the city's culture and identity.
                     </p>
 
+                    <a href="{{ route('destinations.show', 'masjid-dan-makam-sunan-ampel') }}" class="featured-cta-btn">
+                        Explore Destination →
+                    </a>
+
                 </div>
 
             </div>
@@ -93,6 +101,10 @@
                     <p>
                         Sunsetz, sea breeze, and the vibrant atmosphere of Surabaya's North Quay. A perfect place to unwind, enjoy the view, and create unforgettable memories.
                     </p>
+
+                    <a href="{{ route('destinations.show', 'surabaya-north-quay') }}" class="featured-cta-btn">
+                        Explore Destination →
+                    </a>
 
                 </div>
 

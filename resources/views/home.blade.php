@@ -5,6 +5,7 @@
 @section('content')
 
     @include('partials.navbar')
+    @include('partials.dev-flyer')
 
     @include('partials.hero')
 

@@ -16,7 +16,9 @@
             padding: 0;
         }
 
-        
+        body {
+            color: var(--text-primary);
+        }
 
         a {
             text-decoration: none;
@@ -56,7 +58,7 @@
             font-size: 12px;
             font-weight: 700;
             letter-spacing: .7px;
-            color: #4b453e;
+            color: var(--text-muted);
             transition: .2s;
         }
 
@@ -110,7 +112,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 22px;
-            padding: 30px;
+            padding: 56px 30px 30px;
             box-shadow: 0 18px 45px rgba(55,43,31,.10);
         }
 
@@ -122,10 +124,11 @@
             font-family: Georgia, serif;
             font-size: 30px;
             margin-bottom: 7px;
+            color: var(--text-primary);
         }
 
         .planner-title p {
-            color: #777066;
+            color: var(--text-muted);
             font-size: 14px;
         }
 
@@ -142,7 +145,7 @@
             letter-spacing: .8px;
             text-transform: uppercase;
             margin-bottom: 8px;
-            color: #655e56;
+            color: var(--text-muted);
         }
 
         .field select {
@@ -152,8 +155,27 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             background: var(--bg-card);
-            color: #403a34;
+            color: var(--text-primary);
             outline: none;
+        }
+
+        /* Daftar dropdown pakai warna solid (var tema bisa transparan di popup bawaan browser) */
+        [data-theme="dark"] .field select {
+            color-scheme: dark;
+        }
+
+        [data-theme="dark"] .field select option {
+            background-color: #1b2a4e;
+            color: #ffffff;
+        }
+
+        [data-theme="light"] .field select {
+            color-scheme: light;
+        }
+
+        [data-theme="light"] .field select option {
+            background-color: #ffffff;
+            color: #403a34;
         }
 
         .field select:focus {
@@ -199,11 +221,12 @@
             font-family: Georgia, serif;
             font-size: 38px;
             margin-top: 7px;
+            color: var(--text-primary);
         }
 
         .section-heading p {
             max-width: 420px;
-            color: #777066;
+            color: var(--text-muted);
             font-size: 14px;
             line-height: 1.7;
         }
@@ -215,7 +238,7 @@
         }
 
         .idea {
-            background: white;
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 28px;
@@ -231,7 +254,7 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: #f1e6da;
+            background: var(--bg-surface);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -243,16 +266,17 @@
             font-family: Georgia, serif;
             font-size: 23px;
             margin-bottom: 10px;
+            color: var(--text-primary);
         }
 
         .idea p {
-            color: #777066;
+            color: var(--text-muted);
             line-height: 1.7;
             font-size: 14px;
         }
 
         .steps {
-            background: #ebe3d9;
+            background: var(--bg-surface);
             padding: 65px 0;
         }
 
@@ -276,10 +300,11 @@
         .step h3 {
             font-size: 18px;
             margin-bottom: 8px;
+            color: var(--text-primary);
         }
 
         .step p {
-            color: #6e675f;
+            color: var(--text-muted);
             font-size: 13px;
             line-height: 1.7;
         }
@@ -289,9 +314,13 @@
             padding: 18px 20px;
             background: var(--bg-card);
             border-left: 3px solid #a5673f;
-            color: #6e675f;
+            color: var(--text-muted);
             font-size: 13px;
             line-height: 1.7;
+        }
+
+        .note strong {
+            color: var(--text-primary);
         }
 
         footer {
@@ -361,7 +390,7 @@
             }
 
             .planner {
-                padding: 22px;
+                padding: 52px 22px 22px;
             }
 
             .section-heading {
@@ -382,8 +411,6 @@
             }
         }
     </style>
-    <style>
-        </style>
 </head>
 
 <body>
@@ -590,7 +617,7 @@
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:22px;padding:32px;">
         <div style="margin-bottom:24px;">
             <small style="color:#a5673f;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">Your Curated Itinerary</small>
-            <h2 style="font-family:Georgia,serif;font-size:26px;margin-top:8px;">{{ $itinerary['title'] }}</h2>
+            <h2 style="font-family:Georgia,serif;font-size:26px;margin-top:8px;color:var(--text-primary);">{{ $itinerary['title'] }}</h2>
             <p style="color:var(--text-muted);font-size:13px;margin-top:4px;">{{ $itinerary['subtitle'] }}</p>
         </div>
 
@@ -620,7 +647,7 @@
 
         @if(isset($itinerary['tips']))
         <div style="background:var(--bg-surface);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:15px 20px;margin-top:8px;">
-            <strong style="font-size:13px;">&#128161; Travel Tips:</strong>
+            <strong style="font-size:13px;color:var(--text-primary);">&#128161; Travel Tips:</strong>
             <p style="color:var(--text-muted);font-size:13px;margin-top:5px;line-height:1.6;">{{ $itinerary['tips'] }}</p>
         </div>
         @endif

@@ -23,20 +23,19 @@
         <div class="grid-auto">
             @foreach($items as $item)
                 <div class="uni-card">
+                    @if($item->image)
                     <div class="uni-card-image-wrap">
-                        @if($item->image)
-                            <img class="uni-card-image" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name ?? $item->title }}">
-                        @else
-                            <div class="card-img-placeholder">
-                                <i class="fa-solid fa-image"></i>
-                            </div>
-                        @endif
+                        <img class="uni-card-image" src="{{ \App\Support\Media::url($item->image) }}" alt="{{ $item->name ?? $item->title }}">
                     </div>
+                    @endif
                     <div class="uni-card-body">
+                        @if(isset($field) && $field)
+                            <div style="font-size:22px; color:var(--gold, #d4a017); margin-bottom:8px;"><i class="fa-solid fa-lightbulb"></i></div>
+                        @endif
                         <div class="uni-card-title">{{ $item->name ?? $item->title }}</div>
                         <div class="uni-card-desc">
                             @if(isset($field) && $field)
-                                {{ \Illuminate\Support\Str::limit($item->$field, 110) }}
+                                {{ $item->$field }}
                             @else
                                 {{ \Illuminate\Support\Str::limit($item->description, 110) }}
                             @endif

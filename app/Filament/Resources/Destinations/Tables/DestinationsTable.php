@@ -14,6 +14,9 @@ class DestinationsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->persistSearchInSession()
+            ->persistFiltersInSession()
+            ->persistSortInSession()
             ->columns([
                 TextColumn::make('regency.name')
                     ->searchable(),

@@ -73,9 +73,10 @@
     <div class="uni-nav-right" style="display: flex; align-items: center; gap: 12px;">
         @auth
             @if(Auth::user()->role === 'admin')
+                <a href="{{ route('profile.show') }}" style="font-size: 12px; font-weight: 600; text-decoration: none; color: inherit;" title="My Profile"><i class="fa-regular fa-user"></i> Profile</a>
                 <a href="/admin" class="btn-primary" style="padding: 6px 14px; font-size: 11px; text-decoration: none; border-radius: 999px;">Admin Panel</a>
             @else
-                <span style="font-size: 12px; font-weight: 600;">Hello, {{ explode(' ', Auth::user()->name)[0] }}</span>
+                <a href="{{ route('profile.show') }}" style="font-size: 12px; font-weight: 600; text-decoration: none; color: inherit;" title="My Profile"><i class="fa-regular fa-user"></i> {{ explode(' ', Auth::user()->name)[0] }}</a>
             @endif
             <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                 @csrf
@@ -162,3 +163,4 @@ function toggleTheme() {
     applyTheme(current === 'dark' ? 'light' : 'dark');
 }
 </script>
+

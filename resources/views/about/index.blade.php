@@ -15,8 +15,6 @@
             padding: 0;
         }
 
-        
-
         a {
             text-decoration: none;
             color: inherit;
@@ -24,25 +22,17 @@
 
         .navbar { display: none; }
 
-        
-
-        
-
-        
-
-        
-
-        
-
+        /* Hero selalu punya overlay gelap, jadi teksnya harus selalu terang
+           (tidak ikut variable tema, karena di light mode variable-nya gelap) */
         .hero {
             min-height: 380px;
             display: flex;
             align-items: center;
             background:
-                linear-gradient(rgba(42,34,27,.48), rgba(42,34,27,.48)),
+                linear-gradient(rgba(42,34,27,.55), rgba(42,34,27,.55)),
                 url('https://upload.wikimedia.org/wikipedia/commons/b/ba/Patung_suroboyo.jpg')
                 center/cover;
-            color: var(--text-heading);
+            color: #ffffff;
         }
 
         .hero-content {
@@ -56,6 +46,8 @@
             letter-spacing: 2px;
             font-size: 9px;
             margin-bottom: 18px;
+            color: #ffffff;
+            opacity: .9;
         }
 
         .hero h1 {
@@ -64,13 +56,16 @@
             line-height: .95;
             max-width: 680px;
             margin-bottom: 24px;
+            color: #ffffff;
+            text-shadow: 0 2px 14px rgba(0,0,0,.35);
         }
 
         .hero p {
             max-width: 620px;
             font-size: 13px;
             line-height: 1.8;
-            color: var(--text-secondary);
+            color: #f5f1eb;
+            text-shadow: 0 1px 8px rgba(0,0,0,.35);
         }
 
         .container {
@@ -152,7 +147,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-surface);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -268,9 +263,10 @@
             line-height: 1.7;
         }
 
+        /* Footer background-nya selalu gelap, jadi teksnya harus selalu terang */
         footer {
             background: #1e1b18;
-            color: var(--text-secondary);
+            color: #eee7de;
             padding: 45px 7%;
         }
 
@@ -284,6 +280,7 @@
             font-family: Georgia, serif;
             font-size: 25px;
             margin-bottom: 8px;
+            color: #eee7de;
         }
 
         footer p {
@@ -304,8 +301,6 @@
         }
 
         @media (max-width: 900px) {
-            
-
             .intro,
             .values-grid {
                 grid-template-columns: 1fr;
@@ -350,8 +345,6 @@
             }
         }
     </style>
-    <style>
-        </style>
 </head>
 
 <body>

@@ -6,31 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Lewati kalau tabel sudah ada (sisa percobaan migrate yang gagal)
+        if (Schema::hasTable('wishlists')) {
+            return;
+        }
+
         Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
-
-            $table->foreignId('destination_id')
-                ->constrained('destinations')
-                ->onDelete('cascade');
-
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('destination_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
+            // Satu user hanya bisa menyimpan satu destinasi satu kali
             $table->unique(['user_id', 'destination_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('wishlists');

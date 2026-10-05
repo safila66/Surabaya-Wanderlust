@@ -136,7 +136,8 @@
         <div class="section-heading" style="margin-bottom:30px;">
             <div>
                 <span class="section-title-kicker">Where to Stay</span>
-                <h2 style="font-size:30px; font-weight:800; color:#fff; margin-top:6px;">
+                {{-- [FIX] sebelumnya color:#fff (tidak terbaca di light mode) --}}
+                <h2 style="font-size:30px; font-weight:800; color:var(--text-primary, #fff); margin-top:6px;">
                     Accommodations from every corner.
                 </h2>
             </div>
@@ -150,15 +151,17 @@
                     <a href="{{ route('accommodations.show', $accommodation->slug) }}" class="uni-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
 
                         <div class="card-placeholder" style="position:relative; overflow:hidden;">
-                            @if ($accommodation->image)
-                                <img
-                                    class="uni-card-image"
-                                    src="{{ asset('storage/' . $accommodation->image) }}"
-                                    alt="{{ $accommodation->name }}"
-                                    style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
-                            @else
-                                <i class="fa-solid fa-bed" style="transition: transform 0.5s ease;"></i>
-                            @endif
+                            {{--
+                                Selalu tampilkan <img>. Kalau kolom image kosong / file tidak ada,
+                                Media::url() otomatis memakai public/images/default-accommodation.jpg
+                            --}}
+                            <img
+                                class="uni-card-image"
+                                src="{{ \App\Support\Media::url($accommodation->image, 'images/default-accommodation.jpg') }}"
+                                alt="{{ $accommodation->name }}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='{{ \App\Support\Media::fallback('images/default-accommodation.jpg') }}';"
+                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
                         </div>
 
                         <div class="uni-card-body" style="flex: 1; display: flex; flex-direction: column;">

@@ -10,7 +10,7 @@
 <body>
 @include('partials.navbar')
 
-<header class="page-hero" style="background-image: linear-gradient(rgba(7, 17, 42, 0.55), rgba(7, 17, 42, 0.75)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Suro_and_Boyo_statue%2C_Surabaya.jpg/1280px-Suro_and_Boyo_statue%2C_Surabaya.jpg');">
+<header class="page-hero" style="background-image: linear-gradient(rgba(7, 17, 42, 0.55), rgba(7, 17, 42, 0.75)), url('{{ asset('images/culture-surabaya.jpg') }}');">
     <div class="container-main text-center">
         <span class="uni-card-label" style="color:var(--gold); display:block; margin-bottom:12px;">Discover Surabaya</span>
         <h1 class="page-hero-title">Culture beyond the destination.</h1>
@@ -21,23 +21,23 @@
 <main class="section container-main">
     <div class="grid-3">
         <a href="{{ route('culture.traditions') }}" class="item-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Masjid_Sunan_Ampel_2.jpg/800px-Masjid_Sunan_Ampel_2.jpg" alt="Traditions" class="item-image">
+            <img src="{{ asset('images/traditions-surabaya.jpg') }}" alt="traditions" class="item-image" style="height:220px; object-fit:cover;">
             <div class="item-info">
                 <h3>Traditions</h3>
                 <p>Discover local traditions and cultural practices from different regions across Surabaya.</p>
             </div>
         </a>
         <a href="{{ route('culture.heritage') }}" class="item-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Balai_Pemuda_Surabaya.jpg/800px-Balai_Pemuda_Surabaya.jpg" alt="Heritage" class="item-image">
+            <img src="{{ asset('images/heritage-surabaya.jpg') }}" alt="Heritage" class="item-image" style="height:220px; object-fit:cover;">
             <div class="item-info">
                 <h3>Heritage</h3>
                 <p>Learn about historical places, cultural heritage, and stories that shape Surabaya's identity.</p>
             </div>
         </a>
         <a href="{{ route('culture.arts') }}" class="item-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/House_of_Sampoerna.jpg/800px-House_of_Sampoerna.jpg" alt="Arts & Identity" class="item-image">
+            <img src="{{ asset('images/arts-identity.jpg') }}" alt="Arts &amp; Identity" class="item-image" style="height:220px; object-fit:cover;">
             <div class="item-info">
-                <h3>Arts & Identity</h3>
+                <h3>Arts &amp; Identity</h3>
                 <p>Get to know traditional arts, crafts, performances, and local expressions from across Surabaya.</p>
             </div>
         </a>

@@ -2,18 +2,31 @@
 
 namespace App\Models;
 
+use App\Support\Media; // BARU
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Destination extends Model
 {
+    /** Kategori destinasi: kunci disimpan di database, label ditampilkan ke user. */
+    public const CATEGORIES = [
+        'alam'     => 'Alam & Taman',
+        'sejarah'  => 'Sejarah & Monumen',
+        'budaya'   => 'Budaya & Seni',
+        'religi'   => 'Religi',
+        'belanja'  => 'Belanja',
+        'edukasi'  => 'Edukasi & Keluarga',
+    ];
+
     protected $fillable = [
         'regency_id',
         'name',
         'slug',
+        'category',
         'description',
         'activities',
         'opening_hours',
@@ -27,6 +40,11 @@ class Destination extends Model
         'latitude',
         'longitude',
         'image',
+    ];
+
+    protected $casts = [
+        'latitude'  => 'float',
+        'longitude' => 'float',
     ];
 
     public function regency(): BelongsTo
@@ -62,5 +80,32 @@ class Destination extends Model
         return $this->hasMany(TravelPost::class)
             ->where('is_published', true)
             ->latest();
+    }
+
+    /** User yang menyimpan destinasi ini ke wishlist. */
+    public function wishlistedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'destination_id', 'user_id')
+            ->withTimestamps();
+    }
+
+    // Dipakai di Blade sebagai {{ $destination->category_label }}
+    public function getCategoryLabelAttribute(): ?string
+    {
+        return self::CATEGORIES[$this->category] ?? null;
+    }
+
+    // BARU: dipakai di Blade sebagai {{ $destination->cover_url }}
+    public function getCoverUrlAttribute(): string
+    {
+        if (filled($this->image)) {
+            return Media::url($this->image);
+        }
+
+        $first = $this->relationLoaded('images')
+            ? $this->images->first()
+            : $this->images()->first();
+
+        return $first ? $first->url : Media::FALLBACK;
     }
 }

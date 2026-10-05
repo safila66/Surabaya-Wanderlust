@@ -1,108 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <title>Sign Up | Surabaya Wanderlust</title>
-
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #F5F1E8;
-            font-family: Arial, sans-serif;
-            color: #29352E;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 400px;
-            padding: 35px;
-            background: #FBF9F3;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(48, 74, 59, .10);
-        }
-
-        h1 {
-            margin: 0 0 8px;
-            color: #304A3B;
-        }
-
-        p {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 18px;
-            border: 1px solid #D8CDB9;
-            border-radius: 10px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            border: 0;
-            padding: 13px;
-            border-radius: 999px;
-            background: #304A3B;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #A56A4A;
-        }
-
-        .error {
-            color: #A04F36;
-            font-size: 12px;
-            margin-bottom: 15px;
-            background: rgba(160, 79, 54, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .back {
-            display: block;
-            margin-top: 18px;
-            text-align: center;
-            font-size: 12px;
-            color: #A56A4A;
-            text-decoration: none;
-        }
-    </style>
+    @include('auth.partials.auth-style')
 </head>
+<body class="auth-body">
 
-<body>
+<div class="auth-card">
+    <a href="{{ route('home') }}" class="auth-brand">
+        <span class="auth-brand-name">Surabaya Wanderlust</span>
+        <span class="auth-brand-tag">Somewhere in Surabaya</span>
+    </a>
 
-<div class="login-box">
-
-    <h1>Join us.</h1>
-
-    <p>
-        Create an account to join the Surabaya Wanderlust community.
-    </p>
+    <h1 class="auth-title">Join us.</h1>
+    <p class="auth-sub">Buat akun untuk bergabung dengan komunitas Surabaya Wanderlust.</p>
 
     @if($errors->any())
-        <div class="error">
+        <div class="auth-error">
             @foreach($errors->all() as $error)
-                <div style="margin-bottom: 4px;">{{ $error }}</div>
+                <div>{{ $error }}</div>
             @endforeach
         </div>
     @endif
@@ -114,25 +34,19 @@
         <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="you@email.com" required>
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required>
-        
+
         <label for="password_confirmation">Confirm Password</label>
         <input type="password" id="password_confirmation" name="password_confirmation" required>
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" class="auth-btn">Sign Up</button>
     </form>
 
-    <div style="text-align: center; margin-top: 20px; font-size: 13px;">
-        Already have an account? <a href="{{ route('login') }}" style="color: #304A3B; font-weight: bold;">Sign In</a>
-    </div>
-
-    <a href="{{ route('home') }}" class="back">
-        ← Back to Surabaya Wanderlust
-    </a>
-
+    <div class="auth-alt">Sudah punya akun? <a href="{{ route('login') }}">Sign In</a></div>
+    <a href="{{ route('home') }}" class="auth-back">← Back to Surabaya Wanderlust</a>
 </div>
 
 </body>

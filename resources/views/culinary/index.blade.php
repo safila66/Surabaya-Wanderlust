@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
     <style>
         /* ─── PAGE-SPECIFIC OVERRIDES ─────────────────────── */
 
-        /* Hero khusus culinary — tanpa foto background */
+        /* Hero khusus culinary */
         .culinary-hero {
             position: relative;
             padding: 105px 5% 70px;
@@ -34,7 +34,56 @@
             background: linear-gradient(to bottom, transparent, var(--navy));
         }
 
-        /* Cards grid */
+        /* ── Filter ── */
+        .culinary-filter {
+            max-width: 1240px;
+            margin: -30px auto 0;
+            padding: 0 7%;
+            position: relative;
+            z-index: 10;
+        }
+        .filter-form {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 16px;
+            align-items: flex-end;
+        }
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        .filter-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            color: #000;
+        }
+        .filter-actions { display: flex; align-items: center; gap: 12px; }
+        .filter-submit {
+            height: 46px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: var(--gold);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .filter-reset { font-size: 13px; color: var(--text-primary); text-decoration: underline; white-space: nowrap; }
+
+        /* ── Cards grid ── */
         .culinary-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -72,16 +121,29 @@
 
         @media (max-width: 900px) {
             .culinary-grid { grid-template-columns: repeat(2, 1fr); }
+            .filter-grid   { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 600px) {
             .culinary-grid { grid-template-columns: 1fr; }
+            .filter-grid   { grid-template-columns: 1fr; }
         }
     </style>
+
+    <script>
+        (function () {
+            const t = localStorage.getItem('sw-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
 </head>
 
 <body>
 
 @include('partials.navbar')
+
+@php
+    $hasFilter = request()->hasAny(['region', 'search_name', 'price_min', 'price_max']);
+@endphp
 
 {{-- ── HERO ──────────────────────────────────────────────── --}}
 <section class="culinary-hero">
@@ -99,30 +161,36 @@
 
 
 {{-- ── FILTER ────────────────────────────────────────────── --}}
-<section class="filter-section" style="max-width:1240px; margin:auto; padding:0 7%; margin-top: -30px; position:relative; z-index: 10;">
-    <form action="" method="GET" style="margin-bottom: 30px; background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:16px; align-items:flex-end;">
+<section class="filter-section culinary-filter">
+    <form action="{{ url()->current() }}" method="GET" class="filter-form">
+        <div class="filter-grid">
+
             <div>
-                <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Region (Wilayah)</label>
-                <select name="region" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;" onchange="this.form.submit()">
+                <label class="filter-label" for="filter-region">Region (Wilayah)</label>
+                <select id="filter-region" name="region" class="filter-input" onchange="this.form.submit()">
                     <option value="">Semua Wilayah</option>
-                    <option value="Surabaya Barat" {{ request('region') == 'Surabaya Barat' ? 'selected' : '' }}>Surabaya Barat</option>
-                    <option value="Surabaya Timur" {{ request('region') == 'Surabaya Timur' ? 'selected' : '' }}>Surabaya Timur</option>
-                    <option value="Surabaya Selatan" {{ request('region') == 'Surabaya Selatan' ? 'selected' : '' }}>Surabaya Selatan</option>
-                    <option value="Surabaya Tengah" {{ request('region') == 'Surabaya Tengah' ? 'selected' : '' }}>Surabaya Tengah</option>
-                    <option value="Surabaya Utara" {{ request('region') == 'Surabaya Utara' ? 'selected' : '' }}>Surabaya Utara</option>
+                    @foreach(['Surabaya Barat', 'Surabaya Timur', 'Surabaya Selatan', 'Surabaya Tengah', 'Surabaya Utara'] as $region)
+                        <option value="{{ $region }}" {{ request('region') === $region ? 'selected' : '' }}>{{ $region }}</option>
+                    @endforeach
                 </select>
             </div>
+
             <div>
-                <label style="display:block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text-primary);">Cari Nama</label>
-                <input type="text" name="search_name" value="{{ request('search_name') }}" placeholder="Cari nama..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #000;">
+                <label class="filter-label" for="filter-search">Cari Nama</label>
+                <input id="filter-search" type="text" name="search_name"
+                       value="{{ request('search_name') }}" placeholder="Cari nama..."
+                       class="filter-input">
             </div>
 
             @include('partials.price-slider', ['max' => $sliderMax, 'step' => $sliderStep])
 
-            <div>
-                <button type="submit" class="btn-primary" style="background: var(--gold); border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; height: 46px;">Filter</button>
+            <div class="filter-actions">
+                <button type="submit" class="btn-primary filter-submit">Filter</button>
+                @if($hasFilter)
+                    <a href="{{ url()->current() }}" class="filter-reset">Reset</a>
+                @endif
             </div>
+
         </div>
     </form>
 </section>
@@ -136,29 +204,31 @@
         <div class="section-heading" style="margin-bottom:30px;">
             <div>
                 <span class="section-title-kicker">Local Flavours</span>
-                <h2 style="font-size:30px; font-weight:800; color:#fff; margin-top:6px;">
+                <h2 style="font-size:30px; font-weight:800; color:var(--text-primary, #fff); margin-top:6px;">
                     Culinary from every corner.
                 </h2>
             </div>
-            <span class="result-count">{{ $culinaries->count() }} culinary found</span>
+            <span class="result-count">{{ $culinaries->total() }} culinary found</span>
         </div>
 
         @if ($culinaries->count())
 
             <div class="culinary-grid">
                 @foreach ($culinaries as $culinary)
+
+                    {{-- Default gambar otomatis: Cafe & Resto atau Bar & Club, sesuai kategori --}}
+                    @php $cardDefault = \App\Support\CulinaryImage::defaultFor($culinary); @endphp
+
                     <a href="{{ route('culinary.show', $culinary->slug) }}" class="uni-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
 
                         <div class="card-placeholder" style="position:relative; overflow:hidden;">
-                            @if ($culinary->image)
-                                <img
-                                    class="uni-card-image"
-                                    src="{{ asset('storage/' . $culinary->image) }}"
-                                    alt="{{ $culinary->name }}"
-                                    style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
-                            @else
-                                <i class="fa-solid fa-utensils" style="transition: transform 0.5s ease;"></i>
-                            @endif
+                            <img
+                                class="uni-card-image"
+                                src="{{ \App\Support\Media::url($culinary->image, $cardDefault) }}"
+                                alt="{{ $culinary->name }}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='{{ \App\Support\Media::fallback($cardDefault) }}';"
+                                style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
                         </div>
 
                         <div class="uni-card-body" style="flex: 1; display: flex; flex-direction: column;">
@@ -192,12 +262,18 @@
                 @endforeach
             </div>
 
+            {{-- ── PAGINATION (tombol halaman) ── --}}
+            {{ $culinaries->onEachSide(1)->links('partials.pagination', ['label' => 'kuliner']) }}
+
         @else
 
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:16px;">🍜</div>
                 <h3>No culinary found</h3>
                 <p>Try changing your filters or exploring another region.</p>
+                @if($hasFilter)
+                    <a href="{{ url()->current() }}" class="filter-reset">Reset filter</a>
+                @endif
             </div>
 
         @endif

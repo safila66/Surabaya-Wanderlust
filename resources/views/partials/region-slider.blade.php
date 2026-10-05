@@ -45,6 +45,21 @@
                 'subtitle' => 'Kawasan Bisnis & Modern'
             ],
         ]);
+
+        // Gambar tiap region (key = slug).
+        // Foto sendiri: simpan di public/images/ lalu pakai asset('images/nama-file.jpg')
+        // Foto online: isi dengan URL biasa.
+        $regionImages = [
+            'north-surabaya'   => asset('images/north-surabaya.jpg'),
+            'south-surabaya'   => asset('images/south-surabaya.jpg'),
+            'east-surabaya'    => asset('images/east-surabaya.jpg'),
+            'west-surabaya'    => asset('images/west-surabaya.jpg'),
+            'central-surabaya' => asset('images/central-surabaya.jpg'),
+        ];
+
+        // Gambar cadangan kalau slug tidak ada di daftar di atas
+        $defaultRegionImage = asset('images/default-region.jpg');
+
         $provincePages = $surabayaRegions->chunk(6);
     @endphp
 
@@ -65,27 +80,9 @@
                         @foreach ($page as $region)
 
                             <a href="{{ route('regions.show', $region->slug) }}" class="region-card">
-                            >
-
-                                @php
-
-                                    $regionImages = [
-                                        'north-surabaya'            => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Jembatan_Merah_Surabaya.jpg/800px-Jembatan_Merah_Surabaya.jpg',
-                                        'south-surabaya'            => 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Masjid_Al_Akbar_Surabaya.jpg/800px-Masjid_Al_Akbar_Surabaya.jpg',
-                                        'east-surabaya'             => 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Klenteng_Sanggar_Agung%2C_Kenjeran%2C_Surabaya.jpg/800px-Klenteng_Sanggar_Agung%2C_Kenjeran%2C_Surabaya.jpg',
-                                        'west-surabaya'             => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Pakuwon_Mall_Surabaya.jpg/800px-Pakuwon_Mall_Surabaya.jpg',
-                                        'central-surabaya'          => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Bambu_Runcing_Monument.jpg/800px-Bambu_Runcing_Monument.jpg',
-                                    ];
-
-                                    $regionImage =
-                                        $regionImages[$region->slug]
-                                        ?? 'https://images.unsplash.com/photo-1549473889-14f410d83298?w=800&q=80';
-
-                                @endphp
-
 
                                 <img
-                                    src="{{ $regionImage }}"
+                                    src="{{ $regionImages[$region->slug] ?? $defaultRegionImage }}"
                                     alt="{{ $region->name }}"
                                     class="region-image"
                                 >
