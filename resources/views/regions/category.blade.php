@@ -99,6 +99,7 @@
 
                         // Resolve image (pakai gambar default bila belum diupload)
                         $defaults = [
+                            'entertainment' => 'images/destination-default.jpg',
                             'resto-cafe'    => \App\Support\CulinaryImage::CAFE_RESTO,
                             'bar-club'      => \App\Support\CulinaryImage::BAR_CLUB,
                             'accommodation' => 'images/accommodation-default.jpg',

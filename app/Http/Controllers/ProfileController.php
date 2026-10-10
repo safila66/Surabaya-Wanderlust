@@ -13,6 +13,15 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
+    public function publicProfile($username)
+    {
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $reviews = $user->reviews()->with('reviewable')->latest()->get();
+        $posts = $user->travelPosts()->with('destination')->latest()->get();
+        $wishlist = $user->wishlist()->with('regency')->get();
+        return view('profile.public', compact('user', 'reviews', 'posts', 'wishlist'));
+    }
+
     public function show(Request $request)
     {
         $user = $request->user();
@@ -65,6 +74,7 @@ class ProfileController extends Controller
             'bio'      => ['nullable', 'string', 'max:160'],
             'location' => ['nullable', 'string', 'max:60'],
             'website'  => ['nullable', 'url', 'max:120'],
+            'is_private' => ['nullable', 'boolean'],
             'avatar'   => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'banner'   => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:5120'],
         ], [
@@ -88,6 +98,7 @@ class ProfileController extends Controller
             }
         }
 
+        $data['is_private'] = $request->boolean('is_private');
         $user->forceFill($data)->save();
 
         return redirect()->route('profile.show')->with('success', 'Profil berhasil diperbarui.');

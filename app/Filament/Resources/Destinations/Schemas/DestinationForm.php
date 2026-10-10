@@ -20,6 +20,9 @@ class DestinationForm
                         ->relationship('regency', 'name', fn($query) => $query->whereIn('name', ['Surabaya Barat', 'Surabaya Tengah', 'Surabaya Timur', 'Surabaya Selatan', 'Surabaya Utara']))
                         ->label('Region')
                         ->required(),
+                                        Select::make('category')
+                        ->options(\App\Models\Destination::CATEGORIES)
+                        ->required(),
                     TextInput::make('name')
                         ->required()
                         ->live(onBlur: true)

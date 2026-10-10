@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var t='dark';try{t=localStorage.getItem('sw-theme')||'dark';}catch(e){}document.documentElement.setAttribute('data-theme',t);})()</script>
+    <script>(function(){var t='dark';try{var s=localStorage.getItem('sw-theme');if(s==='system'||!s){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}else{t=s;}}catch(e){}document.documentElement.setAttribute('data-theme',t);})()</script>
     <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>{{ $user->name }} (&#64;{{ $user->username }}) - Surabaya Wanderlust</title>
@@ -99,7 +99,7 @@
         .st-desc { margin: -8px 0 18px; font-size: 13.5px; line-height: 1.6; opacity: .7; }
         .st-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
-        .pf-dialog { width: min(600px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--border); border-radius: 18px; background: var(--bg-surface); color: var(--text-primary); overflow: hidden; }
+        .pf-dialog { margin: auto; width: min(600px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--border); border-radius: 18px; background: var(--bg-surface); color: var(--text-primary); overflow: hidden; }
         .pf-dialog::backdrop { background: rgba(3, 8, 20, .65); backdrop-filter: blur(3px); }
         .pf-dialog form { display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
         .pf-dh { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
@@ -333,6 +333,22 @@
                         </div>
                         <button type="submit" class="pf-btn">Save email</button>
                     </form>
+                    <form action="{{ route('profile.update') }}" method="POST" style="margin-top:22px; padding-top:18px; border-top:1px solid var(--border);">
+                        @csrf @method('PUT')
+                        <input type="hidden" name="update_privacy" value="1">
+                        <div class="pf-field" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                            <div>
+                                <h4 style="margin:0 0 4px; font-family:'Plus Jakarta Sans'; font-size:15px;">Account Privacy</h4>
+                                <p style="margin:0; opacity:0.65; font-size:13px;">When your account is private, only you can see your Travel Stories and Wishlist. Your reviews remain public.</p>
+                            </div>
+                            <div style="margin-left: 20px; flex-shrink:0;">
+                                <label style="display:flex; align-items:center; cursor:pointer; font-size:14px; gap:8px;">
+                                    <input type="checkbox" name="is_private" value="1" {{ $user->is_private ? 'checked' : '' }} onchange="this.form.submit()" style="width:18px; height:18px; cursor:pointer;">
+                                    <span style="font-weight:700; opacity:0.8;">Private account</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 {{-- Change password --}}
@@ -439,6 +455,7 @@
                     <div class="st-actions">
                         <button type="button" class="pf-btn" data-theme-set="dark"><i class="fa-regular fa-moon"></i> Dark</button>
                         <button type="button" class="pf-btn" data-theme-set="light"><i class="fa-regular fa-sun"></i> Light</button>
+                        <button type="button" class="pf-btn" data-theme-set="system"><i class="fa-solid fa-desktop"></i> System</button>
                     </div>
                 </div>
 
@@ -618,16 +635,19 @@
         });
     }
 
-    /* Theme */
+    
+        /* Theme */
     const themeBtns = document.querySelectorAll('[data-theme-set]');
-    function applyTheme(t) {
-        try { localStorage.setItem('sw-theme', t); } catch (e) {}
-        document.documentElement.setAttribute('data-theme', t);
+    function applyProfileTheme(t) {
+        if(typeof applyTheme === 'function') {
+            applyTheme(t);
+        }
         themeBtns.forEach(b => b.classList.toggle('pf-btn-ghost', b.dataset.themeSet !== t));
     }
-    themeBtns.forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeSet)));
-    const nowTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    themeBtns.forEach(b => b.classList.toggle('pf-btn-ghost', b.dataset.themeSet !== nowTheme));
+    themeBtns.forEach(b => b.addEventListener('click', () => applyProfileTheme(b.dataset.themeSet)));
+    let savedTheme = 'dark';
+    try { savedTheme = localStorage.getItem('sw-theme') || 'dark'; } catch(e) {}
+    themeBtns.forEach(b => b.classList.toggle('pf-btn-ghost', b.dataset.themeSet !== savedTheme));
 
     /* Preview & hapus foto */
     const MAX = { avatar: 2, banner: 5 }; // MB, sama dengan aturan di server

@@ -11,7 +11,7 @@ class Media
     public const DEFAULT_IMAGE = 'images/destination-default.jpg';
 
     /** Cadangan paling akhir kalau file default lokal juga belum ada. */
-    public const FALLBACK = 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1800&q=85';
+    public const FALLBACK = 'images/destination-default.jpg';
 
     /**
      * URL gambar default.
@@ -24,7 +24,7 @@ class Media
 
         return is_file(public_path($default))
             ? asset($default)
-            : self::FALLBACK;
+            : asset(self::FALLBACK);
     }
 
     /**

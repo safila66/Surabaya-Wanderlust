@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var t='dark';try{t=localStorage.getItem('sw-theme')||'dark';}catch(e){}document.documentElement.setAttribute('data-theme',t);})()</script>
+    <script>(function(){var t='dark';try{var s=localStorage.getItem('sw-theme');if(s==='system'||!s){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}else{t=s;}}catch(e){}document.documentElement.setAttribute('data-theme',t);})()</script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/unified.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -192,9 +192,9 @@
 
     // Gambar bawaan kalau destinasi belum punya foto (cek lokasi umum di folder public)
     $defaultImg = null;
-    foreach (['images/default-destination.jpg', 'images/default.jpg', 'images/placeholder.jpg', 'images/no-image.jpg',
-              'images/default-destination.png', 'images/default.png', 'images/placeholder.png', 'images/no-image.png',
-              'images/default-destination.webp', 'img/default.jpg', 'img/placeholder.jpg'] as $c) {
+    foreach (['images/destination-default.jpg', 'images/default.jpg', 'images/placeholder.jpg', 'images/no-image.jpg',
+              'images/destination-default.png', 'images/default.png', 'images/placeholder.png', 'images/no-image.png',
+              'images/destination-default.webp', 'img/default.jpg', 'img/placeholder.jpg'] as $c) {
         if (file_exists(public_path($c))) { $defaultImg = asset($c); break; }
     }
     if (!$cover && $defaultImg) $cover = $defaultImg;

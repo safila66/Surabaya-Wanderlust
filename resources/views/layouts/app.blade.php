@@ -11,7 +11,7 @@
     <title>@yield('title', 'Surabaya Wanderlust - Explore Surabaya Beyond the Destination')</title>
 
     {{-- Anti-flicker: apply saved theme immediately --}}
-    <script>(function(){var t=localStorage.getItem('sw-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <script>(function(){var t='dark';try{var s=localStorage.getItem('sw-theme');if(s==='system'||!s){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}else{t=s;}}catch(e){}document.documentElement.setAttribute('data-theme',t);})()</script>
 
     {{-- Unified stylesheet --}}
     <link rel="stylesheet" href="{{ asset('css/unified.css') }}">

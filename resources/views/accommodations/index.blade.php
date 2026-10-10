@@ -157,10 +157,10 @@
                             --}}
                             <img
                                 class="uni-card-image"
-                                src="{{ \App\Support\Media::url($accommodation->image, 'images/default-accommodation.jpg') }}"
+                                src="{{ \App\Support\Media::url($accommodation->image, 'images/accommodation-default.jpg') }}"
                                 alt="{{ $accommodation->name }}"
                                 loading="lazy"
-                                onerror="this.onerror=null;this.src='{{ \App\Support\Media::fallback('images/default-accommodation.jpg') }}';"
+                                onerror="this.onerror=null;this.src='{{ \App\Support\Media::fallback('images/accommodation-default.jpg') }}';"
                                 style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease;">
                         </div>
 

@@ -60,12 +60,14 @@ Route::get('/travel-guide/tips', [TravelGuideController::class, 'tips'])->name('
 Route::get('/best-time', [BestTimeController::class, 'index'])->name('best-time.index');
 
 Route::get('/plan-your-trip', [PlanYourTripController::class, 'index'])->name('plan-your-trip.index');
+Route::get('/map', [\App\Http\Controllers\MapController::class, 'index'])->name('map.index');
 Route::get('/plan-your-trip/build', [PlanYourTripController::class, 'build'])->name('plan-your-trip.build');
 Route::get('/plan-your-trip/nature-escape', [PlanYourTripController::class, 'nature'])->name('plan-your-trip.nature');
 Route::get('/plan-your-trip/culture-heritage', [PlanYourTripController::class, 'culture'])->name('plan-your-trip.culture');
 Route::get('/plan-your-trip/culinary-journey', [PlanYourTripController::class, 'culinary'])->name('plan-your-trip.culinary');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+Route::get('/u/{username}', [ProfileController::class, 'publicProfile'])->name('profile.public');
 
 /*
 |--------------------------------------------------------------------------
@@ -76,11 +78,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::put('/profile/password', [ProfileController::class, 'password'])->name('profile.password');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::delete('/profile/sessions', [ProfileController::class, 'destroyOtherSessions'])->name('profile.sessions.destroy');
+    Route::delete('/profile/sessions', [ProfileController::class, 'destroySessions'])->name('profile.sessions.destroy');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::delete('/profile/sessions', [ProfileController::class, 'destroyOtherSessions'])->name('profile.sessions.destroy');
+    Route::delete('/profile/sessions', [ProfileController::class, 'destroySessions'])->name('profile.sessions.destroy');
 
     Route::get('/search', [App\Http\Controllers\GlobalSearchController::class, 'search'])->name('global.search');
 

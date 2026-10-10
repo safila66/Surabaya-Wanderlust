@@ -1,19 +1,19 @@
 <style>
 /* NAVBAR FIXES TO PREVENT OVERLAP (GLOBAL) */
 .uni-navbar {
-    padding: 12px 3% !important; 
+    padding: 12px 2% !important; 
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 40px !important;
+    gap: 20px !important;
 }
 .uni-brand {
     flex-shrink: 0;
 }
 .uni-nav-menu {
     display: flex !important;
-    gap: 14px !important;
+    gap: 12px !important;
     margin: 0 auto !important;
     padding: 0 !important;
     flex-wrap: nowrap !important;
@@ -26,7 +26,7 @@
     display: inline-block;
 }
 .uni-nav-menu a {
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     letter-spacing: 0.5px !important;
     white-space: nowrap !important;
     text-align: center;
@@ -62,10 +62,11 @@
         <li><a href="{{ route('home') }}"                 class="{{ request()->routeIs('home') ? 'active' : '' }}">HOME</a></li>
         <li><a href="{{ route('destinations.index') }}"   class="{{ request()->routeIs('destinations.*') ? 'active' : '' }}">DESTINATIONS</a></li>
         <li><a href="{{ route('culinary.index') }}"       class="{{ request()->routeIs('culinary.*') ? 'active' : '' }}">CULINARY</a></li>
-        <li><a href="{{ route('accommodations.index') }}">ACCOMMODATIONS</a></li>
-        <li><a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a></li>
+        <li><a href="{{ route('accommodations.index') }}">STAYS</a></li>
+        <li><a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">GUIDE</a></li>
         <li><a href="{{ route('best-time.index') }}"      class="{{ request()->routeIs('best-time.*') ? 'active' : '' }}">BEST TIME</a></li>
         <li><a href="{{ route('plan-your-trip.index') }}" class="{{ request()->routeIs('plan-your-trip.*') ? 'active' : '' }}">PLAN YOUR TRIP</a></li>
+        <li><a href="{{ route('map.index') }}" class="{{ request()->routeIs('map.*') ? 'active' : '' }}">MAP</a></li>
         <li><a href="{{ route('about.index') }}"          class="{{ request()->routeIs('about.*') ? 'active' : '' }}">ABOUT</a></li>
     </ul>
 
@@ -113,10 +114,11 @@
     <a href="{{ route('home') }}"                 class="{{ request()->routeIs('home') ? 'active' : '' }}">HOME</a>
     <a href="{{ route('destinations.index') }}"   class="{{ request()->routeIs('destinations.*') ? 'active' : '' }}">DESTINATIONS</a>
     <a href="{{ route('culinary.index') }}"       class="{{ request()->routeIs('culinary.*') ? 'active' : '' }}">CULINARY</a>
-    <a href="{{ route('accommodations.index') }}">ACCOMMODATIONS</a>
-    <a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">TRAVEL GUIDE</a>
+    <a href="{{ route('accommodations.index') }}">STAYS</a>
+    <a href="{{ route('travel-guide.index') }}" class="{{ request()->routeIs('travel-guide.*') ? 'active' : '' }}">GUIDE</a>
     <a href="{{ route('best-time.index') }}"      class="{{ request()->routeIs('best-time.*') ? 'active' : '' }}">BEST TIME</a>
     <a href="{{ route('plan-your-trip.index') }}" class="{{ request()->routeIs('plan-your-trip.*') ? 'active' : '' }}">PLAN YOUR TRIP</a>
+    <a href="{{ route('map.index') }}" class="{{ request()->routeIs('map.*') ? 'active' : '' }}">MAP</a>
     <a href="{{ route('about.index') }}"          class="{{ request()->routeIs('about.*') ? 'active' : '' }}">ABOUT</a>
 </div>
 
@@ -149,18 +151,36 @@ function toggleUniNav() {
 })();
 
 function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('sw-theme', theme);
+    try { localStorage.setItem('sw-theme', theme); } catch(e) {}
+    let actualTheme = theme;
+    if (theme === 'system') {
+        actualTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    document.documentElement.setAttribute('data-theme', actualTheme);
     // Update all toggle button icons
     document.querySelectorAll('.theme-toggle, #themeToggleBtn').forEach(btn => {
-        btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        btn.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        btn.textContent = actualTheme === 'dark' ? '🌙' : '☀️';
+        btn.title = actualTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
     });
 }
 
 function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    let current = localStorage.getItem('sw-theme') || 'dark';
+    if (current === 'system') {
+        current = document.documentElement.getAttribute('data-theme');
+    }
     applyTheme(current === 'dark' ? 'light' : 'dark');
 }
+
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+    if (localStorage.getItem('sw-theme') === 'system') {
+        applyTheme('system');
+    }
+});
+
+// Initialize icons based on current theme
+document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(localStorage.getItem('sw-theme') || 'dark');
+});
 </script>
 

@@ -20,6 +20,7 @@ class DestinationsTable
             ->columns([
                 TextColumn::make('regency.name')
                     ->searchable(),
+                                TextColumn::make('category')->formatStateUsing(fn ($state) => \App\Models\Destination::CATEGORIES[$state] ?? $state)->searchable()->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('slug')

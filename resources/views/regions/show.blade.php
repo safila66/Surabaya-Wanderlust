@@ -75,7 +75,7 @@
                 @foreach($entertainment->take(6) as $item)
                     <a href="{{ route('destinations.show', $item->slug ?? '#') }}" class="item-card">
                         @php
-                            $destImg = \App\Support\Media::url($item->images->first()?->image ?? ($item->image ?? null));
+                            $destImg = \App\Support\Media::url($item->images->first()?->image ?? ($item->image ?? null), 'images/destination-default.jpg');
                         @endphp
                         @if($destImg)
                             <div style="overflow:hidden; height:195px;">
